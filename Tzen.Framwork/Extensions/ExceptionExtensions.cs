@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tzen.Framwork
+namespace Tzen.Framework
 {
     public static class ExceptionEx
     {

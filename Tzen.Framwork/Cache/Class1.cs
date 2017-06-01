@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tzen.Framwork.Cache
+namespace Tzen.Framework.Cache
 {
     class Class1
     {

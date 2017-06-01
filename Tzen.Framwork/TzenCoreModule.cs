@@ -1,33 +1,42 @@
 ﻿using System.Reflection;
-using Tzen.Framwork.Ioc;
-using Tzen.Framwork.Modules;
+using Tzen.Framework.Extensions;
+using Tzen.Framework.Ioc;
+using Tzen.Framework.Modules;
+using Tzen.Framework.Uow;
 
-namespace Tzen.Framwork
+namespace Tzen.Framework
 {
     /// <summary>
     /// Tzen.Framework核心Module
     /// </summary>
     /// <remarks>
-    /// 所有使用Tzen.Framwork框架的Module都需要<see cref="DependsOnAttribute"/>标记
+    /// 所有使用Tzen.Framework框架的Module都需要<see cref="DependsOnAttribute"/>标记
     /// </remarks>
     public sealed class TzenCoreModule : TzenModule
     {
         public override void BeforeInit()
         {
-            IocManager.AddConventionReg(new BasicConventionRegister());
+            IocManager.AddDefaultRegister(new DefaultRegister());
         }
         public override void Initialize()
         {
             base.Initialize();
-            IocManager.RegisterAssembiyByConvention(Assembly.GetExecutingAssembly(),false);
+            IocManager.RegisterAssembiyByDefault(Assembly.GetExecutingAssembly(), false);
         }
         public override void AfterInit()
         {
             base.AfterInit();
+            RegisterMissingComponents();
+
         }
         public override void Shutdown()
         {
             base.Shutdown();
+        }
+
+        private void RegisterMissingComponents()
+        {
+            IocManager.RegisterIfNot<IUnitOfWork, NullUnitOfWork>(LifeStyle.Transient);
         }
     }
 }

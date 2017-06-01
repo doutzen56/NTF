@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tzen.Framwork.Ioc;
-using Tzen.Framwork.Modules;
+using Tzen.Framework.Ioc;
+using Tzen.Framework.Modules;
 
-namespace Tzen.Framwork
+namespace Tzen.Framework
 {
     public class TzenBootstrapper : IDisposable
     {
@@ -14,7 +10,7 @@ namespace Tzen.Framwork
         public IIocManager IocManager { get; private set; }
 
         private ITzenModuleManager _moduleManager;
-        public TzenBootstrapper() 
+        public TzenBootstrapper()
             : this(Ioc.IocManager.Instance)
         {
 
@@ -29,9 +25,14 @@ namespace Tzen.Framwork
             _moduleManager = IocManager.Resolve<ITzenModuleManager>();
             _moduleManager.InitModules();
         }
-        public void Dispose()
+        public virtual void Dispose()
         {
-            throw new NotImplementedException();
+            if (IsDisposed)
+            {
+                return;
+            }
+            IsDisposed = true;
+            _moduleManager?.ShutdownModules();
         }
     }
 }

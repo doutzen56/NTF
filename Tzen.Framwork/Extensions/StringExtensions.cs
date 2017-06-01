@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace Tzen.Framwork
+namespace Tzen.Framework
 {
     public static class StringEx
     {

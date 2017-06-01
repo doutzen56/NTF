@@ -1,19 +1,19 @@
 ﻿using System;
 
-namespace Tzen.Framwork.Ioc
+namespace Tzen.Framework.Ioc
 {
-    public static class SingletonDependency<T>
+    public static class SingleFactory<T>
     {
         private static readonly Lazy<T> LazyInstance;
 
-        public static Lazy<T> Instance
+        public static T Instance
         {
             get
             {
-                return LazyInstance;
+                return LazyInstance.Value;
             }
         }
-        static SingletonDependency()
+        static SingleFactory()
         {
             LazyInstance = new Lazy<T>(() => IocManager.Instance.Resolve<T>());
         }

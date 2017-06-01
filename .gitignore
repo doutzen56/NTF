@@ -2,3 +2,12 @@
 /Tzen.Framwork/bin/Debug
 /Tzen.Framwork/obj/Debug
 /Tzen.Framwork/tzen.framwork/
+/Tzen.Framwork/obj
+/Tzen.Framwork/bin
+/Tzen.Framwork/*.user
+/Tzen.Framwork/app.config
+/Tzen.Framwork/packages.config
+/Tzen.Framwork.SQL/obj
+/Tzen.Framwork.SQL/bin
+/Tzen.Framwork.SQL/Tzen.Framework.SQL.csproj.user
+/Tzen.Framwork.SQL/packages.config

@@ -1,4 +1,4 @@
-﻿namespace Tzen.Framwork.Ioc
+﻿namespace Tzen.Framework.Ioc
 {
     /// <summary>
     /// 所有实现此接口的类都将被注入为单例对象

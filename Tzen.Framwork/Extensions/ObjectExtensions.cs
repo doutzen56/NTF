@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tzen.Framwork
+namespace Tzen.Framework
 {
     public static class ObjectEx
     {

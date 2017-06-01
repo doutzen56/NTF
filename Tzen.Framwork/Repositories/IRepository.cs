@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Tzen.Framwork.SQL
+namespace Tzen.Framework.SQL
 {
     public interface IRepository<T> where T : class
     {
@@ -13,9 +13,9 @@ namespace Tzen.Framwork.SQL
         T Get(Expression<Func<T, bool>> predicate);
         TResult Get<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector);
         List<T> GetList(Expression<Func<T, bool>> predicate);
-        List<T> GetList(Expression<Func<T, bool>> predicate, Func<OrderBy<T>, OrderBy<T>> orderby = null, int top = 0, string dbLock = DbLock.Default);
+        List<T> GetList(Expression<Func<T, bool>> predicate, Func<OrderBy<T>, OrderBy<T>> orderby = null, int top = 0);
         List<TResult> GetList<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector);
-        List<TResult> GetList<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<OrderBy<T>, OrderBy<T>> orderby = null, int top = 0, string dbLock = DbLock.Default);
+        List<TResult> GetList<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<OrderBy<T>, OrderBy<T>> orderby = null, int top = 0);
         #endregion
 
         #region 02 添加 Add/Insert

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tzen.Framwork.NoSql
+namespace Tzen.Framework.NoSql
 {
     class Class1
     {

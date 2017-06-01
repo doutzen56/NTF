@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Tzen.Framwork.Ioc
+namespace Tzen.Framework.Ioc
 {
     public interface IIocRegister
     {
-        void Register<TType>(DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton)
+        void Register<TType>(LifeStyle lifeStyle = LifeStyle.Singleton)
             where TType : class;
-        void Register(Type type, DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton);
-        void Register<TType, TImpl>(DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton)
+        void Register(Type type, LifeStyle lifeStyle = LifeStyle.Singleton);
+        void Register<TType, TImpl>(LifeStyle lifeStyle = LifeStyle.Singleton)
             where TType : class
             where TImpl : class, TType;
-        void Register(Type type, Type impl, DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton);
-        void AddConventionReg(IConventionRegister reg);
-        void RegisterAssembiyByConvention(Assembly assembly, bool excuteInstaller = true);
+        void Register(Type type, Type impl, LifeStyle lifeStyle = LifeStyle.Singleton);
+        void AddDefaultRegister(IDefaultRegister reg);
+        void RegisterAssembiyByDefault(Assembly assembly, bool excuteInstaller = true);
+        bool IsRegistered(Type type);
+        bool IsRegistered<TType>();
     }
 }

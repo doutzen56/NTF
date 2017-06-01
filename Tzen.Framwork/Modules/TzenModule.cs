@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Tzen.Framwork.Ioc;
+using Tzen.Framework.Ioc;
 
-namespace Tzen.Framwork.Modules
+namespace Tzen.Framework.Modules
 {
     /// <summary>
     /// Module基类，所有模块必须继承自这个类

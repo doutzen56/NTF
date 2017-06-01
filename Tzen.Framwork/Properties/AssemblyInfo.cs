@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Tzen.Framwork")]
-[assembly: AssemblyDescription("Tzen.Framwork")]
+[assembly: AssemblyTitle("Tzen.Framework")]
+[assembly: AssemblyDescription("Tzen.Framework")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Tzen")]
-[assembly: AssemblyProduct("Tzen.Framwork")]
+[assembly: AssemblyProduct("Tzen.Framework")]
 [assembly: AssemblyCopyright("Copyright © Tzen2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

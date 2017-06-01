@@ -5,7 +5,7 @@ using Castle.MicroKernel.Registration;
 using System.Collections.Generic;
 using Castle.Windsor.Installer;
 
-namespace Tzen.Framwork.Ioc
+namespace Tzen.Framework.Ioc
 {
     public class IocManager : IIocManager
     {
@@ -18,7 +18,7 @@ namespace Tzen.Framwork.Ioc
         /// Ioc容器
         /// </summary>
         public IWindsorContainer IocContainer { get; private set; }
-        private readonly List<IConventionRegister> _conventionRegster;
+        private readonly List<IDefaultRegister> _conventionRegster;
         #endregion
 
         #region IocManager 构造函数
@@ -30,7 +30,7 @@ namespace Tzen.Framwork.Ioc
         {
             //初始化Ioc容器
             IocContainer = new WindsorContainer();
-            _conventionRegster = new List<IConventionRegister>();
+            _conventionRegster = new List<IDefaultRegister>();
             //注册自己
             IocContainer.Register(
                 Component.For<IocManager, IIocManager, IIocRegister, IIocResolver>().UsingFactoryMethod(() => this)
@@ -44,7 +44,7 @@ namespace Tzen.Framwork.Ioc
         /// </summary>
         /// <param name="type">待注册类型</param>
         /// <param name="lifeStyle">生命周期</param>
-        public void Register(Type type, DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton)
+        public void Register(Type type, LifeStyle lifeStyle = LifeStyle.Singleton)
         {
             IocContainer.Register(SetLifeStyle(Component.For(type), lifeStyle));
         }
@@ -54,7 +54,7 @@ namespace Tzen.Framwork.Ioc
         /// <param name="type">类型type</param>
         /// <param name="impl">type实现类型impl</param>
         /// <param name="lifeStyle">生命周期</param>
-        public void Register(Type type, Type impl, DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton)
+        public void Register(Type type, Type impl, LifeStyle lifeStyle = LifeStyle.Singleton)
         {
             IocContainer.Register(SetLifeStyle(Component.For(type, impl).ImplementedBy(impl), lifeStyle));
         }
@@ -63,7 +63,7 @@ namespace Tzen.Framwork.Ioc
         /// </summary>
         /// <typeparam name="TType">类型TType</typeparam>
         /// <param name="lifeStyle">生命周期</param>
-        public void Register<TType>(DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton) where TType : class
+        public void Register<TType>(LifeStyle lifeStyle = LifeStyle.Singleton) where TType : class
         {
             IocContainer.Register(SetLifeStyle(Component.For<TType>(), lifeStyle));
         }
@@ -73,7 +73,7 @@ namespace Tzen.Framwork.Ioc
         /// <typeparam name="TType">类型TType</typeparam>
         /// <typeparam name="TImpl">类型TImpl</typeparam>
         /// <param name="lifeStyle">生命周期</param>
-        public void Register<TType, TImpl>(DependencyLifeStyle lifeStyle)
+        public void Register<TType, TImpl>(LifeStyle lifeStyle)
             where TType : class
             where TImpl : class, TType
         {
@@ -83,7 +83,7 @@ namespace Tzen.Framwork.Ioc
         /// 添加约定注册接口实现类到IocManager容器
         /// </summary>
         /// <param name="reg"></param>
-        public void AddConventionReg(IConventionRegister reg)
+        public void AddDefaultRegister(IDefaultRegister reg)
         {
             this._conventionRegster.Add(reg);
         }
@@ -91,9 +91,9 @@ namespace Tzen.Framwork.Ioc
         /// 为该程序集注册所有已添加
         /// </summary>
         /// <param name="assembly"></param>
-        public void RegisterAssembiyByConvention(Assembly assembly, bool excuteInstaller = true)
+        public void RegisterAssembiyByDefault(Assembly assembly, bool excuteInstaller = true)
         {
-            var context = new ConventionRegsterContext(assembly, this);
+            var context = new DefaultRegsterContext(assembly, this);
             foreach (var item in _conventionRegster)
             {
                 item.RegisiterAssembly(context);
@@ -119,17 +119,22 @@ namespace Tzen.Framwork.Ioc
             return IocContainer.Resolve(type);
         }
 
+        public void Release(object obj)
+        {
+            IocContainer.Release(obj);
+        }
+
         #endregion
 
         #region IIocManager
-        public bool IsRegisted(Type type)
+        public bool IsRegistered(Type type)
         {
             return IocContainer.Kernel.HasComponent(type);
         }
 
-        public bool IsRegisted<TType>()
+        public bool IsRegistered<TType>()
         {
-            return IsRegisted(typeof(TType));
+            return IsRegistered(typeof(TType));
         }
         #endregion
 
@@ -141,14 +146,14 @@ namespace Tzen.Framwork.Ioc
         #endregion
 
         #region 私有方法
-        private ComponentRegistration<T> SetLifeStyle<T>(ComponentRegistration<T> registration, DependencyLifeStyle lifeStyle)
+        private ComponentRegistration<T> SetLifeStyle<T>(ComponentRegistration<T> registration, LifeStyle lifeStyle)
             where T : class
         {
             switch (lifeStyle)
             {
-                case DependencyLifeStyle.Singleton:
+                case LifeStyle.Singleton:
                     return registration.LifestyleSingleton();
-                case DependencyLifeStyle.Transient:
+                case LifeStyle.Transient:
                     return registration.LifestyleTransient();
                 default:
                     return registration;

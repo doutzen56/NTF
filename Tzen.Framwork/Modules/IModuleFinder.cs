@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tzen.Framwork.Reflection;
+using Tzen.Framework.Reflection;
 
-namespace Tzen.Framwork.Modules
+namespace Tzen.Framework.Modules
 {
     /// <summary>
     /// 负责查找所有模块的接口定义

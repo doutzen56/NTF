@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Tzen.Framwork.Reflection
+namespace Tzen.Framework.Reflection
 {
     public class TypeFinder : ITypeFinder
     {
@@ -44,7 +44,7 @@ namespace Tzen.Framwork.Reflection
                     }
                     allTypes.AddRange(assemblyTypes.Where(a => a != null));
                 }
-                catch (Exception ex)
+                catch
                 {
 
                 }

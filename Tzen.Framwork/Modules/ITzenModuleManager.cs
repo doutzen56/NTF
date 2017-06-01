@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Tzen.Framwork.Ioc;
+using Tzen.Framework.Ioc;
 
-namespace Tzen.Framwork.Modules
+namespace Tzen.Framework.Modules
 {
     /// <summary>
     /// 定义模块管理接口
@@ -63,7 +63,7 @@ namespace Tzen.Framwork.Modules
                 {
                     throw new Exception("类型{0}不是TzenModule的子类！".Fmt(moduleType.AssemblyQualifiedName));
                 }
-                if (!_iocManager.IsRegisted(moduleType))
+                if (!_iocManager.IsRegistered(moduleType))
                 {
                     _iocManager.Register(moduleType);
                 }

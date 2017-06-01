@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tzen.Framwork.Modules
+namespace Tzen.Framework.Modules
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class DependsOnAttribute : Attribute

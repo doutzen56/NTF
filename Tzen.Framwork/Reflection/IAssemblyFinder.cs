@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tzen.Framwork.Reflection
+namespace Tzen.Framework.Reflection
 {
     public interface IAssemblyFinder
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tzen.Framwork
+namespace Tzen.Framework
 {
     /// <summary>
     /// <see cref="List{T}"/>扩展方法

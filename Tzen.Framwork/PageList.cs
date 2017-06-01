@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Tzen.Framwork
+namespace Tzen.Framework
 {
     /// <summary>
     /// 分页数据封装
