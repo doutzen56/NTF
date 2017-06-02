@@ -58,7 +58,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Tzen.Framwork\Tzen.Framework.csproj">
+    <ProjectReference Include="..\Tzen.Framework\Tzen.Framework.csproj">
       <Project>{c6866fde-933b-4152-827e-481728548bbb}</Project>
       <Name>Tzen.Framework</Name>
     </ProjectReference>

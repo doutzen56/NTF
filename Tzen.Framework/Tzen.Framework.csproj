@@ -67,7 +67,6 @@
     <Compile Include="Aop\InterceptorBase.cs" />
     <Compile Include="Aop\IAop.cs" />
     <Compile Include="Aop\InterceptorRegister.cs" />
-    <Compile Include="Cache\Class1.cs" />
     <Compile Include="Extensions\EventExtensions.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\IocExtensions.cs" />
@@ -91,8 +90,6 @@
     <Compile Include="Modules\IModuleFinder.cs" />
     <Compile Include="Modules\ITzenModuleManager.cs" />
     <Compile Include="Modules\TzenModule.cs" />
-    <Compile Include="MQ\Class1.cs" />
-    <Compile Include="NoSql\Class1.cs" />
     <Compile Include="Repositories\OrderBy.cs" />
     <Compile Include="PageList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,10 +117,7 @@
     <Compile Include="Uow\UnitOfWorkRegister.cs" />
     <Compile Include="Uow\UnitOrWorkOptions.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Log\" />
-    <Folder Include="Provider\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
