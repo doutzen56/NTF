@@ -1,18 +1,17 @@
 ﻿using Castle.DynamicProxy;
-using Tzen.Framework.Aop;
 
 namespace Tzen.Framework.Uow
 {
-    internal class UnitOfWorkInterceptor : InterceptorBase
+    internal class UnitOfWorkInterceptor : IInterceptor
     {
         private readonly IUnitOfWorkManager _uowManager;
         public UnitOfWorkInterceptor(IUnitOfWorkManager uowManager)
         {
             _uowManager = uowManager;
         }
-        public override void Intercept(IInvocation invocation)
+        public void Intercept(IInvocation invocation)
         {
-            if (_uowManager.Current == null)
+            if (_uowManager.Current != null)
             {
                 invocation.Proceed();
                 return;

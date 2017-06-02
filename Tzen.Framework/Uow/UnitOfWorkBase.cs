@@ -87,7 +87,7 @@ namespace Tzen.Framework.Uow
         /// </summary>
         public void Commit()
         {
-            IsBeginCalled();
+            IsCommitCalled();
             try
             {
                 CommitUow();

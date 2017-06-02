@@ -5,7 +5,7 @@ namespace Tzen.Framework.Uow
 {
     internal static class UnitOfWorkHelper
     {
-        public static bool HasUnitOfWorkAttribute(MemberInfo methodInfo)
+        public static bool HasUowAttrbute(MethodInfo methodInfo)
         {
             return methodInfo.IsDefined(typeof(UnitOfWorkAttribute), true);
         }

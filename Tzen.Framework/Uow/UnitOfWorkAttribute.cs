@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Transactions;
-using Tzen.Framework.Aop;
 
 namespace Tzen.Framework.Uow
 {
@@ -11,7 +10,7 @@ namespace Tzen.Framework.Uow
     /// 如果调用此方法之外已存在一个工作单元，并不会影响，因为他们将会使用同一个事务提交
     /// </remarks>
     [AttributeUsage(AttributeTargets.Method)]
-    public class UnitOfWorkAttribute : AopAttribute
+    public class UnitOfWorkAttribute : Attribute
     {
         /// <summary>
         /// 事务作用域

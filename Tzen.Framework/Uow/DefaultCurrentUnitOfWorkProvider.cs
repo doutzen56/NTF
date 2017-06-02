@@ -85,7 +85,6 @@ namespace Tzen.Framework.Uow
             }
             CallContext.LogicalSetData(ContextKey, unitOfWorkKey);
         }
-
         private static void ExitCurrentUow()
         {
             var unitOfWorkKey = CallContext.LogicalGetData(ContextKey) as string;
