@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tzen.Framework.SQL", "Tzen.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tzen.Framework.Test", "Tzen.Framework.Test\Tzen.Framework.Test.csproj", "{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tzen.Framework.Provider", "Tzen.Framework.Provider\Tzen.Framework.Provider.csproj", "{43A1D9C0-D66F-408B-A9A0-4708B6222A42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43A1D9C0-D66F-408B-A9A0-4708B6222A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43A1D9C0-D66F-408B-A9A0-4708B6222A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43A1D9C0-D66F-408B-A9A0-4708B6222A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43A1D9C0-D66F-408B-A9A0-4708B6222A42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

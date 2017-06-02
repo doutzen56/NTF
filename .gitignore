@@ -11,3 +11,5 @@
 /Tzen.Framework/app.config
 /packages
 /Tzen.Framework.Test
+/Tzen.Framework.Provider/bin
+/Tzen.Framework.Provider/obj
