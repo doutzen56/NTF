@@ -4,7 +4,7 @@ using System.Transactions;
 namespace Tzen.Framework.Uow
 {
     /// <summary>
-    /// 设置或者获取工作单元的选项
+    /// 设置或者获取工作单元默认值
     /// </summary>
     public interface IUnitOfWorkDefaultOptions
     {

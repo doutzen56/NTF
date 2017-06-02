@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
+﻿using System.Transactions;
 using Tzen.Framework.Ioc;
 
 namespace Tzen.Framework.Uow
@@ -11,7 +6,7 @@ namespace Tzen.Framework.Uow
     /// <summary>
     /// 工作单元管理类
     /// </summary>
-    internal class UnitOfWorkManager : IUnitOfWorkManager
+    internal class UnitOfWorkManager : IUnitOfWorkManager, ITransient
     {
         private readonly IIocResolver _iocResolver;
         private readonly ICurrentUnitOfWorkProvider _currentUowProvider;

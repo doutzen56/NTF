@@ -4,7 +4,7 @@ using System.Transactions;
 namespace Tzen.Framework.Uow
 {
     /// <summary>
-    /// 工作单元选项值
+    /// 工作单元选设置
     /// </summary>
     public class UnitOfWorkOptions
     {

@@ -115,7 +115,7 @@
     <Compile Include="Uow\UnitOfWorkInterceptor.cs" />
     <Compile Include="Uow\UnitOfWorkManager.cs" />
     <Compile Include="Uow\UnitOfWorkRegister.cs" />
-    <Compile Include="Uow\UnitOrWorkOptions.cs" />
+    <Compile Include="Uow\UnitOfWorkOptions.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

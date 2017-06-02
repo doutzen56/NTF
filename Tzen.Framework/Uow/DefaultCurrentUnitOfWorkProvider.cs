@@ -1,18 +1,15 @@
 ﻿using Castle.Core;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
+using Tzen.Framework.Ioc;
 
 namespace Tzen.Framework.Uow
 {
     /// <summary>
     /// 获取当前工作单元默认实现
     /// </summary>
-    public class DefaultCurrentUnitOfWorkProvider : ICurrentUnitOfWorkProvider
+    public class DefaultCurrentUnitOfWorkProvider : ICurrentUnitOfWorkProvider, ITransient
     {
         /// <summary>
         /// 当前工作单元
@@ -64,16 +61,16 @@ namespace Tzen.Framework.Uow
         }
         private static void SetCurrentUow(IUnitOfWork value)
         {
-            if(value.IsNull())
+            if (value.IsNull())
             {
                 ExitCurrentUow();
                 return;
             }
             var unitOfWorkKey = CallContext.LogicalGetData(ContextKey) as string;
-            if(!unitOfWorkKey.IsNull())
+            if (!unitOfWorkKey.IsNull())
             {
                 IUnitOfWork outer;
-                if(UnitOfWorkDictionary.TryGetValue(unitOfWorkKey,out outer))
+                if (UnitOfWorkDictionary.TryGetValue(unitOfWorkKey, out outer))
                 {
                     if (outer != value)
                     {
@@ -82,7 +79,7 @@ namespace Tzen.Framework.Uow
                 }
             }
             unitOfWorkKey = value.ID;
-            if(!UnitOfWorkDictionary.TryAdd(unitOfWorkKey,value))
+            if (!UnitOfWorkDictionary.TryAdd(unitOfWorkKey, value))
             {
                 throw new Exception("内部异常：添加工作单元到字典发生了不可预知的错误");
             }
@@ -95,7 +92,7 @@ namespace Tzen.Framework.Uow
             if (unitOfWorkKey.IsNull())
                 return;
             IUnitOfWork unitOfWork;
-            if(!UnitOfWorkDictionary.TryGetValue(unitOfWorkKey,out unitOfWork))
+            if (!UnitOfWorkDictionary.TryGetValue(unitOfWorkKey, out unitOfWork))
             {
                 CallContext.FreeNamedDataSlot(ContextKey);
                 return;
@@ -107,7 +104,7 @@ namespace Tzen.Framework.Uow
                 return;
             }
             var outerKey = unitOfWork.Outer.ID;
-            if(!UnitOfWorkDictionary.TryGetValue(outerKey,out unitOfWork))
+            if (!UnitOfWorkDictionary.TryGetValue(outerKey, out unitOfWork))
             {
                 CallContext.FreeNamedDataSlot(ContextKey);
                 return;

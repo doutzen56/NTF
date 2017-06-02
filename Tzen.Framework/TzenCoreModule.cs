@@ -16,7 +16,10 @@ namespace Tzen.Framework
     {
         public override void BeforeInit()
         {
+            //注册默认约定组件
             IocManager.AddDefaultRegister(new DefaultRegister());
+            //工作单元注册
+            UnitOfWorkRegister.Init(IocManager);
         }
         public override void Initialize()
         {
