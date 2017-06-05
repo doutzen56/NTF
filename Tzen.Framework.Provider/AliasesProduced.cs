@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Tzen.Framework.Provider
 {
     /// <summary>
-    ///  returns the set of all aliases produced by a query source
+    ///  返回查询源的所有别名集
     /// </summary>
     internal class AliasesProduced : DbExpressionVisitor
     {

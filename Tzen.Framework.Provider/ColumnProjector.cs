@@ -23,9 +23,9 @@ namespace Tzen.Framework.Provider {
     }
 
     /// <summary>
-    /// ColumnProjection is a visitor that splits an expression representing the result of a query into 
-    /// two parts, a list of column declarations of expressions that must be evaluated on the server
-    /// and a projector expression that describes how to combine the columns back into the result object
+    /// Column访问器，
+    /// 将查询表达式分割成两部分，
+    /// 部分1：Column列表申明，部分2：返回结果值与Column映射
     /// </summary>
     internal class ColumnProjector : DbExpressionVisitor {
         Dictionary<ColumnExpression, ColumnExpression> map;
@@ -68,7 +68,6 @@ namespace Tzen.Framework.Provider {
                         this.columnNames.Add(columnName);
                         return mapped;
                     }
-                    // must be referring to outer scope
                     return column;
                 }
                 else {
@@ -100,8 +99,7 @@ namespace Tzen.Framework.Provider {
         }
 
         /// <summary>
-        /// Nominator is a class that walks an expression tree bottom up, determining the set of 
-        /// candidate expressions that are possible columns of a select expression
+        /// 这个类主要负责确定一个表达式是否是Select表达式
         /// </summary>
         class Nominator : DbExpressionVisitor {
             Func<Expression, bool> fnCanBeColumn;

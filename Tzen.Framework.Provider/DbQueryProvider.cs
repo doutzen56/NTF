@@ -6,14 +6,12 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 
-namespace Tzen.Framework.Provider 
+namespace Tzen.Framework.Provider
 {
 
     /// <summary>
-    /// A LINQ query provider that executes SQL queries over a DbConnection
+    /// 支持LINQ查询，生成SQL语句并执行的Provider
     /// </summary>
     public class DbQueryProvider : QueryProvider 
     {
@@ -39,12 +37,12 @@ namespace Tzen.Framework.Provider
 
         public override object Execute(Expression expression) 
         {
-            // strip off lambda for now
+            // 关闭表达式，开始解析
             LambdaExpression lambda = expression as LambdaExpression;
             if (lambda != null) 
                 expression = lambda.Body;
 
-            // translate query into component pieces
+            // 将表达式转换到SQL构建组件
             ProjectionExpression projection = this.Translate(expression);
 
             string commandText = QueryFormatter.Format(projection.Source);
@@ -59,11 +57,9 @@ namespace Tzen.Framework.Provider
 
             LambdaExpression projector = ProjectionBuilder.Build(this, projection, providerAccess);
             LambdaExpression eRead = GetReader(projector, projection.Aggregator, true);
-
-            // if asked to execute a lambda, produce a function that will execute this query later
+            
             if (lambda != null)
             {
-                // call low-level execute directly on supplied DbQueryProvider
                 Expression body = Expression.Call(
                     providerAccess, "Execute", null,
                     Expression.Constant(commandText),
@@ -77,7 +73,6 @@ namespace Tzen.Framework.Provider
             }
             else
             {
-                // execute right now!
                 object[] values = namedValues.Select(v => v.Value as ConstantExpression).Select(c => c != null ? c.Value : null).ToArray();
                 var fnRead = (Func<DbDataReader, object>)eRead.Compile();
                 return Execute(commandText, names, values, fnRead);
@@ -91,7 +86,7 @@ namespace Tzen.Framework.Provider
                 this.log.WriteLine(commandText);
             }
 
-            // create command object (and fill in parameters)
+            // 创建命令对象（并填写参数）
             DbCommand cmd = this.connection.CreateCommand();
             cmd.CommandText = commandText;
             for (int i = 0, n = paramNames.Length; i < n; i++)
@@ -106,7 +101,7 @@ namespace Tzen.Framework.Provider
                 cmd.Parameters.Add(p);
             }
 
-            // execute & go
+            // 执行
             DbDataReader reader = cmd.ExecuteReader();
 
             return fnRead(reader);
@@ -129,7 +124,7 @@ namespace Tzen.Framework.Provider
 
         private bool CanBeEvaluatedLocally(Expression expression)
         {
-            // any operation on a query can't be done locally
+            // 不执行任何基于本身的查询操作
             ConstantExpression cex = expression as ConstantExpression;
             if (cex != null)
             {
@@ -151,7 +146,7 @@ namespace Tzen.Framework.Provider
                    expression.NodeType != ExpressionType.Lambda;
         }
 
-        // create a lambda function that will convert a DbDataReader into a projected (and possibly aggregated) result
+        //将DataReader映射到lambda
         private static LambdaExpression GetReader(LambdaExpression fnProjector, LambdaExpression fnAggregator, bool boxReturn)
         {
             ParameterExpression reader = Expression.Parameter(typeof(DbDataReader), "reader");

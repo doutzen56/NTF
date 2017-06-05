@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Tzen.Framework.Provider {
+namespace Tzen.Framework.Provider
+{
     /// <summary>
-    /// Rewrite aggregate expressions, moving them into same select expression that has the group-by clause
+    /// 重写聚合表达式
     /// </summary>
     internal class AggregateRewriter : DbExpressionVisitor {
         ILookup<string, AggregateSubqueryExpression> lookup;

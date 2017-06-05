@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Tzen.Framework.Provider
@@ -116,7 +113,7 @@ namespace Tzen.Framework.Provider
         }
 
         /// <summary>
-        /// Rewrite all column references to one or more alias to a new specific alias
+        /// Column别名映射
         /// </summary>
         class ColumnMapper : DbExpressionVisitor
         {
