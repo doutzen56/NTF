@@ -30,14 +30,14 @@ namespace Tzen.Framework.Provider
                 {
                     newSelect = newSelect.AddRedundantSelect("s" + (this.aliasCount++));
                 }
-                newSelect = newSelect.AddColumn(new ColumnDeclaration("rownum", new RowNumberExpression(select.OrderBy)));
+                newSelect = newSelect.AddColumn(new ColumnDeclaration("ROWNUM", new RowNumberExpression(select.OrderBy)));
 
                 // add layer for WHERE clause that references new rownum column
                 newSelect = newSelect.AddRedundantSelect("s" + (this.aliasCount++));
                 newSelect = newSelect.RemoveColumn(newSelect.Columns[newSelect.Columns.Count - 1]);
 
                 string newAlias = ((SelectExpression)newSelect.From).Alias;
-                ColumnExpression rnCol = new ColumnExpression(typeof(int), newAlias, "rownum");
+                ColumnExpression rnCol = new ColumnExpression(typeof(int), newAlias, "ROWNUM");
                 Expression where;
                 if (select.Take != null)
                 {

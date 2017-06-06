@@ -64,6 +64,12 @@
     <Compile Include="TypeSystem.cs" />
     <Compile Include="UnusedColumnRemover.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tzen.Framework\Tzen.Framework.csproj">
+      <Project>{c6866fde-933b-4152-827e-481728548bbb}</Project>
+      <Name>Tzen.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

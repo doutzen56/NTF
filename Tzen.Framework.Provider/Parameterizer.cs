@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 
 namespace Tzen.Framework.Provider
 {
     /// <summary>
-    /// Convert user arguments into named-value parameters
+    /// 将输入参数转换为指定 NameValue
     /// </summary>
     internal class Parameterizer : DbExpressionVisitor
     {
@@ -28,7 +25,7 @@ namespace Tzen.Framework.Provider
 
         protected override Expression VisitProjection(ProjectionExpression proj)
         {
-            // don't parameterize the projector or aggregator!
+            // 不要给聚合函数映射
             SelectExpression select = (SelectExpression)this.Visit(proj.Source);
             if (select != proj.Source) {
                 return new ProjectionExpression(select, proj.Projector, proj.Aggregator);
@@ -41,8 +38,8 @@ namespace Tzen.Framework.Provider
         {
             if (c.Value != null && !IsNumeric(c.Value.GetType())) {
                 NamedValueExpression nv;
-                if (!this.map.TryGetValue(c.Value, out nv)) { // re-use same name-value if same value
-                    string name = "p" + (iParam++);
+                if (!this.map.TryGetValue(c.Value, out nv)) {
+                    string name = "P" + (iParam++);
                     nv = new NamedValueExpression(name, c);
                     this.map.Add(c.Value, nv);
                 }
@@ -56,7 +53,7 @@ namespace Tzen.Framework.Provider
             NamedValueExpression nv;
             if (!this.pmap.TryGetValue(p, out nv))
             {
-                string name = "p" + (iParam++);
+                string name = "P" + (iParam++);
                 nv = new NamedValueExpression(name, p);
                 this.pmap.Add(p, nv);
             }

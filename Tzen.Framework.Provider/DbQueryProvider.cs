@@ -146,7 +146,7 @@ namespace Tzen.Framework.Provider
                    expression.NodeType != ExpressionType.Lambda;
         }
 
-        //将DataReader映射到lambda
+        //将DataReader映射到lambda表达式
         private static LambdaExpression GetReader(LambdaExpression fnProjector, LambdaExpression fnAggregator, bool boxReturn)
         {
             ParameterExpression reader = Expression.Parameter(typeof(DbDataReader), "reader");
@@ -161,7 +161,7 @@ namespace Tzen.Framework.Provider
         }
 
         /// <summary>
-        /// Creates a function that materializes objects from DbDataReader's
+        /// 创建具有Datareader特点的对象
         /// </summary>
         class ProjectionBuilder : DbExpressionVisitor
         {
@@ -200,9 +200,6 @@ namespace Tzen.Framework.Provider
                     else {
                         defvalue = Expression.Constant(Activator.CreateInstance(column.Type), column.Type);
                     }
-
-                    // this sucks, but since we don't track true SQL types through the query, and ADO throws exception if you
-                    // call the wrong accessor, the best we can do is call GetValue and Convert.ChangeType
                     Expression value = Expression.Convert(
                         Expression.Call(typeof(System.Convert), "ChangeType", null,
                             Expression.Call(this.dbDataReaderParam, "GetValue", null, Expression.Constant(iOrdinal)),
@@ -222,7 +219,7 @@ namespace Tzen.Framework.Provider
             protected override Expression VisitProjection(ProjectionExpression projection)
             {
                 projection = (ProjectionExpression)Parameterizer.Parameterize(projection);
-                // also convert references to outer alias to named values!  these become SQL parameters too
+                //外部别名
                 projection = (ProjectionExpression)OuterParameterizer.Parameterize(this.projection.Source.Alias, projection);
 
                 string commandText = QueryFormatter.Format(projection.Source);
@@ -234,10 +231,8 @@ namespace Tzen.Framework.Provider
                 LambdaExpression eRead = GetReader(projector, projection.Aggregator, true);
 
                 Type resultType = projection.Aggregator != null ? projection.Aggregator.Body.Type : typeof(IEnumerable<>).MakeGenericType(projection.Projector.Type);
-
-                // return expression that will call Execute(...)
+                
                 return Expression.Convert(
-                    //Expression.Call(dbProviderParam, "Execute", null, 
                     Expression.Call(providerAccess, "Execute", null, 
                         Expression.Constant(commandText),
                         Expression.Constant(names),
@@ -249,7 +244,7 @@ namespace Tzen.Framework.Provider
             }
 
             /// <summary>
-            /// columns referencing the outer alias are turned into special named-value parameters
+            /// 引用外部别名将列转换为特殊的  Name-Value
             /// </summary>
             class OuterParameterizer : DbExpressionVisitor
             {
@@ -284,7 +279,9 @@ namespace Tzen.Framework.Provider
             }
         }
 
-        // attempt to isolate a sub-expression that accesses a Query<T> object
+        /// <summary>
+        /// 分离一个<see cref="Query{T}"/>对象的子表达式
+        /// </summary>
         class RootQueryableFinder : DbExpressionVisitor
         {
             Expression root;
@@ -299,7 +296,7 @@ namespace Tzen.Framework.Provider
             {
                 Expression result = base.Visit(exp);
 
-                // remember the first sub-expression that produces an IQueryable
+                //记录IQueryable生成的第一个子表达式
                 if (this.root == null && result != null && typeof(IQueryable).IsAssignableFrom(result.Type))
                 {
                     this.root = result;

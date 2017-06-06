@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Tzen.Framework.Provider {
 
-    // implements reading over a data-reader and producing projected objects 
+    // 实现对DataReader的读取以及映射
     public class ProjectionReader<T> : IEnumerable<T>, IEnumerable, IDisposable
     {
         Enumerator enumerator;
@@ -24,7 +24,7 @@ namespace Tzen.Framework.Provider {
             Enumerator e = this.enumerator;
             if (e == null)
             {
-                throw new InvalidOperationException("Cannot enumerate more than once");
+                throw new InvalidOperationException("迭代器为null，DataReader的读取以及映射失败");
             }
             this.enumerator = null;
             return e;

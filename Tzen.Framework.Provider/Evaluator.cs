@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
-namespace Tzen.Framework.Provider {
+namespace Tzen.Framework.Provider
+{
 
     public static class Evaluator {
         /// <summary>
-        /// Performs evaluation & replacement of independent sub-trees
+        /// 表达式执行前子节点赋值与替换
         /// </summary>
-        /// <param name="expression">The root of the expression tree.</param>
-        /// <param name="fnCanBeEvaluated">A function that decides whether a given expression node can be part of the local function.</param>
-        /// <returns>A new tree with sub-trees evaluated and replaced.</returns>
+        /// <param name="expression">表达式树的根</param>
+        /// <param name="fnCanBeEvaluated">标识给定的表达式节点是否可以作为局部函数的一部分</param>
+        /// <returns>一个新的子节点</returns>
         public static Expression PartialEval(Expression expression, Func<Expression, bool> fnCanBeEvaluated) {
             return SubtreeEvaluator.Eval(Nominator.Nominate(fnCanBeEvaluated, expression), expression);
         }
 
         /// <summary>
-        /// Performs evaluation & replacement of independent sub-trees
+        ///表达式执行前子节点赋值与替换
         /// </summary>
-        /// <param name="expression">The root of the expression tree.</param>
-        /// <returns>A new tree with sub-trees evaluated and replaced.</returns>
+        /// <param name="expression">表达式树的根</param>
+        /// <returns>一个新的子节点</returns>
         public static Expression PartialEval(Expression expression) {
             return PartialEval(expression, Evaluator.CanBeEvaluatedLocally);
         }
@@ -30,7 +30,7 @@ namespace Tzen.Framework.Provider {
         }
 
         /// <summary>
-        /// Evaluates & replaces sub-trees when first candidate is reached (top-down)
+        ///子节点赋值替换，自上而下
         /// </summary>
         class SubtreeEvaluator: DbExpressionVisitor {
             HashSet<Expression> candidates;
@@ -68,8 +68,7 @@ namespace Tzen.Framework.Provider {
         }
 
         /// <summary>
-        /// Performs bottom-up analysis to determine which nodes can possibly
-        /// be part of an evaluated sub-tree.
+        /// 执行自下而上的分析，以确定哪些节点可能作为评估子树的一部分
         /// </summary>
         class Nominator : DbExpressionVisitor {
             Func<Expression, bool> fnCanBeEvaluated;

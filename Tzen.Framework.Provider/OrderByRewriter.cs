@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 
-namespace Tzen.Framework.Provider {
+namespace Tzen.Framework.Provider
+{
     /// <summary>
-    /// Move order-bys to the outermost select
+    /// 将OrderBy移动到最外层Select
     /// </summary>
     internal class OrderByRewriter : DbExpressionVisitor {
         IList<OrderExpression> gatheredOrderings;
@@ -51,7 +47,7 @@ namespace Tzen.Framework.Provider {
                 if (this.gatheredOrderings != null) {
                     if (canPassOnOrderings) {
                         HashSet<string> producedAliases = AliasesProduced.Gather(select.From);
-                        // reproject order expressions using this select's alias so the outer select will have properly formed expressions
+                        // OrderBy重新绑定
                         BindResult project = this.RebindOrderings(this.gatheredOrderings, select.Alias, producedAliases, select.Columns);
                         this.gatheredOrderings = null;
                         this.PrependOrderings(project.Orderings);
@@ -80,11 +76,10 @@ namespace Tzen.Framework.Provider {
         }
 
         protected override Expression VisitJoin(JoinExpression join) {
-            // make sure order by expressions lifted up from the left side are not lost
-            // when visiting the right side
+            // 确保访问OrderBy右侧表达式的时候，左边的已缓存记录                                                 
             Expression left = this.VisitSource(join.Left);
             IList<OrderExpression> leftOrders = this.gatheredOrderings;
-            this.gatheredOrderings = null; // start on the right with a clean slate
+            this.gatheredOrderings = null; // 重置模板
             Expression right = this.VisitSource(join.Right);
             this.PrependOrderings(leftOrders);
             Expression condition = this.Visit(join.Condition);
@@ -95,8 +90,7 @@ namespace Tzen.Framework.Provider {
         }
 
         /// <summary>
-        /// Add a sequence of order expressions to an accumulated list, prepending so as
-        /// to give precedence to the new expressions over any previous expressions
+        /// 在已有序列上添加一个新的序列
         /// </summary>
         /// <param name="newOrderings"></param>
         protected void PrependOrderings(IList<OrderExpression> newOrderings) {
@@ -116,7 +110,6 @@ namespace Tzen.Framework.Provider {
                         }
                     }
                     else {
-                        // unless we have full expression tree matching assume its different
                         this.gatheredOrderings.Insert(0, ordering);
                     }
                 }
@@ -145,7 +138,7 @@ namespace Tzen.Framework.Provider {
         }
 
         /// <summary>
-        /// Rebind order expressions to reference a new alias and add to column declarations if necessary
+        /// 使用列的别名和别名映射重新绑定排序表达式
         /// </summary>
         protected virtual BindResult RebindOrderings(IEnumerable<OrderExpression> orderings, string alias, HashSet<string> existingAliases, IEnumerable<ColumnDeclaration> existingColumns) {
             List<ColumnDeclaration> newColumns = null;
@@ -154,19 +147,19 @@ namespace Tzen.Framework.Provider {
                 Expression expr = ordering.Expression;
                 ColumnExpression column = expr as ColumnExpression;
                 if (column == null || (existingAliases != null && existingAliases.Contains(column.Alias))) {
-                    // check to see if a declared column already contains a similar expression
+                    // 检查已声明的列是否已包含类似类型的表达式
                     int iOrdinal = 0;
                     foreach (ColumnDeclaration decl in existingColumns) {
                         ColumnExpression declColumn = decl.Expression as ColumnExpression;
                         if (decl.Expression == ordering.Expression || 
                             (column != null && declColumn != null && column.Alias == declColumn.Alias && column.Name == declColumn.Name)) {
-                            // found it, so make a reference to this column
+                            // 如果有，创建一个Column表达式
                             expr = new ColumnExpression(column.Type, alias, decl.Name);
                             break;
                         }
                         iOrdinal++;
                     }
-                    // if not already projected, add a new column declaration for it
+                    // 如果尚未构建，添加一个新的列声明
                     if (expr == ordering.Expression) {
                         if (newColumns == null) {
                             newColumns = new List<ColumnDeclaration>(existingColumns);
