@@ -319,7 +319,7 @@ namespace NTF.Provider.Data.Common
         public virtual string Format(Expression expression)
         {
             // use common SQL formatter by default
-            return SQLFormatter.Format(expression);
+            return CmdFormatter.Format(expression);
         }
 
         /// <summary>

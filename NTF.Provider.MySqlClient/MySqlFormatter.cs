@@ -8,7 +8,7 @@ namespace NTF.Provider.MySqlClient
     /// <summary>
     /// Formats a query expression into TSQL language syntax
     /// </summary>
-    public class MySqlFormatter : SQLFormatter
+    public class MySqlFormatter : CmdFormatter
     {
         protected MySqlFormatter(QueryLanguage language)
             : base(language)

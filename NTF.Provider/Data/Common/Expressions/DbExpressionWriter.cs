@@ -159,7 +159,7 @@ namespace NTF.Provider.Data.Common
             {
                 //return this.language.Format(query);
             }
-            return SQLFormatter.Format(query, true);
+            return CmdFormatter.Format(query, true);
         }
 
         protected virtual Expression VisitBatch(BatchExpression batch)

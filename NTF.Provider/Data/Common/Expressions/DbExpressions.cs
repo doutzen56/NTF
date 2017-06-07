@@ -1,7 +1,4 @@
-﻿
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
@@ -367,7 +364,7 @@ namespace NTF.Provider.Data.Common
         }
         public string QueryText
         {
-            get { return SQLFormatter.Format(this, true); }
+            get { return CmdFormatter.Format(this, true); }
         }
     }
 
@@ -677,7 +674,7 @@ namespace NTF.Provider.Data.Common
         }
         public string QueryText
         {
-            get { return SQLFormatter.Format(select, true); }
+            get { return CmdFormatter.Format(select, true); }
         }
     }
 

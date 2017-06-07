@@ -10,7 +10,7 @@ namespace NTF.Provider.Data.Common
     /// <summary>
     /// Formats a query expression into common SQL language syntax
     /// </summary>
-    public class SQLFormatter : DbExpressionVisitor
+    public class CmdFormatter : DbExpressionVisitor
     {
         QueryLanguage language;
         StringBuilder cmdText;
@@ -22,7 +22,7 @@ namespace NTF.Provider.Data.Common
         bool isNested;
         bool forDebug;
 
-        private SQLFormatter(QueryLanguage language, bool forDebug)
+        private CmdFormatter(QueryLanguage language, bool forDebug)
         {
             this.language = language;
             this.cmdText = new StringBuilder();
@@ -30,21 +30,21 @@ namespace NTF.Provider.Data.Common
             this.forDebug = forDebug;
         }
 
-        protected SQLFormatter(QueryLanguage language)
+        protected CmdFormatter(QueryLanguage language)
             : this(language, false)
         {
         }
 
         public static string Format(Expression expression, bool forDebug)
         {
-            var formatter = new SQLFormatter(null, forDebug);
+            var formatter = new CmdFormatter(null, forDebug);
             formatter.Visit(expression);
             return formatter.ToString();
         }
 
         public static string Format(Expression expression)
         {
-            var formatter = new SQLFormatter(null, false);
+            var formatter = new CmdFormatter(null, false);
             formatter.Visit(expression);
             return formatter.ToString();
         }

@@ -9,7 +9,7 @@ namespace NTF.Provider.SqlServerClient
     /// <summary>
     /// Formats a query expression into TSQL language syntax
     /// </summary>
-    public class SqlFormatter : SQLFormatter
+    public class SqlFormatter : CmdFormatter
     {
         protected SqlFormatter(QueryLanguage language)
             : base(language)
