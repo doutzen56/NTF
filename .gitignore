@@ -11,3 +11,7 @@
 /NTF.SQL/obj
 /NTF.SQL/bin
 *.user
+/NTF.Provider.MySqlClient/obj
+/NTF.Provider.MySqlClient/bin
+/NTF.Provider.SqlServerClient/bin
+/NTF.Provider.SqlServerClient/obj
