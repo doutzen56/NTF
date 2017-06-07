@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Tzen.Framework.Provider {
+namespace Tzen.Framework.Provider
+{
     /// <summary>
     /// QueryFormatter is a visitor that converts an bound expression tree into SQL query text
     /// </summary>

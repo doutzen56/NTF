@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
+﻿using System.Linq.Expressions;
 
-namespace Tzen.Framework.Provider {
+namespace Tzen.Framework.Provider
+{
     /// <summary>
     /// A visitor that replaces references to one specific instance of a node with another
     /// </summary>

@@ -50,7 +50,6 @@
     <Compile Include="ExpressionVisitor.cs" />
     <Compile Include="OrderByRewriter.cs" />
     <Compile Include="Parameterizer.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="ProjectionReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBinder.cs" />
@@ -60,8 +59,7 @@
     <Compile Include="Replacer.cs" />
     <Compile Include="SkipRewriter.cs" />
     <Compile Include="SubqueryRemover.cs" />
-    <Compile Include="Tests.cs" />
-    <Compile Include="TypeSystem.cs" />
+    <Compile Include="TypeExtensions.cs" />
     <Compile Include="UnusedColumnRemover.cs" />
   </ItemGroup>
   <ItemGroup>

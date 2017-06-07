@@ -450,7 +450,7 @@ namespace Tzen.Framework.Provider
             ProjectedColumns elementPC = this.ProjectColumns(subqueryElemExpr, elementAlias, subqueryBasis.Source.Alias);
             ProjectionExpression elementSubquery =
                 new ProjectionExpression(
-                    new SelectExpression(TypeSystem.GetSequenceType(subqueryElemExpr.Type), elementAlias, elementPC.Columns, subqueryBasis.Source, subqueryCorrelation),
+                    new SelectExpression(TypeEx.GetSequenceType(subqueryElemExpr.Type), elementAlias, elementPC.Columns, subqueryBasis.Source, subqueryCorrelation),
                     elementPC.Projector
                     );
 
@@ -487,7 +487,7 @@ namespace Tzen.Framework.Provider
             groupByMap.TryAdd(projectedElementSubquery, info);
 
             return new ProjectionExpression(
-                new SelectExpression(TypeSystem.GetSequenceType(resultExpr.Type), alias, pc.Columns, projection.Source, null, null, groupExprs),
+                new SelectExpression(TypeEx.GetSequenceType(resultExpr.Type), alias, pc.Columns, projection.Source, null, null, groupExprs),
                 pc.Projector
                 );
         }
@@ -840,7 +840,7 @@ namespace Tzen.Framework.Provider
         {
             if (this.IsTable(c))
             {
-                return GetTableProjection(TypeSystem.GetElementType(c.Type));
+                return GetTableProjection(TypeEx.GetElementType(c.Type));
             }
             return c;
         }
@@ -873,7 +873,7 @@ namespace Tzen.Framework.Provider
         {
             if (this.IsTable(m))
             {
-                return this.GetTableProjection(TypeSystem.GetElementType(m.Type));
+                return this.GetTableProjection(TypeEx.GetElementType(m.Type));
             }
             Expression source = this.Visit(m.Expression);
             switch (source.NodeType)

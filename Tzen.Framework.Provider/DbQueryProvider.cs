@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Common;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -13,20 +12,13 @@ namespace Tzen.Framework.Provider
     /// <summary>
     /// 支持LINQ查询，生成SQL语句并执行的Provider
     /// </summary>
-    public class DbQueryProvider : QueryProvider 
+    public class SQLQueryProvider : NTFProvider 
     {
         DbConnection connection;
-        TextWriter log;
 
-        public DbQueryProvider(DbConnection connection) 
+        public SQLQueryProvider(DbConnection connection) 
         {
             this.connection = connection;
-        }
-
-        public TextWriter Log 
-        {
-            get { return this.log; }
-            set { this.log = value; }
         }
 
         public override string GetQueryText(Expression expression) 
@@ -52,7 +44,7 @@ namespace Tzen.Framework.Provider
             Expression rootQueryable = RootQueryableFinder.Find(expression);
             Expression providerAccess = Expression.Convert(
                 Expression.Property(rootQueryable, typeof(IQueryable).GetProperty("Provider")),
-                typeof(DbQueryProvider)
+                typeof(SQLQueryProvider)
                 );
 
             LambdaExpression projector = ProjectionBuilder.Build(this, projection, providerAccess);
@@ -81,11 +73,6 @@ namespace Tzen.Framework.Provider
 
         public object Execute(string commandText, string[] paramNames, object[] paramValues, Func<DbDataReader, object> fnRead)
         {
-            if (this.log != null)
-            {
-                this.log.WriteLine(commandText);
-            }
-
             // 创建命令对象（并填写参数）
             DbCommand cmd = this.connection.CreateCommand();
             cmd.CommandText = commandText;
@@ -94,10 +81,6 @@ namespace Tzen.Framework.Provider
                 DbParameter p = cmd.CreateParameter();
                 p.ParameterName = paramNames[i];
                 p.Value = paramValues[i];
-                if (this.log != null)
-                {
-                    this.log.WriteLine("-- @{0} = [{1}]", p.ParameterName, p.Value);
-                }
                 cmd.Parameters.Add(p);
             }
 
@@ -165,13 +148,13 @@ namespace Tzen.Framework.Provider
         /// </summary>
         class ProjectionBuilder : DbExpressionVisitor
         {
-            DbQueryProvider provider;
+            SQLQueryProvider provider;
             ProjectionExpression projection;
             Expression providerAccess;
             ParameterExpression dbDataReaderParam;
             Dictionary<string, int> nameMap;
 
-            private ProjectionBuilder(DbQueryProvider provider, ProjectionExpression projection, Expression providerAccess)
+            private ProjectionBuilder(SQLQueryProvider provider, ProjectionExpression projection, Expression providerAccess)
             {
                 this.provider = provider;
                 this.projection = projection;
@@ -180,7 +163,7 @@ namespace Tzen.Framework.Provider
                 this.nameMap = projection.Source.Columns.Select((c, i) => new { c, i }).ToDictionary(x => x.c.Name, x => x.i);
             }
 
-            internal static LambdaExpression Build(DbQueryProvider provider, ProjectionExpression projection, Expression providerAccess)
+            internal static LambdaExpression Build(SQLQueryProvider provider, ProjectionExpression projection, Expression providerAccess)
             {
                 ProjectionBuilder m = new ProjectionBuilder(provider, projection, providerAccess);
                 Expression body = m.Visit(projection.Projector);
@@ -194,7 +177,7 @@ namespace Tzen.Framework.Provider
                     int iOrdinal = this.nameMap[column.Name];
 
                     Expression defvalue;
-                    if (!column.Type.IsValueType || TypeSystem.IsNullableType(column.Type)) {
+                    if (!column.Type.IsValueType || TypeEx.IsNullableType(column.Type)) {
                         defvalue = Expression.Constant(null, column.Type);
                     }
                     else {
@@ -203,7 +186,7 @@ namespace Tzen.Framework.Provider
                     Expression value = Expression.Convert(
                         Expression.Call(typeof(System.Convert), "ChangeType", null,
                             Expression.Call(this.dbDataReaderParam, "GetValue", null, Expression.Constant(iOrdinal)),
-                            Expression.Constant(TypeSystem.GetNonNullableType(column.Type))
+                            Expression.Constant(TypeEx.GetNonNullableType(column.Type))
                             ),
                             column.Type
                         );
