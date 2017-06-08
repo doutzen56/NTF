@@ -15,3 +15,4 @@
 /NTF.Provider.MySqlClient/bin
 /NTF.Provider.SqlServerClient/bin
 /NTF.Provider.SqlServerClient/obj
+/NTF.Provider/*.user
