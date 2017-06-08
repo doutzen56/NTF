@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -24,13 +26,12 @@ namespace NTF.Provider.Data.Mapping
 
         public override bool IsPrimaryKey(MappingEntity entity, MemberInfo member)
         {
-            // Customers has CustomerID, Orders has OrderID, etc
-            if (this.IsColumn(entity, member)) 
-            {
-                string name = NameWithoutTrailingDigits(member.Name);
-                return member.Name.EndsWith("ID") && member.DeclaringType.Name.StartsWith(member.Name.Substring(0, member.Name.Length - 2)); 
-            }
-            return false;
+            return member.IsDefined(typeof(DatabaseGeneratedAttribute));
+        }
+
+        public override bool IsGenerated(MappingEntity entity, MemberInfo member)
+        {
+            return member.IsDefined(typeof(KeyAttribute));
         }
 
         private string NameWithoutTrailingDigits(string name)
@@ -152,7 +153,8 @@ namespace NTF.Provider.Data.Mapping
 
         private string InferTableName(Type rowType)
         {
-            return SplitWords(Plural(rowType.Name));
+            //return SplitWords(Plural(rowType.Name));
+            return rowType.Name;
         }
 
         public static string SplitWords(string name)
