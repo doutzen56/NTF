@@ -22,7 +22,7 @@ namespace NTF
         /// <param name="source">需要排序的列表</param>
         /// <param name="getDependencies"></param>
         /// <returns></returns>
-        internal static List<T> SortByDependencies<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> getDependencies)
+        public static List<T> Sort<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> getDependencies)
         {
             var sorted = new List<T>();
             var visited = new Dictionary<T, bool>();
@@ -71,9 +71,9 @@ namespace NTF
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static bool IsNullOrEmpty<T>(this ICollection<T> source)
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
         {
-            return source == null || source.Count <= 0;
+            return source == null || source.Count() <= 0;
         }
     }
 }

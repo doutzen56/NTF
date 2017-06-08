@@ -82,7 +82,7 @@ namespace NTF.Provider.Data
             return From(provider, connection, mapping);
         }
 
-        public static DbEntityProvider From(string connectionString, string mappingId)
+        public static DbEntityProvider From(string connectionString, string mappingId = null)
         {
             return From(connectionString, mappingId, QueryPolicy.Default);
         }
@@ -131,7 +131,7 @@ namespace NTF.Provider.Data
                 }
                 else
                 {
-                    provider = "NTF.Provider.Data.MySqlClient";
+                    provider = "NTF.Provider.SqlServerClient";
                     //throw new InvalidOperationException(string.Format("Query provider not specified and cannot be inferred."));
                 }
             }

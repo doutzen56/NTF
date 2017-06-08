@@ -89,7 +89,7 @@ namespace NTF.Provider.Data
         protected virtual IDbContext CreateTable(MappingEntity entity)
         {
             return (IDbContext) Activator.CreateInstance(
-                typeof(EntityTable<>).MakeGenericType(entity.ElementType), 
+                typeof(EntityDbContenxt<>).MakeGenericType(entity.ElementType), 
                 new object[] { this, entity }
                 );
         }
@@ -141,12 +141,12 @@ namespace NTF.Provider.Data
             return this.CreateExecutor();
         }
 
-        public class EntityTable<T> : Query<T>, IDbContext<T>, IHaveMappingEntity
+        public class EntityDbContenxt<T> : Query<T>, IDbContext<T>, IHaveMappingEntity
         {
             MappingEntity entity;
             EntityProvider provider;
 
-            public EntityTable(EntityProvider provider, MappingEntity entity)
+            public EntityDbContenxt(EntityProvider provider, MappingEntity entity)
                 : base(provider, typeof(IDbContext<T>))
             {
                 this.provider = provider;

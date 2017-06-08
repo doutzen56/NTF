@@ -4,7 +4,7 @@ using System.Reflection;
 namespace NTF.Provider.Data.Common
 {
     /// <summary>
-    /// Defines query execution & materialization policies. 
+    /// 定义查询执行和实体化策略
     /// </summary>
     public class QueryPolicy
     {

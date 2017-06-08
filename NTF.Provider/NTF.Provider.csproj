@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,7 +53,7 @@
     <Compile Include="Data\Common\FieldReader.cs" />
     <Compile Include="Data\Common\Language\QueryLanguage.cs" />
     <Compile Include="Data\Common\Language\QueryTypeSystem.cs" />
-    <Compile Include="Data\Common\Language\SqlFormatter.cs" />
+    <Compile Include="Data\Common\Language\CmdFormatter.cs" />
     <Compile Include="Data\Common\Mapping\AdvancedMapping.cs" />
     <Compile Include="Data\Common\Mapping\BasicMapping.cs" />
     <Compile Include="Data\Common\Mapping\QueryMapping.cs" />
@@ -111,7 +112,6 @@
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="ScopedDictionary.cs" />
     <Compile Include="StrongDelegate.cs" />
-    <Compile Include="TopologicalSort.cs" />
     <Compile Include="TypedSubtreeFinder.cs" />
     <Compile Include="TypeHelper.cs" />
     <Compile Include="Data\DbEntityProvider.cs" />

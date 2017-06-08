@@ -7,6 +7,9 @@ using System.Reflection;
 
 namespace NTF.Provider.Data
 {
+    /// <summary>
+    /// 查询计划和实体化策略
+    /// </summary>
     public class EntityPolicy : QueryPolicy
     {
         HashSet<MemberInfo> included = new HashSet<MemberInfo>();

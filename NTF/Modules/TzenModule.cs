@@ -126,7 +126,7 @@ namespace NTF.Modules
         /// <returns>返回根据依赖关系排序后的列表</returns>
         public List<TzenModuleInfo> GetSortModuleListByDependency()
         {
-            var sortedModules = ListEx.SortByDependencies(this, a => a.Dependencies);
+            var sortedModules = ListEx.Sort(this, a => a.Dependencies);
             //确保核心模块在首位
             var coreModuleIndex = sortedModules.FindIndex(a => a.Type == typeof(TzenCoreModule));
             if (coreModuleIndex > 0)

@@ -91,7 +91,7 @@ namespace NTF.Provider.SqlServerClient
 
             public override string Format(Expression expression)
             {
-                return SqlServerFormatter.Format(expression, this.Language);
+                return SqlFormatter.Format(expression, this.Language);
             }
         }
 
