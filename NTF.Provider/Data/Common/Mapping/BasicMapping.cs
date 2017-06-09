@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 
 namespace NTF.Provider.Data.Common
 {
@@ -808,8 +809,9 @@ namespace NTF.Provider.Data.Common
 
         protected virtual Expression GetIdentityCheck(Expression root, MappingEntity entity, Expression instance)
         {
+            
             return this.mapping.GetMappedMembers(entity)
-            .Where(m => this.mapping.IsPrimaryKey(entity, m))
+            //.Where(m => this.mapping.IsPrimaryKey(entity, m))
             .Select(m => this.GetMemberExpression(root, entity, m).Equal(Expression.MakeMemberAccess(instance, m)))
             .Aggregate((x, y) => x.And(y));
         }
@@ -834,7 +836,6 @@ namespace NTF.Provider.Data.Common
         {
             var tableAlias = new TableAlias();
             var table = new TableExpression(tableAlias, entity, this.mapping.GetTableName(entity));
-
             var where = this.GetIdentityCheck(table, entity, instance);
             if (updateCheck != null)
             {

@@ -7,7 +7,7 @@ using System.Reflection;
 namespace NTF.Provider
 {
     /// <summary>
-    /// Creates a reusable, parameterized representation of a query that caches the execution plan
+    /// 创建一个可重用的、参数化的查询表达式，用于缓存执行计划。
     /// </summary>
     public static class QueryCompiler
     {
@@ -17,9 +17,9 @@ namespace NTF.Provider
             return StrongDelegate.CreateDelegate(query.Type, (Func<object[], object>)cq.Invoke);
         }
 
-        public static D Compile<D>(Expression<D> query)
+        public static TResult Compile<TResult>(Expression<TResult> query)
         {
-            return (D)(object)Compile((LambdaExpression)query);
+            return (TResult)(object)Compile((LambdaExpression)query);
         }
 
         public static Func<TResult> Compile<TResult>(Expression<Func<TResult>> query)

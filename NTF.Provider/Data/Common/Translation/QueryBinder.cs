@@ -206,7 +206,7 @@ namespace NTF.Provider.Data.Common
                     case "Update":
                         return this.BindUpdate(
                             upd,
-                            m.Arguments[1], 
+                            m.Arguments.Count > 1 ? GetLambda(m.Arguments[1]) : null,
                             m.Arguments.Count > 2 ? GetLambda(m.Arguments[2]) : null, 
                             m.Arguments.Count > 3 ? GetLambda(m.Arguments[3]) : null
                             );
@@ -946,7 +946,7 @@ namespace NTF.Provider.Data.Common
 
         private Expression BindUpdate(IDbContext upd, Expression instance, LambdaExpression updateCheck, LambdaExpression resultSelector)
         {
-            MappingEntity entity = this.mapper.Mapping.GetEntity(instance.Type, upd.TableName);
+            MappingEntity entity = this.mapper.Mapping.GetEntity(upd.ElementType, upd.TableName);
             return this.Visit(this.mapper.GetUpdateExpression(entity, instance, updateCheck, resultSelector, null));
         }
 
