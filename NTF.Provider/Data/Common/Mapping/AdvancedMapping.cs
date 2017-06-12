@@ -386,7 +386,7 @@ namespace NTF.Provider.Data.Common
             return exp;
         }
 
-        public override Expression GetUpdateExpression(MappingEntity entity, Expression instance, LambdaExpression updateCheck, LambdaExpression selector, Expression @else)
+        public override Expression GetUpdateExpression(MappingEntity entity, Expression instance, Expression updateCheck, LambdaExpression selector, Expression @else)
         {
             var tables = this.mapping.GetTables(entity);
             if (tables.Count < 2)
@@ -426,11 +426,11 @@ namespace NTF.Provider.Data.Common
 
             Expression block = new BlockCommand(commands);
 
-            if (updateCheck != null)
-            {
-                var test = this.GetEntityStateTest(entity, instance, updateCheck);
-                return new IFCommand(test, block, null);
-            }
+            //if (updateCheck != null)
+            //{
+            //    var test = this.GetEntityStateTest(entity, instance, updateCheck);
+            //    return new IFCommand(test, block, null);
+            //}
 
             return block;
         }

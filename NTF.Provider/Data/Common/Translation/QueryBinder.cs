@@ -204,10 +204,11 @@ namespace NTF.Provider.Data.Common
                             m.Arguments.Count > 2 ? GetLambda(m.Arguments[2]) : null
                             );
                     case "Update":
+
                         return this.BindUpdate(
                             upd,
                             m.Arguments.Count > 1 ? GetLambda(m.Arguments[1]) : null,
-                            m.Arguments.Count > 2 ? GetLambda(m.Arguments[2]) : null, 
+                            m.Arguments.Count > 2 ? GetLambda(m.Arguments[2]) : null,
                             m.Arguments.Count > 3 ? GetLambda(m.Arguments[3]) : null
                             );
                     case "InsertOrUpdate":
@@ -944,10 +945,10 @@ namespace NTF.Provider.Data.Common
             return this.Visit(this.mapper.GetInsertExpression(entity, instance, selector));
         }
 
-        private Expression BindUpdate(IDbContext upd, Expression instance, LambdaExpression updateCheck, LambdaExpression resultSelector)
+        private Expression BindUpdate(IDbContext upd, LambdaExpression predicate, Expression updateExpression, LambdaExpression resultSelector)
         {
             MappingEntity entity = this.mapper.Mapping.GetEntity(upd.ElementType, upd.TableName);
-            return this.Visit(this.mapper.GetUpdateExpression(entity, instance, updateCheck, resultSelector, null));
+            return this.Visit(this.mapper.GetUpdateExpression(entity, predicate, updateExpression, resultSelector, null));
         }
 
         private Expression BindInsertOrUpdate(IDbContext upd, Expression instance, LambdaExpression updateCheck, LambdaExpression resultSelector)

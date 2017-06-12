@@ -110,7 +110,7 @@ namespace NTF.Provider
                 ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(TResult)),
                 collection.Expression,
                 predicate != null ? (Expression)Expression.Quote(predicate) : Expression.Constant(null, typeof(Expression<Func<T, bool>>)),
-                update != null ? (Expression)Expression.Quote(update) : Expression.Constant(null, typeof(Expression<Func<T, T>>)),
+                update,
                 resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(Expression<Func<T, TResult>>))
                 );
             return (TResult)collection.Provider.Execute(callMyself);
@@ -140,6 +140,17 @@ namespace NTF.Provider
             return Update<T, int>(collection, instance, null, null);
         }
 
+        public static int Update<T>(this INonQuery<T> collection,Expression<Func<T, bool>> predicate, Expression<Func<T, T>> updateExpression)
+        {
+            var callMyself = Expression.Call(
+                null,
+                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T)),
+                collection.Expression,
+                predicate != null ? (Expression)Expression.Quote(predicate) : Expression.Constant(null, typeof(Expression<Func<T, bool>>)),
+                updateExpression != null ? (Expression)Expression.Quote(updateExpression) : Expression.Constant(null, typeof(Expression<Func<T, T>>))
+                );
+            return (int)collection.Provider.Execute(callMyself);
+        }
         public static object InsertOrUpdate(INonQuery collection, object instance, LambdaExpression updateCheck, LambdaExpression resultSelector)
         {
             var callMyself = Expression.Call(

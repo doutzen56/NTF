@@ -203,7 +203,7 @@ namespace NTF.Provider.Data.Common
         /// <param name="selector"></param>
         /// <param name="else"></param>
         /// <returns></returns>
-        public abstract Expression GetUpdateExpression(MappingEntity entity, Expression instance, LambdaExpression updateCheck, LambdaExpression selector, Expression @else);
+        public abstract Expression GetUpdateExpression(MappingEntity entity, Expression instance, Expression updateCheck, LambdaExpression selector, Expression @else);
 
         /// <summary>
         /// Get an expression that represents the insert-or-update operation for the specified instance.

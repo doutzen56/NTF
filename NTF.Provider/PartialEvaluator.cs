@@ -85,6 +85,7 @@ namespace NTF.Provider
 
             private Expression Evaluate(Expression e)
             {
+                return e;
                 Type type = e.Type;
                 if (e.NodeType == ExpressionType.Convert)
                 {

@@ -131,6 +131,7 @@ namespace NTF.Provider.Data.Common
         /// <returns></returns>
         public virtual bool IsUpdatable(MappingEntity entity, MemberInfo member)
         {
+
             return !this.IsPrimaryKey(entity, member);
         }
 
@@ -163,7 +164,7 @@ namespace NTF.Provider.Data.Common
         /// <param name="member"></param>
         /// <returns></returns>
         public virtual IEnumerable<MemberInfo> GetAssociationKeyMembers(MappingEntity entity, MemberInfo member)
-        {            
+        {
             return new MemberInfo[] { };
         }
 
@@ -504,7 +505,7 @@ namespace NTF.Provider.Data.Common
         {
             foreach (var assign in assignments)
             {
-                MemberInfo[] members = entityType.GetMember(assign.Member.Name, BindingFlags.Instance|BindingFlags.Public);
+                MemberInfo[] members = entityType.GetMember(assign.Member.Name, BindingFlags.Instance | BindingFlags.Public);
                 if (members != null && members.Length > 0)
                 {
                     yield return new EntityAssignment(members[0], assign.Expression);
@@ -656,7 +657,7 @@ namespace NTF.Provider.Data.Common
                 Expression where = null;
                 for (int i = 0, n = associatedMembers.Count; i < n; i++)
                 {
-                    Expression equal = 
+                    Expression equal =
                         this.GetMemberExpression(projection.Projector, relatedEntity, associatedMembers[i]).Equal(
                             this.GetMemberExpression(root, entity, declaredTypeMembers[i])
                         );
@@ -704,6 +705,7 @@ namespace NTF.Provider.Data.Common
 
         private IEnumerable<ColumnAssignment> GetColumnAssignments(Expression table, Expression instance, MappingEntity entity, Func<MappingEntity, MemberInfo, bool> fnIncludeColumn)
         {
+
             foreach (var m in this.mapping.GetMappedMembers(entity))
             {
                 if (this.mapping.IsColumn(entity, m) && fnIncludeColumn(entity, m))
@@ -809,11 +811,11 @@ namespace NTF.Provider.Data.Common
 
         protected virtual Expression GetIdentityCheck(Expression root, MappingEntity entity, Expression instance)
         {
-            
-            return this.mapping.GetMappedMembers(entity)
+            return instance;
+            //return this.mapping.GetMappedMembers(entity)
             //.Where(m => this.mapping.IsPrimaryKey(entity, m))
-            .Select(m => this.GetMemberExpression(root, entity, m).Equal(Expression.MakeMemberAccess(instance, m)))
-            .Aggregate((x, y) => x.And(y));
+            //.Select(m => this.GetMemberExpression(root, entity, m).Equal(Expression.MakeMemberAccess(instance, m)))
+            //.Aggregate((x, y) => x.And(y));
         }
 
         protected virtual Expression GetEntityExistsTest(MappingEntity entity, Expression instance)
@@ -832,19 +834,21 @@ namespace NTF.Provider.Data.Common
             return new ExistsExpression(new SelectExpression(new TableAlias(), null, tq.Select, where));
         }
 
-        public override Expression GetUpdateExpression(MappingEntity entity, Expression instance, LambdaExpression updateCheck, LambdaExpression selector, Expression @else)
+        public override Expression GetUpdateExpression(MappingEntity entity, Expression instance, Expression updateCheck, LambdaExpression selector, Expression @else)
         {
             var tableAlias = new TableAlias();
             var table = new TableExpression(tableAlias, entity, this.mapping.GetTableName(entity));
-            var where = this.GetIdentityCheck(table, entity, instance);
-            if (updateCheck != null)
+            Expression where=null;
+            var predicate = instance as LambdaExpression;
+            if (predicate != null)
             {
                 Expression typeProjector = this.GetEntityExpression(table, entity);
-                Expression pred = DbExpressionReplacer.Replace(updateCheck.Body, updateCheck.Parameters[0], typeProjector);
-                where = where.And(pred);
+                Expression pred = DbExpressionReplacer.Replace(predicate.Body, predicate.Parameters[0], typeProjector);
+                where = pred;
             }
-
-            var assignments = this.GetColumnAssignments(table, instance, entity, (e, m) => this.mapping.IsUpdatable(e, m));
+            var updateExpression = (updateCheck as LambdaExpression).Body;
+            
+            var assignments = this.GetColumnAssignments(table, updateExpression, entity, (e, m) => ((MemberInitExpression)updateExpression).Bindings.FirstOrDefault(a => a.Member.Name == m.Name) != null);
 
             Expression update = new UpdateCommand(table, where, assignments);
 
@@ -854,7 +858,7 @@ namespace NTF.Provider.Data.Common
                     update,
                     new IFCommand(
                         this.translator.Linguist.Language.GetRowsAffectedExpression(update).GreaterThan(Expression.Constant(0)),
-                        this.GetUpdateResult(entity, instance, selector),
+                        this.GetUpdateResult(entity, predicate, selector),
                         @else
                         )
                     );
@@ -875,13 +879,21 @@ namespace NTF.Provider.Data.Common
                 return update;
             }
         }
-
         protected virtual Expression GetUpdateResult(MappingEntity entity, Expression instance, LambdaExpression selector)
         {
             var tq = this.GetQueryExpression(entity);
-            Expression where = this.GetIdentityCheck(tq.Select, entity, instance);
+            Expression where = null;
+            TableAlias newAlias = tq.Select.Alias;
+            var table = new TableExpression(newAlias, entity, this.mapping.GetTableName(entity));
+            var predicate = instance as LambdaExpression;
+            if (predicate != null)
+            {
+                Expression typeProjector = this.GetEntityExpression(table, entity);
+                Expression pred = DbExpressionReplacer.Replace(predicate.Body, predicate.Parameters[0], typeProjector);
+                where = pred;
+            }
             Expression selection = DbExpressionReplacer.Replace(selector.Body, selector.Parameters[0], tq.Projector);
-            TableAlias newAlias = new TableAlias();
+            
             var pc = ColumnProjector.ProjectColumns(this.translator.Linguist.Language, selection, null, newAlias, tq.Select.Alias);
             return new ProjectionExpression(
                 new SelectExpression(newAlias, pc.Columns, tq.Select, where),
@@ -899,7 +911,7 @@ namespace NTF.Provider.Data.Common
                 var check = this.GetEntityExistsTest(entity, instance);
                 return new IFCommand(check, update, insert);
             }
-            else 
+            else
             {
                 Expression insert = this.GetInsertExpression(entity, instance, resultSelector);
                 Expression update = this.GetUpdateExpression(entity, instance, updateCheck, resultSelector, insert);
