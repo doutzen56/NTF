@@ -21,7 +21,7 @@ namespace NTF.Provider
 
         IQueryable IQueryProvider.CreateQuery(Expression expression)
         {
-            Type elementType = TypeHelper.GetElementType(expression.Type);
+            Type elementType = TypeEx.GetElementType(expression.Type);
             try
             {
                 return (IQueryable)Activator.CreateInstance(typeof(Query<>).MakeGenericType(elementType), new object[] { this, expression });

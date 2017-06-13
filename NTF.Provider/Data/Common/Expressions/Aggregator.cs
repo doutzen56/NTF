@@ -18,10 +18,10 @@ namespace NTF.Provider.Data.Common
         /// <returns></returns>
         public static LambdaExpression GetAggregator(Type expectedType, Type actualType)
         {
-            Type actualElementType = TypeHelper.GetElementType(actualType);
+            Type actualElementType = TypeEx.GetElementType(actualType);
             if (!expectedType.IsAssignableFrom(actualType))
             {
-                Type expectedElementType = TypeHelper.GetElementType(expectedType);
+                Type expectedElementType = TypeEx.GetElementType(expectedType);
                 ParameterExpression p = Expression.Parameter(actualType, "p");
                 Expression body = null;
                 if (expectedType.IsAssignableFrom(actualElementType))
@@ -74,7 +74,7 @@ namespace NTF.Provider.Data.Common
 
         private static Expression CoerceElement(Type expectedElementType, Expression expression)
         {
-            Type elementType = TypeHelper.GetElementType(expression.Type);
+            Type elementType = TypeEx.GetElementType(expression.Type);
             if (expectedElementType != elementType && (expectedElementType.IsAssignableFrom(elementType) || elementType.IsAssignableFrom(expectedElementType)))
             {
                 return Expression.Call(typeof(Enumerable), "Cast", new Type[] { expectedElementType }, expression);

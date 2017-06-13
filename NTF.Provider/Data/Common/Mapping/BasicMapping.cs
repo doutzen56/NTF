@@ -24,7 +24,7 @@ namespace NTF.Provider.Data.Common
 
         public override MappingEntity GetEntity(MemberInfo contextMember)
         {
-            Type elementType = TypeHelper.GetElementType(TypeHelper.GetMemberType(contextMember));
+            Type elementType = TypeEx.GetElementType(TypeEx.GetMemberType(contextMember));
             return this.GetEntity(elementType);
         }
 
@@ -99,7 +99,7 @@ namespace NTF.Provider.Data.Common
 
         public virtual MappingEntity GetRelatedEntity(MappingEntity entity, MemberInfo member)
         {
-            Type relatedType = TypeHelper.GetElementType(TypeHelper.GetMemberType(member));
+            Type relatedType = TypeEx.GetElementType(TypeEx.GetMemberType(member));
             return this.GetEntity(relatedType);
         }
 
@@ -207,8 +207,8 @@ namespace NTF.Provider.Data.Common
             for (int i = 0, n = keys.Length; i < n; i++)
             {
                 MemberInfo mem = idMembers[i];
-                Type memberType = TypeHelper.GetMemberType(mem);
-                if (keys[i] != null && TypeHelper.GetNonNullableType(keys[i].Type) != TypeHelper.GetNonNullableType(memberType))
+                Type memberType = TypeEx.GetMemberType(mem);
+                if (keys[i] != null && TypeEx.GetNonNullableType(keys[i].Type) != TypeEx.GetNonNullableType(memberType))
                 {
                     throw new InvalidOperationException("Primary key value is wrong type");
                 }
@@ -319,7 +319,7 @@ namespace NTF.Provider.Data.Common
             {
                 return this.translator.Linguist.Language.TypeSystem.Parse(dbType);
             }
-            return this.translator.Linguist.Language.TypeSystem.GetColumnType(TypeHelper.GetMemberType(member));
+            return this.translator.Linguist.Language.TypeSystem.GetColumnType(TypeEx.GetMemberType(member));
         }
 
         public override ProjectionExpression GetQueryExpression(MappingEntity entity)
@@ -375,7 +375,7 @@ namespace NTF.Provider.Data.Common
             NewExpression newExpression;
 
             // handle cases where members are not directly assignable
-            EntityAssignment[] readonlyMembers = assignments.Where(b => TypeHelper.IsReadOnly(b.Member)).ToArray();
+            EntityAssignment[] readonlyMembers = assignments.Where(b => TypeEx.IsReadOnly(b.Member)).ToArray();
             ConstructorInfo[] cons = entity.EntityType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
             bool hasNoArgConstructor = cons.Any(c => c.GetParameters().Length == 0);
 
@@ -473,7 +473,7 @@ namespace NTF.Provider.Data.Common
                     MemberInfo[] mems = cons.DeclaringType.GetMember(p.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
                     if (mems != null && mems.Length > 0)
                     {
-                        args[i] = Expression.Constant(TypeHelper.GetDefault(p.ParameterType), p.ParameterType);
+                        args[i] = Expression.Constant(TypeEx.GetDefault(p.ParameterType), p.ParameterType);
                         mis[i] = mems[0];
                     }
                     else
@@ -591,7 +591,7 @@ namespace NTF.Provider.Data.Common
                 TableAlias newAlias = new TableAlias();
                 var pc = ColumnProjector.ProjectColumns(this.translator.Linguist.Language, projection.Projector, null, newAlias, projection.Select.Alias);
 
-                LambdaExpression aggregator = Aggregator.GetAggregator(TypeHelper.GetMemberType(member), typeof(IEnumerable<>).MakeGenericType(pc.Projector.Type));
+                LambdaExpression aggregator = Aggregator.GetAggregator(TypeEx.GetMemberType(member), typeof(IEnumerable<>).MakeGenericType(pc.Projector.Type));
                 var result = new ProjectionExpression(
                     new SelectExpression(newAlias, pc.Columns, projection.Select, where),
                     pc.Projector, aggregator
@@ -604,7 +604,7 @@ namespace NTF.Provider.Data.Common
                 AliasedExpression aliasedRoot = root as AliasedExpression;
                 if (aliasedRoot != null && this.mapping.IsColumn(entity, member))
                 {
-                    return new ColumnExpression(TypeHelper.GetMemberType(member), this.GetColumnType(entity, member), aliasedRoot.Alias, this.mapping.GetColumnName(entity, member));
+                    return new ColumnExpression(TypeEx.GetMemberType(member), this.GetColumnType(entity, member), aliasedRoot.Alias, this.mapping.GetColumnName(entity, member));
                 }
                 return QueryBinder.BindMember(root, member);
             }
@@ -679,7 +679,7 @@ namespace NTF.Provider.Data.Common
                         var colType = this.GetColumnType(entity, mex.Member);
                         return new ProjectionExpression(
                             new SelectExpression(alias, new[] { new ColumnDeclaration("", map[mex.Member], colType) }, null, null),
-                            new ColumnExpression(TypeHelper.GetMemberType(mex.Member), colType, alias, ""),
+                            new ColumnExpression(TypeEx.GetMemberType(mex.Member), colType, alias, ""),
                             aggregator
                             );
                     }
@@ -725,7 +725,7 @@ namespace NTF.Provider.Data.Common
                 decls.Add(new VariableDeclaration(member.Name, colType, new ColumnExpression(genId.Type, colType, alias, member.Name)));
                 if (map != null)
                 {
-                    var vex = new VariableExpression(member.Name, TypeHelper.GetMemberType(member), colType);
+                    var vex = new VariableExpression(member.Name, TypeEx.GetMemberType(member), colType);
                     map.Add(member, vex);
                 }
             }

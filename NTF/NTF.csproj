@@ -70,6 +70,7 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Ioc\DefaultRegister.cs" />
     <Compile Include="Ioc\IConventionReg.cs" />
     <Compile Include="Ioc\IIocManager.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Repositories\OrderBy.cs" />
     <Compile Include="PageList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reflection\TzenAssemblyFinder.cs" />
+    <Compile Include="Reflection\NtfAssemblyFinder.cs" />
     <Compile Include="Reflection\IAssemblyFinder.cs" />
     <Compile Include="Reflection\ITypeFinder.cs" />
     <Compile Include="Reflection\TypeFinder.cs" />

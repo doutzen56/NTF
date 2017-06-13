@@ -174,7 +174,7 @@ namespace NTF.Provider.Data.Common
         /// <returns></returns>
         public virtual bool IsScalar(Type type)
         {
-            type = TypeHelper.GetNonNullableType(type);
+            type = TypeEx.GetNonNullableType(type);
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Empty:

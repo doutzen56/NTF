@@ -109,7 +109,7 @@ namespace NTF.Provider.SqlServerClient
                 {
                     var qp = query.Parameters[i];
                     cmd.Parameters[i].SourceColumn = qp.Name;
-                    dataTable.Columns.Add(qp.Name, TypeHelper.GetNonNullableType(qp.Type));
+                    dataTable.Columns.Add(qp.Name, TypeEx.GetNonNullableType(qp.Type));
                 }
                 SqlDataAdapter dataAdapter = new SqlDataAdapter();
                 dataAdapter.InsertCommand = cmd;

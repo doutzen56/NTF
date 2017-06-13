@@ -317,9 +317,9 @@ namespace NTF.Provider.Data
             {
                 if (value == null)
                 {
-                    return TypeHelper.GetDefault(type);
+                    return TypeEx.GetDefault(type);
                 }
-                type = TypeHelper.GetNonNullableType(type);
+                type = TypeEx.GetNonNullableType(type);
                 Type vtype = value.GetType();
                 if (type != vtype)
                 {

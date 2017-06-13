@@ -121,7 +121,7 @@ namespace NTF.Provider.Data
 
         public virtual bool CanBeParameter(Expression expression)
         {
-            Type type = TypeHelper.GetNonNullableType(expression.Type);
+            Type type = TypeEx.GetNonNullableType(expression.Type);
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Object:

@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace NTF.Provider
+namespace NTF
 {
-    /// <summary>
-    /// Type related helper methods
-    /// </summary>
-    public static class TypeHelper
+    public static class TypeEx
     {
         public static Type FindIEnumerable(Type seqType)
         {
@@ -103,7 +100,7 @@ namespace NTF.Provider
 
         public static object GetDefault(Type type)
         {
-            bool isNullable = !type.IsValueType || TypeHelper.IsNullableType(type);
+            bool isNullable = !type.IsValueType || TypeEx.IsNullableType(type);
             if (!isNullable)
                 return Activator.CreateInstance(type);
             return null;

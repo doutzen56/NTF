@@ -167,7 +167,7 @@ namespace NTF.Provider.Data.Common
                 Expression cond = null;
                 for (int i = 0, n = keyColumns.Count; i < n; i++)
                 {
-                    var memberType = TypeHelper.GetMemberType(relatedMembers[i]);
+                    var memberType = TypeEx.GetMemberType(relatedMembers[i]);
                     var colType = this.GetColumnType(entity, relatedMembers[i]);
                     var relatedColumn = new ColumnExpression(memberType, colType, relatedTableAlias, this.mapping.GetColumnName(entity, relatedMembers[i]));
                     var joinedColumn = new ColumnExpression(memberType, colType, joinedTableAlias, keyColumns[i]);
@@ -211,7 +211,7 @@ namespace NTF.Provider.Data.Common
                         TableAlias alias;
                         aliases.TryGetValue(aliasName, out alias);
                         var colType = this.GetColumnType(entity, mi);
-                        ColumnExpression ce = new ColumnExpression(TypeHelper.GetMemberType(mi), colType, alias, name);
+                        ColumnExpression ce = new ColumnExpression(TypeEx.GetMemberType(mi), colType, alias, name);
                         ColumnDeclaration cd = new ColumnDeclaration(name, ce, colType);
                         columns.Add(cd);
                     }
@@ -446,7 +446,7 @@ namespace NTF.Provider.Data.Common
                 for (int i = 0, n = keyColNames.Length; i < n; i++)
                 {
                     var relatedMember = relatedMembers[i];
-                    var cex = new ColumnExpression(TypeHelper.GetMemberType(relatedMember), this.GetColumnType(entity, relatedMember), root.Alias, keyColNames[n]);
+                    var cex = new ColumnExpression(TypeEx.GetMemberType(relatedMember), this.GetColumnType(entity, relatedMember), root.Alias, keyColNames[n]);
                     var nex = this.GetMemberExpression(instance, entity, relatedMember);
                     var eq = cex.Equal(nex);
                     where = (where != null) ? where.And(eq) : where;

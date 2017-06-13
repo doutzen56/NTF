@@ -73,7 +73,7 @@ namespace NTF.Provider.Data.Mapping
 
         public override MappingEntity GetEntity(MemberInfo contextMember)
         {
-            Type elementType = TypeHelper.GetElementType(TypeHelper.GetMemberType(contextMember));
+            Type elementType = TypeEx.GetElementType(TypeEx.GetMemberType(contextMember));
             return this.GetEntity(elementType, contextMember.Name);
         }
 
@@ -117,10 +117,10 @@ namespace NTF.Provider.Data.Mapping
                 foreach (var mi in contextType.GetMembers(BindingFlags.Instance | BindingFlags.Public))
                 {
                     FieldInfo fi = mi as FieldInfo;
-                    if (fi != null && TypeHelper.GetElementType(fi.FieldType) == entityType)
+                    if (fi != null && TypeEx.GetElementType(fi.FieldType) == entityType)
                         return fi.Name;
                     PropertyInfo pi = mi as PropertyInfo;
-                    if (pi != null && TypeHelper.GetElementType(pi.PropertyType) == entityType)
+                    if (pi != null && TypeEx.GetElementType(pi.PropertyType) == entityType)
                         return pi.Name;
                 }
             }
@@ -166,7 +166,7 @@ namespace NTF.Provider.Data.Mapping
                     members.Add(nestedMember);
                     member = this.FindMember(entityType, nestedMember);
                     string newTableId = tableId + "." + nestedMember;
-                    nested = (AttributeMappingEntity)this.GetEntity(TypeHelper.GetMemberType(member), newTableId);
+                    nested = (AttributeMappingEntity)this.GetEntity(TypeEx.GetMemberType(member), newTableId);
                 }
                 else 
                 {
@@ -195,7 +195,7 @@ namespace NTF.Provider.Data.Mapping
                 {
                     throw new InvalidOperationException(string.Format("AttributMapping: the member '{0}' does not exist on type '{1}'", name, type.Name));
                 }
-                type = TypeHelper.GetElementType(TypeHelper.GetMemberType(member));
+                type = TypeEx.GetElementType(TypeEx.GetMemberType(member));
             }
             return member;
         }
@@ -277,7 +277,7 @@ namespace NTF.Provider.Data.Mapping
             AttributeMappingMember mm = ((AttributeMappingEntity)entity).GetMappingMember(member.Name);
             if (mm != null && mm.Association != null)
             {
-                if (mm.Association.IsForeignKey && !typeof(IEnumerable).IsAssignableFrom(TypeHelper.GetMemberType(member)))
+                if (mm.Association.IsForeignKey && !typeof(IEnumerable).IsAssignableFrom(TypeEx.GetMemberType(member)))
                     return true;
             }
             return false;
@@ -288,7 +288,7 @@ namespace NTF.Provider.Data.Mapping
             AttributeMappingMember mm = ((AttributeMappingEntity)entity).GetMappingMember(member.Name);
             if (mm != null && mm.Association != null)
             {
-                if (!mm.Association.IsForeignKey || typeof(IEnumerable).IsAssignableFrom(TypeHelper.GetMemberType(member)))
+                if (!mm.Association.IsForeignKey || typeof(IEnumerable).IsAssignableFrom(TypeEx.GetMemberType(member)))
                     return true;
             }
             return false;
@@ -308,7 +308,7 @@ namespace NTF.Provider.Data.Mapping
             {
                 if (mm.Association != null)
                 {
-                    Type elementType = TypeHelper.GetElementType(TypeHelper.GetMemberType(member));
+                    Type elementType = TypeEx.GetElementType(TypeEx.GetMemberType(member));
                     Type entityType = (mm.Association.RelatedEntityType != null) ? mm.Association.RelatedEntityType : elementType;
                     return this.GetReferencedEntity(elementType, mm.Association.RelatedEntityID, entityType, "Association.RelatedEntityID");
                 }

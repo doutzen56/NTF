@@ -22,7 +22,7 @@ namespace NTF.Provider.Data
                 throw new ArgumentNullException("fnApply");
             if (fnApply.Parameters.Count != 1)
                 throw new ArgumentException("Apply function has wrong number of arguments.");
-            this.AddOperation(TypeHelper.GetElementType(fnApply.Parameters[0].Type), fnApply);
+            this.AddOperation(TypeEx.GetElementType(fnApply.Parameters[0].Type), fnApply);
         }
 
         public void Apply<TEntity>(Expression<Func<IEnumerable<TEntity>, IEnumerable<TEntity>>> fnApply)
@@ -71,7 +71,7 @@ namespace NTF.Provider.Data
 
         private void Defer(MemberInfo member)
         {
-            Type mType = TypeHelper.GetMemberType(member);
+            Type mType = TypeEx.GetMemberType(member);
             if (mType.IsGenericType)
             {
                 var gType = mType.GetGenericTypeDefinition();

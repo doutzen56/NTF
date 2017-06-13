@@ -124,7 +124,7 @@ namespace NTF.Provider.Data.Common
         {
             if (!this.IsRelationship(entity, member))
                 return false;
-            Type ieType = TypeHelper.FindIEnumerable(TypeHelper.GetMemberType(member));
+            Type ieType = TypeEx.FindIEnumerable(TypeEx.GetMemberType(member));
             return ieType == null;
         }
 

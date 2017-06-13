@@ -162,8 +162,8 @@ namespace NTF.Provider.Data
 
         public override QueryType GetColumnType(Type type)
         {
-            bool isNotNull = type.IsValueType && !TypeHelper.IsNullableType(type);
-            type = TypeHelper.GetNonNullableType(type);
+            bool isNotNull = type.IsValueType && !TypeEx.IsNullableType(type);
+            type = TypeEx.GetNonNullableType(type);
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Boolean:

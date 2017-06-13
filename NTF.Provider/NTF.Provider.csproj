@@ -113,7 +113,6 @@
     <Compile Include="ScopedDictionary.cs" />
     <Compile Include="StrongDelegate.cs" />
     <Compile Include="TypedSubtreeFinder.cs" />
-    <Compile Include="TypeHelper.cs" />
     <Compile Include="Data\DbEntityProvider.cs" />
     <Compile Include="Data\DbTypeSystem.cs" />
     <Compile Include="Data\EntityPolicy.cs" />

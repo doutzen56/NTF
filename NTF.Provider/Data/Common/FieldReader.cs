@@ -779,9 +779,9 @@ namespace NTF.Provider.Data.Common
             _readerMethods.TryGetValue(type, out mi);
             if (mi == null)
             {
-                if (TypeHelper.IsNullableType(type))
+                if (TypeEx.IsNullableType(type))
                 {
-                    mi = _miReadNullableValue.MakeGenericMethod(TypeHelper.GetNonNullableType(type));
+                    mi = _miReadNullableValue.MakeGenericMethod(TypeEx.GetNonNullableType(type));
                 }
                 else
                 {

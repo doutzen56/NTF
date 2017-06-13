@@ -36,7 +36,7 @@ namespace NTF.Provider.MySqlClient
 
         public override Expression GetGeneratedIdExpression(MemberInfo member)
         {
-            return new FunctionExpression(TypeHelper.GetMemberType(member), "LAST_INSERT_ID()", null);
+            return new FunctionExpression(TypeEx.GetMemberType(member), "LAST_INSERT_ID()", null);
         }
 
         public override Expression GetRowsAffectedExpression(Expression command)

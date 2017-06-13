@@ -162,7 +162,7 @@ namespace NTF.Provider.Data.Common
             if (join.Projection.Projector.NodeType == (ExpressionType)DbExpressionType.OuterJoined)
             {
                 LambdaExpression pred = Expression.Lambda(
-                    Expression.PropertyOrField(kvp, "Value").NotEqual(TypeHelper.GetNullConstant(join.Projection.Projector.Type)),
+                    Expression.PropertyOrField(kvp, "Value").NotEqual(TypeEx.GetNullConstant(join.Projection.Projector.Type)),
                     kvp
                     );
                 execution = Expression.Call(typeof(Enumerable), "Where", new Type[] { kvp.Type }, execution, pred);
@@ -273,7 +273,7 @@ namespace NTF.Provider.Data.Common
                 var source = this.Visit(batch.Input);
                 var op = this.Visit(batch.Operation.Body);
                 var fn = Expression.Lambda(op, batch.Operation.Parameters[1]);
-                return Expression.Call(this.GetType(), "Batch", new Type[] {TypeHelper.GetElementType(source.Type), batch.Operation.Body.Type}, source, fn, batch.Stream);
+                return Expression.Call(this.GetType(), "Batch", new Type[] {TypeEx.GetElementType(source.Type), batch.Operation.Body.Type}, source, fn, batch.Stream);
             }
         }
 
@@ -385,7 +385,7 @@ namespace NTF.Provider.Data.Common
                         ? ifx.IfFalse 
                         : ifx.IfTrue.Type == typeof(int) 
                             ? (Expression)Expression.Property(this.executor, "RowsAffected") 
-                            : (Expression)Expression.Constant(TypeHelper.GetDefault(ifx.IfTrue.Type), ifx.IfTrue.Type)
+                            : (Expression)Expression.Constant(TypeEx.GetDefault(ifx.IfTrue.Type), ifx.IfTrue.Type)
                             );
             return this.Visit(test);
         }
@@ -498,7 +498,7 @@ namespace NTF.Provider.Data.Common
             {
                 return Expression.Condition(
                     Expression.Call(reader, "IsDbNull", null, Expression.Constant(iOrdinal)),
-                    Expression.Constant(TypeHelper.GetDefault(outer.Type), outer.Type),
+                    Expression.Constant(TypeEx.GetDefault(outer.Type), outer.Type),
                     expr
                     );
             }

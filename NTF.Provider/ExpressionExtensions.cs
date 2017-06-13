@@ -64,11 +64,11 @@ namespace NTF.Provider
         {
             if (expression1.Type != expression2.Type)
             {
-                var isNullable1 = TypeHelper.IsNullableType(expression1.Type);
-                var isNullable2 = TypeHelper.IsNullableType(expression2.Type);
+                var isNullable1 = TypeEx.IsNullableType(expression1.Type);
+                var isNullable2 = TypeEx.IsNullableType(expression2.Type);
                 if (isNullable1 || isNullable2)
                 {
-                    if (TypeHelper.GetNonNullableType(expression1.Type) == TypeHelper.GetNonNullableType(expression2.Type))
+                    if (TypeEx.GetNonNullableType(expression1.Type) == TypeEx.GetNonNullableType(expression2.Type))
                     {
                         if (!isNullable1)
                         {

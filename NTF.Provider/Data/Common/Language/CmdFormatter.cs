@@ -396,7 +396,7 @@ namespace NTF.Provider.Data.Common
 
         protected virtual bool IsInteger(Type type)
         {
-            return TypeHelper.IsInteger(type);
+            return TypeEx.IsInteger(type);
         }
 
         protected override NewExpression VisitNew(NewExpression nex)

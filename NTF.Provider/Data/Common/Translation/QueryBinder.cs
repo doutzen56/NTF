@@ -670,7 +670,7 @@ namespace NTF.Provider.Data.Common
             if (argument != null && hasPredicateArg)
             {
                 // convert query.Count(predicate) into query.Where(predicate).Count()
-                source = Expression.Call(typeof(Queryable), "Where", new [] {TypeHelper.GetElementType(source.Type)}, source, argument);
+                source = Expression.Call(typeof(Queryable), "Where", new [] {TypeEx.GetElementType(source.Type)}, source, argument);
                 argument = null;
                 argumentWasPredicate = true;
             }
@@ -906,7 +906,7 @@ namespace NTF.Provider.Data.Common
             }
             else if (isRoot && !this.language.AllowSubqueryInSelectWithoutFrom)
             {
-                var p = Expression.Parameter(TypeHelper.GetElementType(source.Type), "x");
+                var p = Expression.Parameter(TypeEx.GetElementType(source.Type), "x");
                 var predicate = Expression.Lambda(p.Equal(match), p);
                 var exp = Expression.Call(typeof(Queryable), "Any", new Type[] { p.Type }, source, predicate);
                 this.root = exp;
@@ -977,7 +977,7 @@ namespace NTF.Provider.Data.Common
 
         private bool IsQuery(Expression expression)
         {
-            Type elementType = TypeHelper.GetElementType(expression.Type);
+            Type elementType = TypeEx.GetElementType(expression.Type);
             return elementType != null && typeof(IQueryable<>).MakeGenericType(elementType).IsAssignableFrom(expression.Type);
         }
 
@@ -1044,7 +1044,7 @@ namespace NTF.Provider.Data.Common
             Expression source = this.Visit(m.Expression);
             if (this.language.IsAggregate(m.Member) && IsRemoteQuery(source))
             {
-                return this.BindAggregate(m.Expression, m.Member.Name, TypeHelper.GetMemberType(m.Member), null, m == this.root);
+                return this.BindAggregate(m.Expression, m.Member.Name, TypeEx.GetMemberType(m.Member), null, m == this.root);
             }
             Expression result = BindMember(source, m.Member);
             MemberExpression mex = result as MemberExpression;
@@ -1129,7 +1129,7 @@ namespace NTF.Provider.Data.Common
                     // member access on a projection turns into a new projection w/ member access applied
                     ProjectionExpression proj = (ProjectionExpression)source;
                     Expression newProjector = BindMember(proj.Projector, member);
-                    Type mt = TypeHelper.GetMemberType(member);
+                    Type mt = TypeEx.GetMemberType(member);
                     return new ProjectionExpression(proj.Select, newProjector, Aggregator.GetAggregator(mt, typeof(IEnumerable<>).MakeGenericType(mt)));
 
                 case (ExpressionType)DbExpressionType.OuterJoined:
@@ -1147,7 +1147,7 @@ namespace NTF.Provider.Data.Common
 
                 case ExpressionType.Constant:
                     ConstantExpression con = (ConstantExpression)source;
-                    Type memberType = TypeHelper.GetMemberType(member);
+                    Type memberType = TypeEx.GetMemberType(member);
                     if (con.Value == null)
                     {
                         return Expression.Constant(GetDefault(memberType), memberType);
@@ -1177,7 +1177,7 @@ namespace NTF.Provider.Data.Common
 
         private static object GetDefault(Type type)
         {
-            if (!type.IsValueType || TypeHelper.IsNullableType(type))
+            if (!type.IsValueType || TypeEx.IsNullableType(type))
             {
                 return null;
             }

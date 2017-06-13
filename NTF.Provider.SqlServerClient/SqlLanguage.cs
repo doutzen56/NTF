@@ -58,7 +58,7 @@ namespace NTF.Provider.SqlServerClient
 
         public override Expression GetGeneratedIdExpression(MemberInfo member)
         {
-            return new FunctionExpression(TypeHelper.GetMemberType(member), "SCOPE_IDENTITY()", null);
+            return new FunctionExpression(TypeEx.GetMemberType(member), "SCOPE_IDENTITY()", null);
         }
 
         public override QueryLinguist CreateLinguist(QueryTranslator translator)

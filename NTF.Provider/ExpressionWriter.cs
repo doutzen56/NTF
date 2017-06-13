@@ -494,7 +494,7 @@ namespace NTF.Provider
         protected override Expression VisitNewArray(NewArrayExpression na)
         {
             this.Write("new ");
-            this.Write(this.GetTypeName(TypeHelper.GetElementType(na.Type)));
+            this.Write(this.GetTypeName(TypeEx.GetElementType(na.Type)));
             this.Write("[] {");
             if (na.Expressions.Count > 1)
                 this.WriteLine(Indentation.Inner);

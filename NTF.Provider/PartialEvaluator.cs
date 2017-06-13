@@ -91,7 +91,7 @@ namespace NTF.Provider
                 {
                     // check for unnecessary convert & strip them
                     var u = (UnaryExpression)e;
-                    if (TypeHelper.GetNonNullableType(u.Operand.Type) == TypeHelper.GetNonNullableType(type))
+                    if (TypeEx.GetNonNullableType(u.Operand.Type) == TypeEx.GetNonNullableType(type))
                     {
                         e = ((UnaryExpression)e).Operand;
                     }
@@ -104,7 +104,7 @@ namespace NTF.Provider
                     {
                         return e;
                     }
-                    else if (TypeHelper.GetNonNullableType(e.Type) == TypeHelper.GetNonNullableType(type))
+                    else if (TypeEx.GetNonNullableType(e.Type) == TypeEx.GetNonNullableType(type))
                     {
                         return Expression.Constant(((ConstantExpression)e).Value, type);
                     }

@@ -50,12 +50,12 @@ namespace NTF.Provider.Data.Mapping
 
         public override bool IsColumn(MappingEntity entity, MemberInfo member)
         {
-            return IsScalar(TypeHelper.GetMemberType(member));
+            return IsScalar(TypeEx.GetMemberType(member));
         }
 
         private bool IsScalar(Type type)
         {
-            type = TypeHelper.GetNonNullableType(type);
+            type = TypeEx.GetNonNullableType(type);
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Empty:
@@ -76,7 +76,7 @@ namespace NTF.Provider.Data.Mapping
         {
             if (IsMapped(entity, member) && !IsColumn(entity, member))
             {
-                Type otherType = TypeHelper.GetElementType(TypeHelper.GetMemberType(member));
+                Type otherType = TypeEx.GetElementType(TypeEx.GetMemberType(member));
                 return !this.IsScalar(otherType);
             }
             return false;
@@ -86,7 +86,7 @@ namespace NTF.Provider.Data.Mapping
         {
             if (IsAssociationRelationship(entity, member))
             {
-                if (typeof(IEnumerable).IsAssignableFrom(TypeHelper.GetMemberType(member)))
+                if (typeof(IEnumerable).IsAssignableFrom(TypeEx.GetMemberType(member)))
                     return false;
 
                 // is source of relationship if relatedKeyMembers are the related entity's primary keys
@@ -102,7 +102,7 @@ namespace NTF.Provider.Data.Mapping
         {
             if (IsAssociationRelationship(entity, member))
             {
-                if (typeof(IEnumerable).IsAssignableFrom(TypeHelper.GetMemberType(member)))
+                if (typeof(IEnumerable).IsAssignableFrom(TypeEx.GetMemberType(member)))
                     return true;
 
                 // is target of relationship if the assoctions keys are the same as this entities primary key
