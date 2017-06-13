@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.SQL", "NTF.SQL\NTF.SQL.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Test", "NTF.Test\NTF.Test.csproj", "{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Provider", "NTF.Provider\NTF.Provider.csproj", "{43A1D9C0-D66F-408B-A9A0-4708B6222A42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Data", "NTF.Data\NTF.Data.csproj", "{43A1D9C0-D66F-408B-A9A0-4708B6222A42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Provider.MySqlClient", "NTF.Provider.MySqlClient\NTF.Provider.MySqlClient.csproj", "{CA1D6590-74CC-47BA-A1DD-3087126352AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Data.MySqlClient", "NTF.Data.MySqlClient\NTF.Data.MySqlClient.csproj", "{CA1D6590-74CC-47BA-A1DD-3087126352AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Provider.SqlServerClient", "NTF.Provider.SqlServerClient\NTF.Provider.SqlServerClient.csproj", "{5C4F38FB-59F7-4AEA-AE6A-1A1AF2600E0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Data.SqlServerClient", "NTF.Data.SqlServerClient\NTF.Data.SqlServerClient.csproj", "{5C4F38FB-59F7-4AEA-AE6A-1A1AF2600E0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

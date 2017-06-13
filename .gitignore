@@ -16,3 +16,11 @@
 /NTF.Provider.SqlServerClient/bin
 /NTF.Provider.SqlServerClient/obj
 /NTF.Provider/*.user
+/NTF.Data.SqlServerClient/bin
+/NTF.Data.SqlServerClient/obj
+/NTF.Data.SqlServerClient/NTF.Data.SqlServerClient.csproj
+/NTF.Data.MySqlClient/bin
+/NTF.Data.MySqlClient/obj
+/NTF.Data/obj
+/NTF.Data/bin
+/NTF.Data/*.user

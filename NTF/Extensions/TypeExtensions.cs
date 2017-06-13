@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace NTF
+namespace NTF.Extensions
 {
     public static class TypeEx
     {
