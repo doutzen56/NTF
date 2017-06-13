@@ -15,11 +15,11 @@ namespace NTF.Provider.Data.Common
         {
         }
 
-        public override MappingEntity GetEntity(Type elementType, string tableId)
+        public override MappingEntity GetEntity(Type elementType, string tableName)
         {
-            if (tableId == null)
-                tableId = this.GetTableId(elementType);
-            return new BasicMappingEntity(elementType, tableId);
+            if (tableName == null)
+                tableName = this.GetTableName(elementType);
+            return new BasicMappingEntity(elementType, tableName);
         }
 
         public override MappingEntity GetEntity(MemberInfo contextMember)
@@ -30,18 +30,18 @@ namespace NTF.Provider.Data.Common
 
         class BasicMappingEntity : MappingEntity
         {
-            string entityID;
+            string entityName;
             Type type;
 
-            public BasicMappingEntity(Type type, string entityID)
+            public BasicMappingEntity(Type type, string entityName)
             {
-                this.entityID = entityID;
+                this.entityName = entityName;
                 this.type = type;
             }
 
-            public override string TableId
+            public override string TableName
             {
-                get { return this.entityID; }
+                get { return this.entityName; }
             }
 
             public override Type ElementType
@@ -60,120 +60,59 @@ namespace NTF.Provider.Data.Common
             return this.IsAssociationRelationship(entity, member);
         }
 
-        /// <summary>
-        /// Deterimines is a property is mapped onto a column or relationship
-        /// </summary>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual bool IsMapped(MappingEntity entity, MemberInfo member)
         {
             return true;
         }
 
-        /// <summary>
-        /// Determines if a property is mapped onto a column
-        /// </summary>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual bool IsColumn(MappingEntity entity, MemberInfo member)
         {
             //return this.mapping.IsMapped(entity, member) && this.translator.Linguist.Language.IsScalar(TypeHelper.GetMemberType(member));
             return this.IsMapped(entity, member);
         }
 
-        /// <summary>
-        /// The type declaration for the column in the provider's syntax
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="member"></param>
-        /// <returns>a string representing the type declaration or null</returns>
         public virtual string GetColumnDbType(MappingEntity entity, MemberInfo member)
         {
             return null;
         }
 
-        /// <summary>
-        /// Determines if a property represents or is part of the entities unique identity (often primary key)
-        /// </summary>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public override bool IsPrimaryKey(MappingEntity entity, MemberInfo member)
         {
 
             return false;
         }
 
-        /// <summary>
-        /// Determines if a property is computed after insert or update
-        /// </summary>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual bool IsComputed(MappingEntity entity, MemberInfo member)
         {
             return false;
         }
-
-        /// <summary>
-        /// Determines if a property is generated on the server during insert
-        /// </summary>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual bool IsGenerated(MappingEntity entity, MemberInfo member)
         {
             return false;
         }
 
-        /// <summary>
-        /// Determines if a property can be part of an update operation
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual bool IsUpdatable(MappingEntity entity, MemberInfo member)
         {
 
             return !this.IsPrimaryKey(entity, member);
         }
 
-        /// <summary>
-        /// The type of the entity on the other side of the relationship
-        /// </summary>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual MappingEntity GetRelatedEntity(MappingEntity entity, MemberInfo member)
         {
             Type relatedType = TypeHelper.GetElementType(TypeHelper.GetMemberType(member));
             return this.GetEntity(relatedType);
         }
 
-        /// <summary>
-        /// Determines if the property is an assocation relationship.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual bool IsAssociationRelationship(MappingEntity entity, MemberInfo member)
         {
             return false;
         }
 
-        /// <summary>
-        /// Returns the key members on this side of the association
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual IEnumerable<MemberInfo> GetAssociationKeyMembers(MappingEntity entity, MemberInfo member)
         {
             return new MemberInfo[] { };
         }
 
-        /// <summary>
-        /// Returns the key members on the other side (related side) of the association
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual IEnumerable<MemberInfo> GetAssociationRelatedKeyMembers(MappingEntity entity, MemberInfo member)
         {
             return new MemberInfo[] { };
@@ -183,31 +122,16 @@ namespace NTF.Provider.Data.Common
 
         public abstract bool IsRelationshipTarget(MappingEntity entity, MemberInfo member);
 
-        /// <summary>
-        /// The name of the corresponding database table
-        /// </summary>
-        /// <param name="rowType"></param>
-        /// <returns></returns>
         public virtual string GetTableName(MappingEntity entity)
         {
             return entity.EntityType.Name;
         }
 
-        /// <summary>
-        /// The name of the corresponding table column
-        /// </summary>
-        /// <param name="member"></param>
-        /// <returns></returns>
         public virtual string GetColumnName(MappingEntity entity, MemberInfo member)
         {
             return member.Name;
         }
 
-        /// <summary>
-        /// A sequence of all the mapped members
-        /// </summary>
-        /// <param name="rowType"></param>
-        /// <returns></returns>
         public override IEnumerable<MemberInfo> GetMappedMembers(MappingEntity entity)
         {
             //Type type = entity.ElementType.IsInterface ? entity.EntityType : entity.ElementType;
@@ -384,7 +308,7 @@ namespace NTF.Provider.Data.Common
         }
 
         /// <summary>
-        /// The query language specific type for the column
+        /// 获取字段对应的数据库特定类型
         /// </summary>
         /// <param name="member"></param>
         /// <returns></returns>
@@ -811,11 +735,11 @@ namespace NTF.Provider.Data.Common
 
         protected virtual Expression GetIdentityCheck(Expression root, MappingEntity entity, Expression instance)
         {
-            return instance;
-            //return this.mapping.GetMappedMembers(entity)
-            //.Where(m => this.mapping.IsPrimaryKey(entity, m))
-            //.Select(m => this.GetMemberExpression(root, entity, m).Equal(Expression.MakeMemberAccess(instance, m)))
-            //.Aggregate((x, y) => x.And(y));
+            //return instance;
+            return this.mapping.GetMappedMembers(entity)
+            .Where(m => this.mapping.IsPrimaryKey(entity, m))
+            .Select(m => this.GetMemberExpression(root, entity, m).Equal(Expression.MakeMemberAccess(instance, m)))
+            .Aggregate((x, y) => x.And(y));
         }
 
         protected virtual Expression GetEntityExistsTest(MappingEntity entity, Expression instance)
@@ -847,8 +771,8 @@ namespace NTF.Provider.Data.Common
                 where = pred;
             }
             var updateExpression = (updateCheck as LambdaExpression).Body;
-            
-            var assignments = this.GetColumnAssignments(table, updateExpression, entity, (e, m) => ((MemberInitExpression)updateExpression).Bindings.FirstOrDefault(a => a.Member.Name == m.Name) != null);
+            var binds = ((MemberInitExpression)updateExpression).Bindings;
+            var assignments = this.GetColumnAssignments(table, updateExpression, entity, (e, m) => binds.Any(a => a.Member.Name == m.Name));
 
             Expression update = new UpdateCommand(table, where, assignments);
 

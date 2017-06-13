@@ -165,7 +165,7 @@ namespace NTF.Provider.Data
 
             public string TableName
             {
-                get { return this.entity.TableId; }
+                get { return this.entity.TableName; }
             }
 
             public Type EntityType

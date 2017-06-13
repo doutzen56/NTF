@@ -19,7 +19,7 @@ namespace NTF.Provider.Data.Mapping
         {
         }
 
-        public override string GetTableId(Type type)
+        public override string GetTableName(Type type)
         {
             return this.InferTableName(type);
         }
@@ -148,7 +148,7 @@ namespace NTF.Provider.Data.Mapping
 
         public override string GetTableName(MappingEntity entity)
         {
-            return !string.IsNullOrEmpty(entity.TableId) ? entity.TableId : this.InferTableName(entity.EntityType);
+            return !string.IsNullOrEmpty(entity.TableName) ? entity.TableName : this.InferTableName(entity.EntityType);
         }
 
         private string InferTableName(Type rowType)

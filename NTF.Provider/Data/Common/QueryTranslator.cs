@@ -3,7 +3,7 @@
 namespace NTF.Provider.Data.Common
 {
     /// <summary>
-    /// Defines query execution & materialization policies. 
+    /// <see cref="Expression"/>查询解析器。
     /// </summary>
     public class QueryTranslator
     {
@@ -32,19 +32,23 @@ namespace NTF.Provider.Data.Common
         {
             get { return this.police; }
         }
-
+        /// <summary>
+        /// <see cref="Expression"/>解析、翻译
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
         public virtual Expression Translate(Expression expression)
         {
-            // pre-evaluate local sub-trees
+            // 预执行本地表达式
             expression = PartialEvaluator.Eval(expression, this.mapper.Mapping.CanBeEvaluatedLocally);
 
-            // apply mapping (binds LINQ operators too)
+            // 表达式映射，绑定LINQ运算
             expression = this.mapper.Translate(expression);
 
-            // any policy specific translations or validations
+            // 解析和验证所有策略
             expression = this.police.Translate(expression);
 
-            // any language specific translations or validations
+            // 多（数据库）语言支持解析和验证
             expression = this.linguist.Translate(expression);
 
             return expression;

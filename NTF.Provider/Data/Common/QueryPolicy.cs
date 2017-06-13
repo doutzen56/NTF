@@ -4,7 +4,7 @@ using System.Reflection;
 namespace NTF.Provider.Data.Common
 {
     /// <summary>
-    /// 定义查询执行和实体化策略
+    /// <see cref="Expression"/> 查询策略基类
     /// </summary>
     public class QueryPolicy
     {
@@ -13,7 +13,7 @@ namespace NTF.Provider.Data.Common
         }
 
         /// <summary>
-        /// Determines if a relationship property is to be included in the results of the query
+        /// 确定关联属性是否包含在查询中
         /// </summary>
         /// <param name="member"></param>
         /// <returns></returns>
@@ -23,8 +23,7 @@ namespace NTF.Provider.Data.Common
         }
 
         /// <summary>
-        /// Determines if a relationship property is included, but the query for the related data is 
-        /// deferred until the property is first accessed.
+        /// 确定是否包含关系属性，但相关数据的查询被推迟到属性首次访问为止
         /// </summary>
         /// <param name="member"></param>
         /// <returns></returns>
@@ -32,7 +31,11 @@ namespace NTF.Provider.Data.Common
         {
             return false;
         }
-
+        /// <summary>
+        /// 创建查询策略
+        /// </summary>
+        /// <param name="translator"></param>
+        /// <returns></returns>
         public virtual QueryPolice CreatePolice(QueryTranslator translator)
         {
             return new QueryPolice(this, translator);
@@ -40,7 +43,9 @@ namespace NTF.Provider.Data.Common
 
         public static readonly QueryPolicy Default = new QueryPolicy();
     }
-
+    /// <summary>
+    /// 查询策略
+    /// </summary>
     public class QueryPolice
     {
         QueryPolicy policy;
@@ -68,14 +73,13 @@ namespace NTF.Provider.Data.Common
         }
 
         /// <summary>
-        /// Provides policy specific query translations.  This is where choices about inclusion of related objects and how
-        /// heirarchies are materialized affect the definition of the queries.
+        /// 具体<see cref="Expression"/>查询翻译
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
         public virtual Expression Translate(Expression expression)
         {
-            // add included relationships to client projection
+            // 映射表达式锁包含的映射关系
             var rewritten = RelationshipIncluder.Include(this.translator.Mapper, expression);
             if (rewritten != expression)
             {
@@ -86,7 +90,6 @@ namespace NTF.Provider.Data.Common
                 expression = RedundantJoinRemover.Remove(expression);
             }
 
-            // convert any singleton (1:1 or n:1) projections into server-side joins (cardinality is preserved)
             rewritten = SingletonProjectionRewriter.Rewrite(this.translator.Linguist.Language, expression);
             if (rewritten != expression)
             {

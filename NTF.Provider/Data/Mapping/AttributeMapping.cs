@@ -110,7 +110,7 @@ namespace NTF.Provider.Data.Mapping
             return (MappingAttribute[])Attribute.GetCustomAttributes(contextMember, typeof(MappingAttribute));
         }
 
-        public override string GetTableId(Type entityType)
+        public override string GetTableName(Type entityType)
         {
             if (contextType != null)
             {
@@ -130,7 +130,7 @@ namespace NTF.Provider.Data.Mapping
         private MappingEntity CreateEntity(Type elementType, string tableId, Type entityType)
         {
             if (tableId == null)
-                tableId = this.GetTableId(elementType);
+                tableId = this.GetTableName(elementType);
             var members = new HashSet<string>();
             var mappingMembers = new List<AttributeMappingMember>();
             int dot = tableId.IndexOf('.');
@@ -211,7 +211,7 @@ namespace NTF.Provider.Data.Mapping
         {
             string name = (attr != null && !string.IsNullOrEmpty(attr.Name))
                 ? attr.Name
-                : entity.TableId;
+                : entity.TableName;
             return name;
         }
 
@@ -525,7 +525,7 @@ namespace NTF.Provider.Data.Mapping
                 this.mappingMembers = mappingMembers.ToDictionary(mm => mm.Member.Name);
             }
 
-            public override string TableId
+            public override string TableName
             {
                 get { return this.tableId; }
             }

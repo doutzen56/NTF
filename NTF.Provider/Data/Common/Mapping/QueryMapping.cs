@@ -6,13 +6,18 @@ using System.Reflection;
 
 namespace NTF.Provider.Data.Common
 {
+    /// <summary>
+    /// 实体抽象基类
+    /// </summary>
     public abstract class MappingEntity
     {
-        public abstract string TableId { get; }
+        public abstract string TableName { get; }
         public abstract Type ElementType { get; }
         public abstract Type EntityType { get; }
     }
-
+    /// <summary>
+    /// 实体对象
+    /// </summary>
     public struct EntityInfo
     {
         object instance;
@@ -41,57 +46,69 @@ namespace NTF.Provider.Data.Common
     }
 
     /// <summary>
-    /// Defines mapping information & rules for the query provider
+    /// 定义<see cref="IQueryProvider"/>的映射信息和规则
     /// </summary>
     public abstract class QueryMapping
     {
         /// <summary>
-        /// Determines the entity Id based on the type of the entity alone
+        /// 根据指定类型确定表名
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public virtual string GetTableId(Type type)
+        public virtual string GetTableName(Type type)
         {
             return type.Name;
         }
 
         /// <summary>
-        /// Get the meta entity directly corresponding to the CLR type
+        /// 获取实体根据指定类型
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
         public virtual MappingEntity GetEntity(Type type)
         {
-            return this.GetEntity(type, this.GetTableId(type));
+            return this.GetEntity(type, this.GetTableName(type));
         }
 
         /// <summary>
-        /// Get the meta entity that maps between the CLR type 'entityType' and the database table, yet
-        /// is represented publicly as 'elementType'.
+        /// 指定类型与数据库表之间的映射
         /// </summary>
-        /// <param name="elementType"></param>
-        /// <param name="entityID"></param>
+        /// <param name="elementType">指定的CLR类型</param>
+        /// <param name="tableName">数据库表名</param>
         /// <returns></returns>
-        public abstract MappingEntity GetEntity(Type elementType, string entityID);
+        public abstract MappingEntity GetEntity(Type elementType, string tableName);
 
         /// <summary>
-        /// Get the meta entity represented by the IQueryable context member
+        /// 根据<see cref="IQueryable{T}"/>的上下文成员获取实体
         /// </summary>
         /// <param name="contextMember"></param>
         /// <returns></returns>
         public abstract MappingEntity GetEntity(MemberInfo contextMember);
-
+        /// <summary>
+        /// 获取所有映射成员集合
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public abstract IEnumerable<MemberInfo> GetMappedMembers(MappingEntity entity);
-
+        /// <summary>
+        /// 判断指定成员是否主键
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="member"></param>
+        /// <returns></returns>
         public abstract bool IsPrimaryKey(MappingEntity entity, MemberInfo member);
-
+        /// <summary>
+        /// 获取指定实体的所有主键
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual IEnumerable<MemberInfo> GetPrimaryKeyMembers(MappingEntity entity)
         {
             return this.GetMappedMembers(entity).Where(m => this.IsPrimaryKey(entity, m));
         }
 
         /// <summary>
-        /// Determines if a property is mapped as a relationship
+        /// 确定属性是否映射为关系映射，即是否关联映射
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="member"></param>
@@ -99,7 +116,7 @@ namespace NTF.Provider.Data.Common
         public abstract bool IsRelationship(MappingEntity entity, MemberInfo member);
 
         /// <summary>
-        /// Determines if a relationship property refers to a single entity (as opposed to a collection.)
+        /// 确定关联映射属性是否引用单个实体（相对于集合而言）
         /// </summary>
         /// <param name="member"></param>
         /// <returns></returns>
@@ -112,8 +129,7 @@ namespace NTF.Provider.Data.Common
         }
 
         /// <summary>
-        /// Determines whether a given expression can be executed locally. 
-        /// (It contains no parts that should be translated to the target environment.)
+        ///确定<see cref="Expression"/>是否可以本地执行
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
@@ -142,10 +158,29 @@ namespace NTF.Provider.Data.Common
             return expression.NodeType != ExpressionType.Parameter &&
                    expression.NodeType != ExpressionType.Lambda;
         }
-
+        /// <summary>
+        /// 获取指定实体中的主键
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="instance"></param>
+        /// <returns></returns>
         public abstract object GetPrimaryKey(MappingEntity entity, object instance);
+        /// <summary>
+        /// 根据指定<see cref="MappingEntity"/>获取主键表达式
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="source"></param>
+        /// <param name="keys"></param>
+        /// <returns></returns>
         public abstract Expression GetPrimaryKeyQuery(MappingEntity entity, Expression source, Expression[] keys);
+        /// <summary>
+        /// 获取指定类型中相关的所有映射实体
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="instance"></param>
+        /// <returns></returns>
         public abstract IEnumerable<EntityInfo> GetDependentEntities(MappingEntity entity, object instance);
+
         public abstract IEnumerable<EntityInfo> GetDependingEntities(MappingEntity entity, object instance);
         public abstract object CloneEntity(MappingEntity entity, object instance);
         public abstract bool IsModified(MappingEntity entity, object instance, object original);

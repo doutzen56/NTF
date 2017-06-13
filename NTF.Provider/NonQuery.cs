@@ -22,17 +22,6 @@ namespace NTF.Provider
 
     public static class NonQuery
     {
-        public static object Insert(INonQuery collection, object instance, LambdaExpression resultSelector)
-        {
-            var callMyself = Expression.Call(
-                null,
-                (MethodInfo)MethodInfo.GetCurrentMethod(),
-                collection.Expression,
-                Expression.Constant(instance),
-                resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(LambdaExpression))
-                );
-            return collection.Provider.Execute(callMyself);
-        }
 
         /// <summary>
         /// Insert an copy of the instance into the updatable collection and produce a result if the insert succeeds.
@@ -103,14 +92,14 @@ namespace NTF.Provider
                 );
             return (TResult)collection.Provider.Execute(callMyself);
         }
-        public static TResult Update<T, TResult>(this INonQuery<T> collection,  Expression<Func<T, bool>> predicate, Expression<Func<T, T>> update, Expression<Func<T, TResult>> resultSelector)
+        public static TResult Update<T, TResult>(this INonQuery<T> collection,  Expression<Func<T, bool>> predicate, Expression<Func<T, T>> updateExpression, Expression<Func<T, TResult>> resultSelector)
         {
             var callMyself = Expression.Call(
                 null,
                 ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(TResult)),
                 collection.Expression,
                 predicate != null ? (Expression)Expression.Quote(predicate) : Expression.Constant(null, typeof(Expression<Func<T, bool>>)),
-                update,
+                updateExpression,
                 resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(Expression<Func<T, TResult>>))
                 );
             return (TResult)collection.Provider.Execute(callMyself);
