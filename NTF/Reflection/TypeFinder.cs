@@ -10,7 +10,7 @@ namespace NTF.Reflection
         public IAssemblyFinder AssemblyFinder { get; set; }
         public TypeFinder()
         {
-            AssemblyFinder = TzenAssemblyFinder.Instance;
+            AssemblyFinder = NtfAssemblyFinder.Instance;
         }
         public Type[] Find(Func<Type, bool> predicate)
         {

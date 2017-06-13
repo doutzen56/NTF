@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NTF.Reflection;
 
 namespace NTF.Modules
@@ -28,7 +26,7 @@ namespace NTF.Modules
         }
         public ICollection<Type> FindAll()
         {
-            return _typeFinder.Find(TzenModule.IsTzenModule).ToList();
+            return _typeFinder.Find(NtfModule.IsNtfModule).ToList();
         }
     }
 }
