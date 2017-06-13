@@ -11,7 +11,7 @@ namespace NTF.Modules
     /// <summary>
     /// 定义模块管理接口
     /// </summary>
-    internal interface ITzenModuleManager
+    internal interface INtfModuleManager
     {
         void InitModules();
 
@@ -20,22 +20,22 @@ namespace NTF.Modules
     /// <summary>
     /// 模块管理类
     /// </summary>
-    internal class TzenModuleManager : ITzenModuleManager
+    internal class NtfModuleManager : INtfModuleManager
     {
         /// <summary>
         /// 模块集合
         /// </summary>
-        private readonly TzenModuleList _modules;
+        private readonly NtfModuleList _modules;
         private readonly IIocManager _iocManager;
         /// <summary>
         /// 模块查找器
         /// </summary>
         private readonly IModuleFinder _moduleFinder;
-        public TzenModuleManager(IIocManager iocManager, IModuleFinder moduleFinder)
+        public NtfModuleManager(IIocManager iocManager, IModuleFinder moduleFinder)
         {
             this._iocManager = iocManager;
             this._moduleFinder = moduleFinder;
-            this._modules = new TzenModuleList();
+            this._modules = new NtfModuleList();
         }
         public void InitModules()
         {
@@ -59,9 +59,9 @@ namespace NTF.Modules
             //模块注入
             foreach (var moduleType in moduleTypes)
             {
-                if (!TzenModule.IsTzenModule(moduleType))
+                if (!NtfModule.IsNtfModule(moduleType))
                 {
-                    throw new Exception("类型{0}不是TzenModule的子类！".Fmt(moduleType.AssemblyQualifiedName));
+                    throw new Exception("类型{0}不是NtfModule的子类！".Fmt(moduleType.AssemblyQualifiedName));
                 }
                 if (!_iocManager.IsRegistered(moduleType))
                 {
@@ -71,13 +71,13 @@ namespace NTF.Modules
             //添加到模块集合
             foreach (var moduleType in moduleTypes)
             {
-                var module = (TzenModule)_iocManager.Resolve(moduleType);
+                var module = (NtfModule)_iocManager.Resolve(moduleType);
                 module.IocManager = _iocManager;
-                _modules.Add(new TzenModuleInfo(module));
+                _modules.Add(new NtfModuleInfo(module));
             }
 
             //确保核心模块在首位
-            var coreModuleIndex = _modules.FindIndex(a => a.Type == typeof(TzenCoreModule));
+            var coreModuleIndex = _modules.FindIndex(a => a.Type == typeof(NtfCoreModule));
             if (coreModuleIndex > 0)
             {
                 var coreModule = _modules[coreModuleIndex];
@@ -105,7 +105,7 @@ namespace NTF.Modules
                     }
                 }
                 //根据模块特性DependsOnAttribute设置
-                foreach (var dependedModuleType in TzenModule.FindDependedModuleTypes(moduleInfo.Type))
+                foreach (var dependedModuleType in NtfModule.FindDependedModuleTypes(moduleInfo.Type))
                 {
                     var dependModuleInfo = _modules.FirstOrDefault(a => a.Type == dependedModuleType);
                     if (dependModuleInfo.IsNull())
@@ -132,7 +132,7 @@ namespace NTF.Modules
         }
         private static void FillDependedModules(Type moduleType, ICollection<Type> allModules)
         {
-            foreach (var item in TzenModule.FindDependedModuleTypes(moduleType))
+            foreach (var item in NtfModule.FindDependedModuleTypes(moduleType))
             {
                 if (!allModules.Contains(item))
                 {

@@ -12,7 +12,7 @@ namespace NTF.Modules
     /// <remarks>
     /// 
     /// </remarks>
-    public abstract class TzenModule
+    public abstract class NtfModule
     {
         /// <summary>
         /// 定义一个程序集内部使用的IocManager
@@ -36,13 +36,13 @@ namespace NTF.Modules
         /// </summary>
         public virtual void Shutdown() { }
         /// <summary>
-        /// 检查给定类型是否是TzenModule子类
+        /// 检查给定类型是否是NtfModule子类
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static bool IsTzenModule(Type type)
+        public static bool IsNtfModule(Type type)
         {
-            return type.IsClass && !type.IsAbstract && typeof(TzenModule).IsAssignableFrom(type);
+            return type.IsClass && !type.IsAbstract && typeof(NtfModule).IsAssignableFrom(type);
         }
         /// <summary>
         /// 查找指定模块中的依赖模块
@@ -51,9 +51,9 @@ namespace NTF.Modules
         /// <returns></returns>
         public static List<Type> FindDependedModuleTypes(Type moduleType)
         {
-            if (!IsTzenModule(moduleType))
+            if (!IsNtfModule(moduleType))
             {
-                throw new Exception("该类型并非派生自{0}，请检查：{1}".Fmt(typeof(TzenModule).FullName, moduleType.AssemblyQualifiedName));
+                throw new Exception("该类型并非派生自{0}，请检查：{1}".Fmt(typeof(NtfModule).FullName, moduleType.AssemblyQualifiedName));
             }
             var list = new List<Type>();
             if (moduleType.IsDefined(typeof(DependsOnAttribute), true))
@@ -70,7 +70,7 @@ namespace NTF.Modules
             return list;
         }
     }
-    internal class TzenModuleInfo
+    internal class NtfModuleInfo
     {
         /// <summary>
         /// 模块定义的程序集
@@ -83,34 +83,34 @@ namespace NTF.Modules
         /// <summary>
         /// 模块实例
         /// </summary>
-        public TzenModule Instance { get; private set; }
+        public NtfModule Instance { get; private set; }
         /// <summary>
         /// 此模块相关的所有模块
         /// </summary>
-        public List<TzenModuleInfo> Dependencies { get; private set; }
+        public List<NtfModuleInfo> Dependencies { get; private set; }
         /// <summary>
-        /// 创建一个新的TzenModuleInfo对象
+        /// 创建一个新的NtfModuleInfo对象
         /// </summary>
         /// <param name="instance"></param>
-        public TzenModuleInfo(TzenModule instance)
+        public NtfModuleInfo(NtfModule instance)
         {
-            Dependencies = new List<TzenModuleInfo>();
+            Dependencies = new List<NtfModuleInfo>();
             Type = instance.GetType();
             Instance = instance;
             Assembly = Type.Assembly;
         }
     }
     /// <summary>
-    /// 用于存储<see cref="TzenModuleInfo"/>的字典类
+    /// 用于存储<see cref="NtfModuleInfo"/>的字典类
     /// </summary>
-    internal class TzenModuleList : List<TzenModuleInfo>
+    internal class NtfModuleList : List<NtfModuleInfo>
     {
         /// <summary>
         /// 获取一个模块的引用实例
         /// </summary>
         /// <typeparam name="TModule"></typeparam>
         /// <returns></returns>
-        public TModule GetModule<TModule>() where TModule : TzenModule
+        public TModule GetModule<TModule>() where TModule : NtfModule
         {
             var module = this.FirstOrDefault(a => a.Type == typeof(TModule));
             if (module.IsNull())
@@ -124,11 +124,11 @@ namespace NTF.Modules
         /// 如：模块A,依赖于模块B，那么返回结果：B，A
         /// </summary>
         /// <returns>返回根据依赖关系排序后的列表</returns>
-        public List<TzenModuleInfo> GetSortModuleListByDependency()
+        public List<NtfModuleInfo> GetSortModuleListByDependency()
         {
             var sortedModules = ListEx.Sort(this, a => a.Dependencies);
             //确保核心模块在首位
-            var coreModuleIndex = sortedModules.FindIndex(a => a.Type == typeof(TzenCoreModule));
+            var coreModuleIndex = sortedModules.FindIndex(a => a.Type == typeof(NtfCoreModule));
             if (coreModuleIndex > 0)
             {
                 var coreModule = sortedModules[coreModuleIndex];

@@ -4,25 +4,25 @@ using NTF.Modules;
 
 namespace NTF
 {
-    public class TzenBootstrapper : IDisposable
+    public class NtfBootstrapper : IDisposable
     {
         protected bool IsDisposed;
         public IIocManager IocManager { get; private set; }
 
-        private ITzenModuleManager _moduleManager;
-        public TzenBootstrapper()
+        private INtfModuleManager _moduleManager;
+        public NtfBootstrapper()
             : this(Ioc.IocManager.Instance)
         {
 
         }
-        public TzenBootstrapper(IIocManager iocManager)
+        public NtfBootstrapper(IIocManager iocManager)
         {
             this.IocManager = iocManager;
         }
         public virtual void Init()
         {
-            IocManager.IocContainer.Install(new TzenCoreInstaller());
-            _moduleManager = IocManager.Resolve<ITzenModuleManager>();
+            IocManager.IocContainer.Install(new NtfCoreInstaller());
+            _moduleManager = IocManager.Resolve<INtfModuleManager>();
             _moduleManager.InitModules();
         }
         public virtual void Dispose()

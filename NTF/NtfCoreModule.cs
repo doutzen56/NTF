@@ -12,7 +12,7 @@ namespace NTF
     /// <remarks>
     /// 所有使用NTF框架的Module都需要<see cref="DependsOnAttribute"/>标记
     /// </remarks>
-    public sealed class TzenCoreModule : TzenModule
+    public sealed class NtfCoreModule : NtfModule
     {
         public override void BeforeInit()
         {

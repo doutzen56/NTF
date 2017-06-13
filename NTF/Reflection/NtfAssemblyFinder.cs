@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace NTF.Reflection
 {
-    public class TzenAssemblyFinder : IAssemblyFinder
+    public class NtfAssemblyFinder : IAssemblyFinder
     {
-        public static TzenAssemblyFinder Instance
+        public static NtfAssemblyFinder Instance
         {
             get
             {
                 return SingletionInstance;
             }
         }
-        private static readonly TzenAssemblyFinder SingletionInstance = new TzenAssemblyFinder();
+        private static readonly NtfAssemblyFinder SingletionInstance = new NtfAssemblyFinder();
         public List<Assembly> GetAllAssemblies()
         {
             return AppDomain.CurrentDomain.GetAssemblies().ToList();

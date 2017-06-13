@@ -81,11 +81,11 @@
     <Compile Include="Ioc\ISingleton.cs" />
     <Compile Include="Ioc\ITransient.cs" />
     <Compile Include="Ioc\SingletonDependency.cs" />
-    <Compile Include="Ioc\TzenCoreInstaller.cs" />
+    <Compile Include="Ioc\NtfCoreInstaller.cs" />
     <Compile Include="Modules\DependsOnAttribute.cs" />
     <Compile Include="Modules\IModuleFinder.cs" />
-    <Compile Include="Modules\ITzenModuleManager.cs" />
-    <Compile Include="Modules\TzenModule.cs" />
+    <Compile Include="Modules\INtfModuleManager.cs" />
+    <Compile Include="Modules\NtfModule.cs" />
     <Compile Include="Repositories\OrderBy.cs" />
     <Compile Include="PageList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,8 +94,8 @@
     <Compile Include="Reflection\ITypeFinder.cs" />
     <Compile Include="Reflection\TypeFinder.cs" />
     <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="TzenBootstrapper.cs" />
-    <Compile Include="TzenCoreModule.cs" />
+    <Compile Include="NtfBootstrapper.cs" />
+    <Compile Include="NtfCoreModule.cs" />
     <Compile Include="Uow\DefaultCurrentUnitOfWorkProvider.cs" />
     <Compile Include="Uow\IActiveUnitOfWork.cs" />
     <Compile Include="Uow\ICurrentUnitOfWorkProvider.cs" />

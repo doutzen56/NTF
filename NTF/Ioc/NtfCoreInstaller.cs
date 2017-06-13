@@ -13,7 +13,7 @@ namespace NTF.Ioc
     /// <remarks>
     /// 框架底层组件注入
     /// </remarks>
-    public class TzenCoreInstaller : IWindsorInstaller
+    public class NtfCoreInstaller : IWindsorInstaller
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
@@ -21,7 +21,7 @@ namespace NTF.Ioc
                     Component.For<IUnitOfWorkDefaultOptions, UnitOfWorkDefaultOptions>().ImplementedBy<UnitOfWorkDefaultOptions>().LifestyleSingleton(),
                     Component.For<ITypeFinder>().ImplementedBy<TypeFinder>().LifestyleSingleton(),
                     Component.For<IModuleFinder>().ImplementedBy<DefaultModuleFinder>().LifestyleTransient(),
-                    Component.For<ITzenModuleManager>().ImplementedBy<TzenModuleManager>().LifestyleSingleton()
+                    Component.For<INtfModuleManager>().ImplementedBy<NtfModuleManager>().LifestyleSingleton()
                 );
         }
     }
