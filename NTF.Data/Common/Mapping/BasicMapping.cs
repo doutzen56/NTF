@@ -845,7 +845,7 @@ namespace NTF.Data.Common
             }
         }
 
-        public override Expression GetDeleteExpression(MappingEntity entity, Expression instance, LambdaExpression deleteCheck)
+        public override Expression GetDeleteExpression(MappingEntity entity, Expression instance, LambdaExpression predicate)
         {
             TableExpression table = new TableExpression(new TableAlias(), entity, this.mapping.GetTableName(entity));
             Expression where = null;
@@ -855,10 +855,10 @@ namespace NTF.Data.Common
                 where = this.GetIdentityCheck(table, entity, instance);
             }
 
-            if (deleteCheck != null)
+            if (predicate != null)
             {
                 Expression row = this.GetEntityExpression(table, entity);
-                Expression pred = DbExpressionReplacer.Replace(deleteCheck.Body, deleteCheck.Parameters[0], row);
+                Expression pred = DbExpressionReplacer.Replace(predicate.Body, predicate.Parameters[0], row);
                 where = (where != null) ? where.And(pred) : pred;
             }
 

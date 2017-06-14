@@ -24,3 +24,6 @@
 /NTF.Data/obj
 /NTF.Data/bin
 /NTF.Data/*.user
+/TestResults
+/UnitTest/obj
+/UnitTest/bin

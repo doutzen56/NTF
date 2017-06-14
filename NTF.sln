@@ -7,13 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF", "NTF\NTF.csproj", "{C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.SQL", "NTF.SQL\NTF.SQL.csproj", "{F5C36C42-54A0-4E9D-B051-E0B3630D463A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Test", "NTF.Test\NTF.Test.csproj", "{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Data", "NTF.Data\NTF.Data.csproj", "{43A1D9C0-D66F-408B-A9A0-4708B6222A42}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Data.MySqlClient", "NTF.Data.MySqlClient\NTF.Data.MySqlClient.csproj", "{CA1D6590-74CC-47BA-A1DD-3087126352AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Data.SqlServerClient", "NTF.Data.SqlServerClient\NTF.Data.SqlServerClient.csproj", "{5C4F38FB-59F7-4AEA-AE6A-1A1AF2600E0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{F2FB329C-2E50-49BA-93D9-5116A18B3A2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{F5C36C42-54A0-4E9D-B051-E0B3630D463A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5C36C42-54A0-4E9D-B051-E0B3630D463A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5C36C42-54A0-4E9D-B051-E0B3630D463A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD5B28F5-3AF9-4AEF-9ED9-C4AE675F0711}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43A1D9C0-D66F-408B-A9A0-4708B6222A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43A1D9C0-D66F-408B-A9A0-4708B6222A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43A1D9C0-D66F-408B-A9A0-4708B6222A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{5C4F38FB-59F7-4AEA-AE6A-1A1AF2600E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C4F38FB-59F7-4AEA-AE6A-1A1AF2600E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C4F38FB-59F7-4AEA-AE6A-1A1AF2600E0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2FB329C-2E50-49BA-93D9-5116A18B3A2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2FB329C-2E50-49BA-93D9-5116A18B3A2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2FB329C-2E50-49BA-93D9-5116A18B3A2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2FB329C-2E50-49BA-93D9-5116A18B3A2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,24 +14,25 @@ namespace NTF.Provider
     {
     }
     /// <summary>
-    /// 非查询操作（增,删,改）,泛型版
+    /// 非查询操作（增,删,改）
     /// </summary>
     public interface INonQuery<T> : INonQuery, IQueryable<T>
     {
     }
-
+    /// <summary>
+    /// <see cref="INonQuery{T}"/>扩展，扩展增删改方法
+    /// </summary>
     public static class NonQuery
     {
-
         /// <summary>
-        /// Insert an copy of the instance into the updatable collection and produce a result if the insert succeeds.
+        /// 添加一个新实体并返回结果
         /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instance">The instance to insert.</param>
-        /// <param name="resultSelector">The function that produces the result.</param>
-        /// <returns>The value of the result if the insert succeed, otherwise null.</returns>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <typeparam name="TResult">返回实体类型</typeparam>
+        /// <param name="collection"></param>
+        /// <param name="instance">要添加的实例实体</param>
+        /// <param name="resultSelector">返回结果</param>
+        /// <returns></returns>
         public static TResult Insert<T, TResult>(this INonQuery<T> collection, T instance, Expression<Func<T, TResult>> resultSelector)
         {
             var callMyself = Expression.Call(
@@ -39,60 +40,32 @@ namespace NTF.Provider
                 ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(TResult)),
                 collection.Expression,
                 Expression.Constant(instance),
-                resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(Expression<Func<T,TResult>>))
-                );
-            return (TResult)collection.Provider.Execute(callMyself);
-        }
-
-        /// <summary>
-        /// Insert a copy of the instance into an updatable collection.
-        /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instance">The instance to insert.</param>
-        /// <returns>The value 1 if the insert succeeds, otherwise 0.</returns>
-        public static int Insert<T>(this INonQuery<T> collection, T instance)
-        {
-            return Insert<T, int>(collection, instance, null);
-        }
-
-        public static object Update(INonQuery collection, object instance, LambdaExpression updateCheck, LambdaExpression resultSelector)
-        {
-            var callMyself = Expression.Call(
-                null,
-                (MethodInfo)MethodInfo.GetCurrentMethod(),
-                collection.Expression,
-                Expression.Constant(instance),
-                updateCheck != null ? (Expression)Expression.Quote(updateCheck) : Expression.Constant(null, typeof(LambdaExpression)),
-                resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(LambdaExpression))
-                );
-            return collection.Provider.Execute(callMyself);
-        }
-
-        /// <summary>
-        /// Update the object in the updatable collection with the values in this instance only if the update check passes and produce
-        /// a result based on the updated object if the update succeeds.
-        /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="collection">The updatable collection</param>
-        /// <param name="instance">The instance to update.</param>
-        /// <param name="updateCheck">A predicate testing the suitability of the object in the collection (often used that make sure assumptions have not changed.)</param>
-        /// <param name="resultSelector">A function that produces a result based on the object in the collection after the update succeeds.</param>
-        /// <returns>The value of the result function if the update succeeds, otherwise null.</returns>
-        public static TResult Update<T, TResult>(this INonQuery<T> collection, T instance, Expression<Func<T, bool>> updateCheck, Expression<Func<T, TResult>> resultSelector)
-        {
-            var callMyself = Expression.Call(
-                null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(TResult)),
-                collection.Expression,
-                Expression.Constant(instance),
-                updateCheck != null ? (Expression)Expression.Quote(updateCheck) : Expression.Constant(null, typeof(Expression<Func<T, bool>>)),
                 resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(Expression<Func<T, TResult>>))
                 );
             return (TResult)collection.Provider.Execute(callMyself);
         }
-        public static TResult Update<T, TResult>(this INonQuery<T> collection,  Expression<Func<T, bool>> predicate, Expression<Func<T, T>> updateExpression, Expression<Func<T, TResult>> resultSelector)
+        /// <summary>
+        /// 添加新实体
+        /// </summary>
+        /// <typeparam name="T">要添加的实例实体</typeparam>
+        /// <param name="collection"></param>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static int Insert<T>(this INonQuery<T> collection, T instance)
+        {
+            return Insert<T, int>(collection, instance, null);
+        }
+        /// <summary>
+        /// 批量更新实体并返回更新结果
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <typeparam name="TResult">返回结果中的实体类型</typeparam>
+        /// <param name="collection"></param>
+        /// <param name="predicate">更新条件</param>
+        /// <param name="updateExpression">更新内容</param>
+        /// <param name="resultSelector">返回结果</param>
+        /// <returns></returns>
+        public static TResult Update<T, TResult>(this INonQuery<T> collection, Expression<Func<T, bool>> predicate, Expression<Func<T, T>> updateExpression, Expression<Func<T, TResult>> resultSelector)
         {
             var callMyself = Expression.Call(
                 null,
@@ -105,165 +78,65 @@ namespace NTF.Provider
             return (TResult)collection.Provider.Execute(callMyself);
         }
         /// <summary>
-        /// Update the object in the updatable collection with the values in this instance only if the update check passes.
+        /// 批量更新
         /// </summary>
-        /// <typeparam name="T">The type of the instance</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instance">The instance to update.</param>
-        /// <param name="updateCheck">A predicate testing the suitability of the object in the collection.</param>
-        /// <returns>The value 1 if the update succeeds, otherwise 0.</returns>
-        public static int Update<T>(this INonQuery<T> collection, T instance, Expression<Func<T, bool>> updateCheck)
-        {
-            return Update<T, int>(collection, instance, updateCheck, null);
-        }
-
-        /// <summary>
-        /// Update the object in the updatable collection with the values in this instance.
-        /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instance">The instance to update.</param>
-        /// <returns>The value 1 if the update succeeds, otherwise 0.</returns>
-        public static int Update<T>(this INonQuery<T> collection, T instance)
-        {
-            return Update<T, int>(collection, instance, null, null);
-        }
-
-        public static int Update<T>(this INonQuery<T> collection,Expression<Func<T, bool>> predicate, Expression<Func<T, T>> updateExpression)
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="collection"></param>
+        /// <param name="predicate">更新条件</param>
+        /// <param name="updateExpression">更新内容</param>
+        /// <returns></returns>
+        public static int Update<T>(this INonQuery<T> collection, Expression<Func<T, bool>> predicate, Expression<Func<T, T>> updateExpression)
         {
             var callMyself = Expression.Call(
                 null,
                 ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T)),
                 collection.Expression,
                 predicate != null ? (Expression)Expression.Quote(predicate) : Expression.Constant(null, typeof(Expression<Func<T, bool>>)),
-                updateExpression != null ? (Expression)Expression.Quote(updateExpression) : Expression.Constant(null, typeof(Expression<Func<T, T>>))
+                updateExpression
                 );
             return (int)collection.Provider.Execute(callMyself);
         }
-        public static object InsertOrUpdate(INonQuery collection, object instance, LambdaExpression updateCheck, LambdaExpression resultSelector)
-        {
-            var callMyself = Expression.Call(
-                null,
-                (MethodInfo)MethodInfo.GetCurrentMethod(),
-                collection.Expression,
-                Expression.Constant(instance),
-                updateCheck != null ? (Expression)Expression.Quote(updateCheck) : Expression.Constant(null, typeof(LambdaExpression)),
-                resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(LambdaExpression))
-                );
-            return collection.Provider.Execute(callMyself);
-        }
-
         /// <summary>
-        /// Insert a copy of the instance if it does not exist in the collection or update the object in the collection with the values in this instance. 
-        /// Produce a result based on the object in the collection after the insert or update succeeds.
+        /// 更新
         /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instance">The instance to insert or update.</param>
-        /// <param name="updateCheck">A predicate testing the suitablilty of the object in the collection if an update is required.</param>
-        /// <param name="resultSelector">A function producing a result based on the object in the collection after the insert or update succeeds.</param>
-        /// <returns>The value of the result if the insert or update succeeds, otherwise null.</returns>
-        public static TResult InsertOrUpdate<T, TResult>(this INonQuery<T> collection, T instance, Expression<Func<T, bool>> updateCheck, Expression<Func<T, TResult>> resultSelector)
-        {
-            var callMyself = Expression.Call(
-                null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(TResult)),
-                collection.Expression,
-                Expression.Constant(instance),
-                updateCheck != null ? (Expression)Expression.Quote(updateCheck) : Expression.Constant(null, typeof(Expression<Func<T, bool>>)),
-                resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(Expression<Func<T, TResult>>))
-                );
-            return (TResult)collection.Provider.Execute(callMyself);
-        }
-
-        /// <summary>
-        /// Insert a copy of the instance if it does not exist in the collection or update the object in the collection with the values in this instance. 
-        /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instance">The instance to insert or update.</param>
-        /// <param name="updateCheck">A function producing a result based on the object in the collection after the insert or update succeeds.</param>
-        /// <returns>The value 1 if the insert or update succeeds, otherwise 0.</returns>
-        public static int InsertOrUpdate<T>(this INonQuery<T> collection, T instance, Expression<Func<T, bool>> updateCheck)
-        {
-            return InsertOrUpdate<T, int>(collection, instance, updateCheck, null);
-        }
-
-        /// <summary>
-        /// Insert a copy of the instance if it does not exist in the collection or update the object in the collection with the values in this instance. 
-        /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instance">The instance to insert or update.</param>
-        /// <returns>The value 1 if the insert or update succeeds, otherwise 0.</returns>
-        public static int InsertOrUpdate<T>(this INonQuery<T> collection, T instance)
-        {
-            return InsertOrUpdate<T, int>(collection, instance, null, null);
-        }
-
-        public static object Delete(INonQuery collection, object instance, LambdaExpression deleteCheck)
-        {
-            var callMyself = Expression.Call(
-                null,
-                (MethodInfo)MethodInfo.GetCurrentMethod(),
-                collection.Expression,
-                Expression.Constant(instance),
-                deleteCheck != null ? (Expression)Expression.Quote(deleteCheck) : Expression.Constant(null, typeof(LambdaExpression))
-                );
-            return collection.Provider.Execute(callMyself);
-        }
-
-        /// <summary>
-        /// Delete the object in the collection that matches the instance only if the delete check passes.
-        /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instance">The instance to delete.</param>
-        /// <param name="deleteCheck">A predicate testing the suitability of the corresponding object in the collection.</param>
-        /// <returns>The value 1 if the delete succeeds, otherwise 0.</returns>
-        public static int Delete<T>(this INonQuery<T> collection, T instance, Expression<Func<T, bool>> deleteCheck)
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="collection"></param>
+        /// <param name="instance">要更新的实例实体</param>
+        /// <returns></returns>
+        public static int Update<T>(this INonQuery<T> collection, T instance)
         {
             var callMyself = Expression.Call(
                 null,
                 ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T)),
                 collection.Expression,
-                Expression.Constant(instance),
-                deleteCheck != null ? (Expression)Expression.Quote(deleteCheck) : Expression.Constant(null, typeof(Expression<Func<T, bool>>))
+                Expression.Constant(instance)
                 );
             return (int)collection.Provider.Execute(callMyself);
         }
-
         /// <summary>
-        /// Delete the object in the collection that matches the instance.
+        /// 删除
         /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instance">The instance to delete.</param>
-        /// <returns>The value 1 if the Delete succeeds, otherwise 0.</returns>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="instance">要删除的实例实体</param>
+        /// <returns></returns>
         public static int Delete<T>(this INonQuery<T> collection, T instance)
-        {
-            return Delete<T>(collection, instance, null);
-        }
-
-        public static int Delete(INonQuery collection, LambdaExpression predicate)
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()),
+                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T)),
                 collection.Expression,
-                predicate != null ? (Expression)Expression.Quote(predicate) : Expression.Constant(null, typeof(LambdaExpression))
+                Expression.Constant(instance)
                 );
             return (int)collection.Provider.Execute(callMyself);
         }
-
         /// <summary>
-        /// Delete all the objects in the collection that match the predicate.
+        /// 批量删除
         /// </summary>
-        /// <typeparam name="T">The type of the instance.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The number of objects deleted.</returns>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="predicate">删除条件</param>
+        /// <returns></returns>
         public static int Delete<T>(this INonQuery<T> collection, Expression<Func<T, bool>> predicate)
         {
             var callMyself = Expression.Call(
@@ -300,7 +173,7 @@ namespace NTF.Provider
         /// <param name="batchSize">The maximum size of each batch.</param>
         /// <param name="stream">If true then execution is deferred until the resulting sequence is enumerated.</param>
         /// <returns>A sequence of results cooresponding to each invocation.</returns>
-        public static IEnumerable<S> Batch<U,T,S>(this INonQuery<U> collection, IEnumerable<T> instances, Expression<Func<INonQuery<U>, T, S>> fnOperation, int batchSize, bool stream)
+        public static IEnumerable<S> Batch<U, T, S>(this INonQuery<U> collection, IEnumerable<T> instances, Expression<Func<INonQuery<U>, T, S>> fnOperation, int batchSize, bool stream)
         {
             var callMyself = Expression.Call(
                 null,

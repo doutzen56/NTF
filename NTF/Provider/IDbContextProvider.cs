@@ -25,7 +25,6 @@ namespace NTF.Provider
         int Insert(object instance);
         int Update(object instance);
         int Delete(object instance);
-        int InsertOrUpdate(object instance);
     }
     /// <summary>
     /// 数据库上下文操作定义
@@ -37,6 +36,5 @@ namespace NTF.Provider
         int Insert(T instance);
         int Update(T instance);
         int Delete(T instance);
-        int InsertOrUpdate(T instance);
     }
 }

@@ -461,12 +461,12 @@ namespace NTF.Data.Common
             }
         }
 
-        public override Expression GetDeleteExpression(MappingEntity entity, Expression instance, LambdaExpression deleteCheck)
+        public override Expression GetDeleteExpression(MappingEntity entity, Expression instance, LambdaExpression predicate)
         {
             var tables = this.mapping.GetTables(entity);
             if (tables.Count < 2)
             {
-                return base.GetDeleteExpression(entity, instance, deleteCheck);
+                return base.GetDeleteExpression(entity, instance, predicate);
             }
 
             var commands = new List<Expression>();
@@ -479,9 +479,9 @@ namespace NTF.Data.Common
 
             Expression block = new BlockCommand(commands);
 
-            if (deleteCheck != null)
+            if (predicate != null)
             {
-                var test = this.GetEntityStateTest(entity, instance, deleteCheck);
+                var test = this.GetEntityStateTest(entity, instance, predicate);
                 return new IFCommand(test, block, null);
             }
 

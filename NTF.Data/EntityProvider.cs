@@ -223,16 +223,6 @@ namespace NTF.Data
             {
                 return this.Update((T)instance);
             }
-
-            public int InsertOrUpdate(T instance)
-            {
-                return NonQuery.InsertOrUpdate(this, instance);
-            }
-
-            int IDbContext.InsertOrUpdate(object instance)
-            {
-                return this.InsertOrUpdate((T)instance);
-            }
         }
 
         public override string GetQueryText(Expression expression)

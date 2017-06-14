@@ -21,7 +21,7 @@ namespace NTF.Provider
             {
                 return en.GetEnumerator();
             }
-            throw new Exception("Enumerated more than once.");
+            throw new Exception("迭代器被多次迭代");
         }
 
         IEnumerator IEnumerable.GetEnumerator()

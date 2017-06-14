@@ -257,9 +257,9 @@ namespace NTF.Data.Common
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="instance"></param>
-        /// <param name="deleteCheck"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public abstract Expression GetDeleteExpression(MappingEntity entity, Expression instance, LambdaExpression deleteCheck);
+        public abstract Expression GetDeleteExpression(MappingEntity entity, Expression instance, LambdaExpression predicate);
 
         /// <summary>
         /// Recreate the type projection with the additional members included

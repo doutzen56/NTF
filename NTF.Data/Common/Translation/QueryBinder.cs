@@ -953,16 +953,16 @@ namespace NTF.Data.Common
             return this.Visit(this.mapper.GetUpdateExpression(entity, predicate, updateExpression, resultSelector, null));
         }
 
-        private Expression BindInsertOrUpdate(IDbContext upd, Expression instance, LambdaExpression updateCheck, LambdaExpression resultSelector)
+        private Expression BindInsertOrUpdate(IDbContext upd, Expression instance, LambdaExpression updateExpression, LambdaExpression resultSelector)
         {
             MappingEntity entity = this.mapper.Mapping.GetEntity(instance.Type, upd.TableName);
-            return this.Visit(this.mapper.GetInsertOrUpdateExpression(entity, instance, updateCheck, resultSelector));
+            return this.Visit(this.mapper.GetInsertOrUpdateExpression(entity, instance, updateExpression, resultSelector));
         }
 
-        private Expression BindDelete(IDbContext upd, Expression instance, LambdaExpression deleteCheck)
+        private Expression BindDelete(IDbContext upd, Expression instance, LambdaExpression predicate)
         {
-            MappingEntity entity = this.mapper.Mapping.GetEntity(instance != null ? instance.Type : deleteCheck.Parameters[0].Type, upd.TableName);
-            return this.Visit(this.mapper.GetDeleteExpression(entity, instance, deleteCheck));
+            MappingEntity entity = this.mapper.Mapping.GetEntity(instance != null ? instance.Type : predicate.Parameters[0].Type, upd.TableName);
+            return this.Visit(this.mapper.GetDeleteExpression(entity, instance, predicate));
         }
 
         private Expression BindBatch(IDbContext upd, Expression instances, LambdaExpression operation, Expression batchSize, Expression stream)
