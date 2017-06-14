@@ -45,6 +45,9 @@ namespace NTF.Data.Common
             {
                 return ((ConstantExpression)e).Value as LambdaExpression;
             }
+            if (e.NodeType == ExpressionType.Parameter)
+            {
+            }
             return e as LambdaExpression;
         }
 
@@ -191,7 +194,7 @@ namespace NTF.Data.Common
                         break;
                 }
             }
-            else if (typeof(NonQuery).IsAssignableFrom(m.Method.DeclaringType)) 
+            else if (typeof(NonQuery).IsAssignableFrom(m.Method.DeclaringType))
             {
                 IDbContext upd = this.batchUpd != null
                     ? this.batchUpd
@@ -202,12 +205,21 @@ namespace NTF.Data.Common
                     case "Insert":
                         return this.BindInsert(
                             upd,
-                            m.Arguments[1], 
+                            m.Arguments[1],
                             m.Arguments.Count > 2 ? GetLambda(m.Arguments[2]) : null
                             );
                     case "Update":
 
-                        return this.BindUpdate(
+                        return
+                            m.Arguments.Count > 1 && (m.Arguments[1].NodeType == ExpressionType.Parameter|| m.Arguments[1].NodeType == ExpressionType.Constant) ?
+                            this.BindUpdate(
+                            upd,
+                            m.Arguments[1],
+                            m.Arguments.Count > 2 ? GetLambda(m.Arguments[2]) : null,
+                            m.Arguments.Count > 3 ? GetLambda(m.Arguments[3]) : null
+                            ) 
+                            :
+                            this.BindUpdate(
                             upd,
                             m.Arguments.Count > 1 ? GetLambda(m.Arguments[1]) : null,
                             m.Arguments.Count > 2 ? GetLambda(m.Arguments[2]) : null,
@@ -227,7 +239,7 @@ namespace NTF.Data.Common
                         }
                         return this.BindDelete(
                             upd,
-                            m.Arguments[1], 
+                            m.Arguments[1],
                             m.Arguments.Count > 2 ? GetLambda(m.Arguments[2]) : null
                             );
                     case "Batch":
@@ -243,10 +255,10 @@ namespace NTF.Data.Common
             if (this.language.IsAggregate(m.Method))
             {
                 return this.BindAggregate(
-                    m.Arguments[0], 
-                    m.Method.Name, 
-                    m.Method.ReturnType, 
-                    m.Arguments.Count > 1 ? GetLambda(m.Arguments[1]) : null, 
+                    m.Arguments[0],
+                    m.Method.Name,
+                    m.Method.ReturnType,
+                    m.Arguments.Count > 1 ? GetLambda(m.Arguments[1]) : null,
                     m == this.root
                     );
             }
@@ -461,7 +473,7 @@ namespace NTF.Data.Common
 
             this.map[outerKey.Parameters[0]] = outerProjection.Projector;
             var predicateLambda = Expression.Lambda(innerKey.Body.Equal(outerKey.Body), innerKey.Parameters[0]);
-            var callToWhere = Expression.Call(typeof(Enumerable), "Where", new Type[] { args[1] }, innerSource, predicateLambda);           
+            var callToWhere = Expression.Call(typeof(Enumerable), "Where", new Type[] { args[1] }, innerSource, predicateLambda);
             Expression group = this.Visit(callToWhere);
 
             this.map[resultSelector.Parameters[0]] = outerProjection.Projector;
@@ -584,7 +596,7 @@ namespace NTF.Data.Common
             else
             {
                 // result must be IGrouping<K,E>
-                resultExpr = 
+                resultExpr =
                     Expression.New(
                         typeof(Grouping<,>).MakeGenericType(keyExpr.Type, subqueryElemExpr.Type).GetConstructors()[0],
                         new Expression[] { keyExpr, elementSubquery }
@@ -672,7 +684,7 @@ namespace NTF.Data.Common
             if (argument != null && hasPredicateArg)
             {
                 // convert query.Count(predicate) into query.Where(predicate).Count()
-                source = Expression.Call(typeof(Queryable), "Where", new [] {TypeEx.GetElementType(source.Type)}, source, argument);
+                source = Expression.Call(typeof(Queryable), "Where", new[] { TypeEx.GetElementType(source.Type) }, source, argument);
                 argument = null;
                 argumentWasPredicate = true;
             }
@@ -880,7 +892,7 @@ namespace NTF.Data.Common
                             new[] { new ColumnDeclaration("value", new AggregateExpression(typeof(int), "Count", null, false), colType) }
                             );
                         var colx = new ColumnExpression(typeof(int), colType, newSelect.Alias, "value");
-                        var exp = isAll 
+                        var exp = isAll
                             ? colx.Equal(Expression.Constant(0))
                             : colx.GreaterThan(Expression.Constant(0));
                         return new ProjectionExpression(
@@ -914,7 +926,7 @@ namespace NTF.Data.Common
                 this.root = exp;
                 return this.Visit(exp);
             }
-            else 
+            else
             {
                 ProjectionExpression projection = this.VisitSequence(source);
                 match = this.Visit(match);
@@ -947,7 +959,7 @@ namespace NTF.Data.Common
             return this.Visit(this.mapper.GetInsertExpression(entity, instance, selector));
         }
 
-        private Expression BindUpdate(IDbContext upd, LambdaExpression predicate, Expression updateExpression, LambdaExpression resultSelector)
+        private Expression BindUpdate(IDbContext upd, Expression predicate, Expression updateExpression, LambdaExpression resultSelector)
         {
             MappingEntity entity = this.mapper.Mapping.GetEntity(upd.ElementType, upd.TableName);
             return this.Visit(this.mapper.GetUpdateExpression(entity, predicate, updateExpression, resultSelector, null));
@@ -1036,8 +1048,8 @@ namespace NTF.Data.Common
 
         protected override Expression VisitMemberAccess(MemberExpression m)
         {
-            if (m.Expression != null 
-                && m.Expression.NodeType == ExpressionType.Parameter 
+            if (m.Expression != null
+                && m.Expression.NodeType == ExpressionType.Parameter
                 && !this.map.ContainsKey((ParameterExpression)m.Expression)
                 && this.IsQuery(m))
             {
@@ -1100,7 +1112,7 @@ namespace NTF.Data.Common
                     {
                         MemberAssignment assign = min.Bindings[i] as MemberAssignment;
                         if (assign != null && MembersMatch(assign.Member, member))
-                        {                            
+                        {
                             return assign.Expression;
                         }
                     }

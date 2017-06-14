@@ -148,57 +148,45 @@ namespace NTF.Provider
             return (int)collection.Provider.Execute(callMyself);
         }
 
-        public static IEnumerable Batch(INonQuery collection, IEnumerable items, LambdaExpression fnOperation, int batchSize, bool stream)
-        {
-            var callMyself = Expression.Call(
-                null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()),
-                collection.Expression,
-                Expression.Constant(items),
-                fnOperation != null ? (Expression)Expression.Quote(fnOperation) : Expression.Constant(null, typeof(LambdaExpression)),
-                Expression.Constant(batchSize),
-                Expression.Constant(stream)
-                );
-            return (IEnumerable)collection.Provider.Execute(callMyself);
-        }
-
         /// <summary>
-        /// Apply an Insert, Update, InsertOrUpdate or Delete operation over a set of items and produce a set of results per invocation.
+        /// 批量操作
         /// </summary>
-        /// <typeparam name="T">The type of the instances.</typeparam>
-        /// <typeparam name="S">The type of each result</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instances">The instances to apply the operation to.</param>
-        /// <param name="fnOperation">The operation to apply.</param>
-        /// <param name="batchSize">The maximum size of each batch.</param>
-        /// <param name="stream">If true then execution is deferred until the resulting sequence is enumerated.</param>
-        /// <returns>A sequence of results cooresponding to each invocation.</returns>
-        public static IEnumerable<S> Batch<U, T, S>(this INonQuery<U> collection, IEnumerable<T> instances, Expression<Func<INonQuery<U>, T, S>> fnOperation, int batchSize, bool stream)
+        /// <typeparam name="TDbContext">数据集上下文类型</typeparam>
+        /// <typeparam name="TModel">实体类型</typeparam>
+        /// <typeparam name="TResult">返回结果类型</typeparam>
+        /// <param name="collection">数据集上下文</param>
+        /// <param name="instances">批量操作实例</param>
+        /// <param name="fnOperation">批量操作，增、删、改</param>
+        /// <param name="batchSize">批量操作数量</param>
+        /// <param name="isLazy">是否延时加载</param>
+        /// <returns>返回批量操作对应的结果/结果集</returns>
+        public static IEnumerable<TResult> Batch<TDbContext, TModel, TResult>(this INonQuery<TDbContext> collection, IEnumerable<TModel> instances, Expression<Func<INonQuery<TDbContext>, TModel, TResult>> fnOperation, int batchSize, bool isLazy)
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(U), typeof(T), typeof(S)),
+                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TDbContext), typeof(TModel), typeof(TResult)),
                 collection.Expression,
                 Expression.Constant(instances),
-                fnOperation != null ? (Expression)Expression.Quote(fnOperation) : Expression.Constant(null, typeof(Expression<Func<INonQuery<U>, T, S>>)),
+                fnOperation != null ? (Expression)Expression.Quote(fnOperation) : Expression.Constant(null, typeof(Expression<Func<INonQuery<TDbContext>, TModel, TResult>>)),
                 Expression.Constant(batchSize),
-                Expression.Constant(stream)
+                Expression.Constant(isLazy)
                 );
-            return (IEnumerable<S>)collection.Provider.Execute(callMyself);
+            return (IEnumerable<TResult>)collection.Provider.Execute(callMyself);
         }
 
         /// <summary>
-        /// Apply an Insert, Update, InsertOrUpdate or Delete operation over a set of items and produce a set of result per invocation.
+        /// 
         /// </summary>
-        /// <typeparam name="T">The type of the items.</typeparam>
-        /// <typeparam name="S">The type of each result.</typeparam>
-        /// <param name="collection">The updatable collection.</param>
-        /// <param name="instances">The instances to apply the operation to.</param>
-        /// <param name="fnOperation">The operation to apply.</param>
-        /// <returns>A sequence of results corresponding to each invocation.</returns>
-        public static IEnumerable<S> Batch<U, T, S>(this INonQuery<U> collection, IEnumerable<T> instances, Expression<Func<INonQuery<U>, T, S>> fnOperation)
+        /// <typeparam name="TDbContext">数据集上下文类型</typeparam>
+        /// <typeparam name="TModel">实体类型</typeparam>
+        /// <typeparam name="TResult">返回结果类型</typeparam>
+        /// <param name="collection">数据集上下文</param>
+        /// <param name="instances">批量操作实例</param>
+        /// <param name="fnOperation">批量操作，增、删、改</param>
+        /// <returns>返回批量操作对应的结果/结果集</returns>
+        public static IEnumerable<TResult> Batch<TDbContext, TModel, TResult>(this INonQuery<TDbContext> collection, IEnumerable<TModel> instances, Expression<Func<INonQuery<TDbContext>, TModel, TResult>> fnOperation)
         {
-            return Batch<U, T, S>(collection, instances, fnOperation, 50, false);
+            return Batch<TDbContext, TModel, TResult>(collection, instances, fnOperation, 50, false);
         }
     }
 }

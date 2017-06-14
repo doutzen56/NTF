@@ -764,18 +764,29 @@ namespace NTF.Data.Common
         {
             var tableAlias = new TableAlias();
             var table = new TableExpression(tableAlias, entity, this.mapping.GetTableName(entity));
-            Expression where=null;
-            var predicate = instance as LambdaExpression;
-            if (predicate != null)
+            Expression where = null;
+            IEnumerable<ColumnAssignment> assignments = null;
+            //Update(T Instance) 以及Batch（list,(u,m)=>u.Update(m)）的时候需要这样处理
+            if (instance.NodeType == ExpressionType.Parameter || instance.NodeType == ExpressionType.Constant)
             {
-                Expression typeProjector = this.GetEntityExpression(table, entity);
-                Expression pred = DbExpressionReplacer.Replace(predicate.Body, predicate.Parameters[0], typeProjector);
-                where = pred;
+                where = this.GetIdentityCheck(table, entity, instance);
+                assignments = this.GetColumnAssignments(table, instance, entity, (e, m) => this.mapping.IsUpdatable(e, m));
             }
-            var updateExpression = (updateCheck as LambdaExpression).Body;
-            var binds = ((MemberInitExpression)updateExpression).Bindings;
-            var assignments = this.GetColumnAssignments(table, updateExpression, entity, (e, m) => binds.Any(a => a.Member.Name == m.Name));
+            //Update(Expression<Func<T,bool>> predicate,Expression<Func<T,T>> updateExpression)这样处理
+            else
+            {
+                var predicate = instance as LambdaExpression;
+                if (predicate != null)
+                {
+                    Expression typeProjector = this.GetEntityExpression(table, entity);
+                    Expression pred = DbExpressionReplacer.Replace(predicate.Body, predicate.Parameters[0], typeProjector);
+                    where = pred;
+                }
+                var updateExpression = (updateCheck as LambdaExpression).Body;
+                var binds = ((MemberInitExpression)updateExpression).Bindings;
+                assignments = this.GetColumnAssignments(table, updateExpression, entity, (e, m) => binds.Any(a => a.Member.Name == m.Name));
 
+            }
             Expression update = new UpdateCommand(table, where, assignments);
 
             if (selector != null)
@@ -784,7 +795,7 @@ namespace NTF.Data.Common
                     update,
                     new IFCommand(
                         this.translator.Linguist.Language.GetRowsAffectedExpression(update).GreaterThan(Expression.Constant(0)),
-                        this.GetUpdateResult(entity, predicate, selector),
+                        this.GetUpdateResult(entity, instance, selector),
                         @else
                         )
                     );
@@ -819,7 +830,7 @@ namespace NTF.Data.Common
                 where = pred;
             }
             Expression selection = DbExpressionReplacer.Replace(selector.Body, selector.Parameters[0], tq.Projector);
-            
+
             var pc = ColumnProjector.ProjectColumns(this.translator.Linguist.Language, selection, null, newAlias, tq.Select.Alias);
             return new ProjectionExpression(
                 new SelectExpression(newAlias, pc.Columns, tq.Select, where),
