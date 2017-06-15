@@ -5,10 +5,10 @@ using System.Linq;
 namespace NTF.Provider
 {
     /// <summary>
-    /// Simple implementation of the IGrouping<TKey, TElement> interface
+    /// <see cref="IGrouping{TKey, TElement}"/>的简单实现
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TElement"></typeparam>
+    /// <typeparam name="TKey">键类型</typeparam>
+    /// <typeparam name="TElement">值类型</typeparam>
     public class Grouping<TKey, TElement> : IGrouping<TKey, TElement>
     {
         TKey key;

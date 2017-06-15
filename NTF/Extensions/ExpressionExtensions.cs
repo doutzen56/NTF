@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace NTF.Provider
+namespace NTF
 {
-    public static class ExpressionExtensions
+    /// <summary>
+    /// <see cref="Expression"/> 扩展方法
+    /// </summary>
+    public static class ExpressionEx
     {
         public static Expression Equal(this Expression expression1, Expression expression2)
         {

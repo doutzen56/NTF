@@ -2,6 +2,11 @@
 
 namespace NTF.Provider
 {
+    /// <summary>
+    /// 作用域字典
+    /// </summary>
+    /// <typeparam name="TKey">键</typeparam>
+    /// <typeparam name="TValue">值</typeparam>
     public class ScopedDictionary<TKey, TValue>
     {
         ScopedDictionary<TKey, TValue> previous;

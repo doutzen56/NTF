@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
 
-namespace NTF.Provider
+namespace NTF
 {
-    public static class ReflectionExtensions
+    public static class ReflectionEx
     {
         public static object GetValue(this MemberInfo member, object instance)
         {

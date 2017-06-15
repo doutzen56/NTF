@@ -12,7 +12,7 @@ using System.Text;
 namespace NTF.Data.Mapping
 {
     /// <summary>
-    /// A simple query mapping that attempts to infer mapping from naming conventions
+    /// 根据命名约定来推测映射关系
     /// </summary>
     public class ImplicitMapping : BasicMapping
     {
@@ -89,8 +89,6 @@ namespace NTF.Data.Mapping
             {
                 if (typeof(IEnumerable).IsAssignableFrom(TypeEx.GetMemberType(member)))
                     return false;
-
-                // is source of relationship if relatedKeyMembers are the related entity's primary keys
                 MappingEntity entity2 = GetRelatedEntity(entity, member);
                 var relatedPKs = new HashSet<string>(this.GetPrimaryKeyMembers(entity2).Select(m => m.Name));
                 var relatedKeyMembers = new HashSet<string>(this.GetAssociationRelatedKeyMembers(entity, member).Select(m => m.Name));
@@ -105,8 +103,6 @@ namespace NTF.Data.Mapping
             {
                 if (typeof(IEnumerable).IsAssignableFrom(TypeEx.GetMemberType(member)))
                     return true;
-
-                // is target of relationship if the assoctions keys are the same as this entities primary key
                 var pks = new HashSet<string>(this.GetPrimaryKeyMembers(entity).Select(m => m.Name));
                 var keys = new HashSet<string>(this.GetAssociationKeyMembers(entity, member).Select(m => m.Name));
                 return keys.IsSubsetOf(pks) && pks.IsSubsetOf(keys);
@@ -133,8 +129,6 @@ namespace NTF.Data.Mapping
         private void GetAssociationKeys(MappingEntity entity, MemberInfo member, out List<MemberInfo> keyMembers, out List<MemberInfo> relatedKeyMembers)
         {
             MappingEntity entity2 = GetRelatedEntity(entity, member);
-
-            // find all members in common (same name)
             var map1 = this.GetMappedMembers(entity).Where(m => this.IsColumn(entity, m)).ToDictionary(m => m.Name);
             var map2 = this.GetMappedMembers(entity2).Where(m => this.IsColumn(entity2, m)).ToDictionary(m => m.Name);
             var commonNames = map1.Keys.Intersect(map2.Keys).OrderBy(k => k);
@@ -154,7 +148,6 @@ namespace NTF.Data.Mapping
 
         private string InferTableName(Type rowType)
         {
-            //return SplitWords(Plural(rowType.Name));
             return rowType.Name;
         }
 

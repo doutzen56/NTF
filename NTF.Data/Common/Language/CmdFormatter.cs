@@ -9,7 +9,7 @@ using System.Text;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Formats a query expression into common SQL language syntax
+    /// 将查询表达式格式化T-SQL
     /// </summary>
     public class CmdFormatter : DbExpressionVisitor
     {
@@ -60,7 +60,7 @@ namespace NTF.Data.Common
             get { return this.language; }
         }
 
-        protected bool HideColumnAliases 
+        protected bool HideColumnAliases
         {
             get { return this.hideColumnAliases; }
             set { this.hideColumnAliases = value; }
@@ -72,7 +72,7 @@ namespace NTF.Data.Common
             set { this.hideTableAliases = value; }
         }
 
-        protected bool IsNested 
+        protected bool IsNested
         {
             get { return this.isNested; }
             set { this.isNested = value; }
@@ -205,9 +205,6 @@ namespace NTF.Data.Common
         protected override Expression Visit(Expression exp)
         {
             if (exp == null) return null;
-
-            // check for supported node types first 
-            // non-supported ones should not be visited (as they would produce bad SQL)
             switch (exp.NodeType)
             {
                 case ExpressionType.Negate:
@@ -283,7 +280,7 @@ namespace NTF.Data.Common
                 default:
                     if (!forDebug)
                     {
-                        throw new NotSupportedException(string.Format("The LINQ expression node of type {0} is not supported", exp.NodeType));
+                        throw new NotSupportedException("不支持节点类型：{0}".Fmt(exp.NodeType));
                     }
                     else
                     {
@@ -306,7 +303,7 @@ namespace NTF.Data.Common
             }
             else
             {
-                throw new NotSupportedException(string.Format("The member access '{0}' is not supported", m.Member));
+                throw new NotSupportedException("不支持成员访问:{0}".Fmt(m.Member));
             }
         }
 
@@ -391,7 +388,7 @@ namespace NTF.Data.Common
             }
             else
             {
-                throw new NotSupportedException(string.Format("The method '{0}' is not supported", m.Method.Name));
+                throw new NotSupportedException("不支持方法：{0}".Fmt(m.Method.Name));
             }
         }
 
@@ -418,7 +415,7 @@ namespace NTF.Data.Common
             }
             else
             {
-                throw new NotSupportedException(string.Format("The construtor for '{0}' is not supported", nex.Constructor.DeclaringType));
+                throw new NotSupportedException("不支持构造函数:{0}".Fmt(nex.Constructor.DeclaringType));
             }
         }
 
@@ -449,7 +446,6 @@ namespace NTF.Data.Common
                     this.VisitValue(u.Operand);
                     break;
                 case ExpressionType.Convert:
-                    // ignore conversions for now
                     this.Visit(u.Operand);
                     break;
                 default:
@@ -463,7 +459,7 @@ namespace NTF.Data.Common
                     }
                     else
                     {
-                        throw new NotSupportedException(string.Format("The unary operator '{0}' is not supported", u.NodeType));
+                        throw new NotSupportedException("不支持一元运算符：{0}".Fmt(u.NodeType));
                     }
             }
             return u;
@@ -547,7 +543,6 @@ namespace NTF.Data.Common
                 case ExpressionType.LessThanOrEqual:
                 case ExpressionType.GreaterThan:
                 case ExpressionType.GreaterThanOrEqual:
-                    // check for special x.CompareTo(y) && type.Compare(x,y)
                     if (left.NodeType == ExpressionType.Call && right.NodeType == ExpressionType.Constant)
                     {
                         MethodCallExpression mc = (MethodCallExpression)left;
@@ -599,7 +594,7 @@ namespace NTF.Data.Common
                     }
                     else
                     {
-                        throw new NotSupportedException(string.Format("The binary operator '{0}' is not supported", b.NodeType));
+                        throw new NotSupportedException("不支持二进制运算符：{0}".Fmt(b.NodeType));
                     }
             }
             this.Write(")");
@@ -746,7 +741,7 @@ namespace NTF.Data.Common
             }
             else
             {
-                throw new NotSupportedException(string.Format("Conditional expressions not supported"));
+                throw new NotSupportedException("不支持条件表达式");
             }
         }
 
@@ -779,7 +774,7 @@ namespace NTF.Data.Common
                         this.Write("'");
                         break;
                     case TypeCode.Object:
-                        throw new NotSupportedException(string.Format("The constant for '{0}' is not supported", value));
+                        throw new NotSupportedException("不支持的常数：{0}".Fmt(value));
                     case TypeCode.Single:
                     case TypeCode.Double:
                         string str = value.ToString();
@@ -809,7 +804,6 @@ namespace NTF.Data.Common
 
         protected override Expression VisitProjection(ProjectionExpression proj)
         {
-            // treat these like scalar subqueries
             if ((proj.Projector is ColumnExpression) || this.forDebug)
             {
                 this.Write("(");
@@ -820,7 +814,7 @@ namespace NTF.Data.Common
             }
             else
             {
-                throw new NotSupportedException("Non-scalar projections cannot be translated to SQL.");
+                throw new NotSupportedException("非 ColumnExpression 不能翻译成.");
             }
             return proj;
         }
@@ -950,7 +944,7 @@ namespace NTF.Data.Common
                     this.VisitJoin((JoinExpression)source);
                     break;
                 default:
-                    throw new InvalidOperationException("Select source is not valid type");
+                    throw new InvalidOperationException("表达式不是一个有效的DbExpressionType");
             }
             this.isNested = saveIsNested;
             return source;
@@ -1105,7 +1099,7 @@ namespace NTF.Data.Common
                     this.Write(")");
                 }
             }
-            else 
+            else
             {
                 this.VisitValue(@in.Expression);
                 this.Write(" IN (");

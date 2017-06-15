@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 namespace NTF.Provider
 {
     /// <summary>
-    /// Finds the first sub-expression that is of a specified type
+    /// 查找指定类型的第一个子表达式
     /// </summary>
     public class TypedSubtreeFinder : ExpressionVisitor
     {
@@ -26,14 +26,11 @@ namespace NTF.Provider
         protected override Expression Visit(Expression exp)
         {
             Expression result = base.Visit(exp);
-
-            // remember the first sub-expression that produces an IQueryable
             if (this.root == null && result != null)
             {
                 if (this.type.IsAssignableFrom(result.Type))
                     this.root = result;
             }
-
             return result;
         }
     }

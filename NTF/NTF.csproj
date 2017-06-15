@@ -65,9 +65,12 @@
   <ItemGroup>
     <Compile Include="Extensions\EventExtensions.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\IocExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\ReadOnlyExtensions.cs" />
+    <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
@@ -92,7 +95,6 @@
     <Compile Include="Provider\DeferredValue.cs" />
     <Compile Include="Provider\EnumerateOnce.cs" />
     <Compile Include="Provider\ExpressionComparer.cs" />
-    <Compile Include="Provider\ExpressionExtensions.cs" />
     <Compile Include="Provider\ExpressionReplacer.cs" />
     <Compile Include="Provider\ExpressionVisitor.cs" />
     <Compile Include="Provider\ExpressionWriter.cs" />
@@ -104,8 +106,6 @@
     <Compile Include="Provider\QueryCache.cs" />
     <Compile Include="Provider\QueryCompiler.cs" />
     <Compile Include="Provider\QueryProvider.cs" />
-    <Compile Include="Provider\ReadOnlyExtensions.cs" />
-    <Compile Include="Provider\ReflectionExtensions.cs" />
     <Compile Include="Provider\ScopedDictionary.cs" />
     <Compile Include="Provider\StrongDelegate.cs" />
     <Compile Include="Provider\TypedSubtreeFinder.cs" />

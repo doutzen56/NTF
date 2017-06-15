@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace NTF.Provider
 {
+    /// <summary>
+    /// 定义一个基本的<see cref="Expression"/>解析器
+    /// </summary>
     public abstract class ExpressionVisitor
     {
         protected ExpressionVisitor()
@@ -85,7 +88,7 @@ namespace NTF.Provider
 
         protected virtual Expression VisitUnknown(Expression expression)
         {
-            throw new Exception(string.Format("Unhandled expression type: '{0}'", expression.NodeType));
+            throw new Exception("未经处理的表达式的类型: '{0}'".Fmt(expression.NodeType));
         }
 
         protected virtual MemberBinding VisitBinding(MemberBinding binding)
@@ -99,7 +102,7 @@ namespace NTF.Provider
                 case MemberBindingType.ListBinding:
                     return this.VisitMemberListBinding((MemberListBinding)binding);
                 default:
-                    throw new Exception(string.Format("Unhandled binding type '{0}'", binding.BindingType));
+                    throw new Exception("未绑定类型 '{0}'".Fmt( binding.BindingType));
             }
         }
 

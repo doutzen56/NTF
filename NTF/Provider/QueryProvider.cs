@@ -7,7 +7,7 @@ using System.Reflection;
 namespace NTF.Provider
 {
     /// <summary>
-    /// 定义一个抽象的扩展自<see cref="IQueryProvider"/>的LINQ查询Provider
+    /// 定义一个扩展自<see cref="IQueryProvider"/>用于执行LINQ查询的Provider
     /// </summary>
     public abstract class QueryProvider : IQueryProvider, IQueryText
     {
@@ -54,16 +54,7 @@ namespace NTF.Provider
             return (TResult)this.Execute(expression);
         }
         /// <summary>
-        /// 执行指定表达式所表示的查询
-        /// </summary>
-        /// <param name="expression">表示 LINQ 查询的表达式</param>
-        /// <returns>执行指定查询所生成的值</returns>
-        object IQueryProvider.Execute(Expression expression)
-        {
-            return this.Execute(expression);
-        }
-        /// <summary>
-        /// 获取表达式所等价的SQL语句
+        /// 解析表达式所等价的SQL语句
         /// </summary>
         /// <param name="expression">表示 LINQ 查询的表达式</param>
         /// <returns></returns>

@@ -6,26 +6,28 @@ using System.Linq.Expressions;
 namespace NTF.Provider
 {
     /// <summary>
-    /// Rewrites an expression tree so that locally isolatable sub-expressions are evaluated and converted into ConstantExpression nodes.
+    /// 重写表达式树，将局部分离的子表达式树转换成<see cref="ConstantExpression"/>节点，
+    /// 如：表达式内容为 a=>new User(){Address="ccc"},则转换成 a=>value(User),
+    /// 这块暂不启用
     /// </summary>
     public static class PartialEvaluator
     {
         /// <summary>
-        /// Performs evaluation & replacement of independent sub-trees
+        /// 执行独立表达式子节点的计算和替换
         /// </summary>
-        /// <param name="expression">The root of the expression tree.</param>
-        /// <returns>A new tree with sub-trees evaluated and replaced.</returns>
+        /// <param name="expression">表达式根节点</param>
+        /// <returns>计算和替换后的表达式</returns>
         public static Expression Eval(Expression expression)
         {
             return Eval(expression, null, null);
         }
 
         /// <summary>
-        /// Performs evaluation & replacement of independent sub-trees
+        /// 执行独立表达式子节点的计算和替换
         /// </summary>
-        /// <param name="expression">The root of the expression tree.</param>
-        /// <param name="fnCanBeEvaluated">A function that decides whether a given expression node can be part of the local function.</param>
-        /// <returns>A new tree with sub-trees evaluated and replaced.</returns>
+        /// <param name="expression">表达式根节点</param>
+        /// <param name="fnCanBeEvaluated">决定给定表达式节点是否可以执行本地计算的函数</param>
+        /// <returns>计算和替换后的表达式</returns>
         public static Expression Eval(Expression expression, Func<Expression, bool> fnCanBeEvaluated)
         {
             return Eval(expression, fnCanBeEvaluated, null);
@@ -44,7 +46,7 @@ namespace NTF.Provider
         }
 
         /// <summary>
-        /// Evaluates & replaces sub-trees when first candidate is reached (top-down)
+        /// 表达式树自上而下的计算和替换
         /// </summary>
         class SubtreeEvaluator : ExpressionVisitor
         {
@@ -90,7 +92,7 @@ namespace NTF.Provider
                 Type type = e.Type;
                 if (e.NodeType == ExpressionType.Convert)
                 {
-                    // check for unnecessary convert & strip them
+                    // 检查不必要的替换
                     var u = (UnaryExpression)e;
                     if (TypeEx.GetNonNullableType(u.Operand.Type) == TypeEx.GetNonNullableType(type))
                     {
@@ -99,8 +101,6 @@ namespace NTF.Provider
                 }
                 if (e.NodeType == ExpressionType.Constant)
                 {
-                    // in case we actually threw out a nullable conversion above, simulate it here
-                    // don't post-eval nodes that were already constants
                     if (e.Type == type)
                     {
                         return e;
@@ -113,9 +113,6 @@ namespace NTF.Provider
                 var me = e as MemberExpression;
                 if (me != null)
                 {
-                    // member accesses off of constant's are common, and yet since these partial evals
-                    // are never re-used, using reflection to access the member is faster than compiling  
-                    // and invoking a lambda
                     var ce = me.Expression as ConstantExpression;
                     if (ce != null)
                     {
@@ -137,8 +134,7 @@ namespace NTF.Provider
         }
 
         /// <summary>
-        /// Performs bottom-up analysis to determine which nodes can possibly
-        /// be part of an evaluated sub-tree.
+        /// 表达式树自下而上的分析，以确定那些节点可以成为计算和替换的子树的一部分
         /// </summary>
         class Nominator : ExpressionVisitor
         {

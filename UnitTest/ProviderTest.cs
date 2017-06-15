@@ -17,7 +17,7 @@ namespace UnitTest
 
         private static IDbContext<UserInfo> UserList;
         private static IDbContext<Orders> OrderList;
-
+        private static IDbContext<ScoreInfo> ScoreInfo;
         private static FileStream fs;
         private static TextWriter tr;
         #endregion
@@ -32,7 +32,7 @@ namespace UnitTest
             provider.Log = tr;
             UserList = provider.GetTable<UserInfo>();
             OrderList = provider.GetTable<Orders>();
-
+            ScoreInfo = provider.GetTable<ScoreInfo>();
             List<UserInfo> list = new List<UserInfo>();
             for (int i = 0; i < 5; i++)
             {
@@ -122,8 +122,8 @@ namespace UnitTest
                              .Skip(0)
                              .Take(10)
                              .OrderBy(a => a.ID);
-            Assert.IsTrue(list.Count() == 10);
+            Assert.AreEqual(list.Count(), 10);
         }
-
+        
     }
 }

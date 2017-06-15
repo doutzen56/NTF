@@ -7,7 +7,8 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Determines if two expressions are equivalent. Supports DbExpression nodes.
+    /// 确定两个<see cref="Expression"/>是否相等。
+    /// 支持<see cref="DbExpression"/>节点。
     /// </summary>
     public class DbExpressionComparer : ExpressionComparer
     {

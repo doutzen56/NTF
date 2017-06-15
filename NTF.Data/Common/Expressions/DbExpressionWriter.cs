@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Writes out an expression tree (including DbExpression nodes) in a C#-ish syntax
+    /// 输出一个表达式，包括<see cref="DbExpression"/>节点
     /// </summary>
     public class DbExpressionWriter : ExpressionWriter
     {

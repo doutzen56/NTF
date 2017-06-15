@@ -1,5 +1,4 @@
-﻿using NTF.Provider;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
@@ -7,11 +6,11 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Extended node types for custom expressions
+    /// 自定义节点类型，扩展<see cref="ExpressionType"/>
     /// </summary>
     public enum DbExpressionType
     {
-        Table = 1000, // make sure these don't overlap with ExpressionType
+        Table = 1000, //确保节点类型取值不会重复
         ClientJoin,
         Column,
         Select,
@@ -39,15 +38,22 @@ namespace NTF.Data.Common
         Declaration,
         Variable
     }
-
+    
     public static class DbExpressionTypeExtensions
     {
+        /// <summary>
+        /// 判断<see cref="Expression"/>节点类型，是否是自定义<see cref="DbExpressionType"/>
+        /// </summary>
+        /// <param name="et"></param>
+        /// <returns></returns>
         public static bool IsDbExpression(this ExpressionType et)
         {
             return ((int)et) >= 1000;
         }
     }
-
+    /// <summary>
+    /// 自定义表达式基类，主要用于构建SQL查询
+    /// </summary>
     public abstract class DbExpression : Expression
     {
         protected DbExpression(DbExpressionType eType, Type type)
@@ -60,7 +66,9 @@ namespace NTF.Data.Common
             return DbExpressionWriter.WriteToString(this);
         }
     }
-
+    /// <summary>
+    /// 表示SQL查询中表别名的自定义表达式节点
+    /// </summary>
     public abstract class AliasedExpression : DbExpression
     {
         TableAlias alias;
@@ -69,6 +77,9 @@ namespace NTF.Data.Common
         {
             this.alias = alias;
         }
+        /// <summary>
+        /// 表别名
+        /// </summary>
         public TableAlias Alias
         {
             get { return this.alias; }
@@ -77,36 +88,50 @@ namespace NTF.Data.Common
 
 
     /// <summary>
-    /// A custom expression node that represents a table reference in a SQL query
+    /// 表示SQL查询中数据表的自定义表达式节点
     /// </summary>
     public class TableExpression : AliasedExpression
     {
         MappingEntity entity;
         string name;
-
+        /// <summary>
+        /// 实例化一个新的<see cref="TableExpression"/>
+        /// </summary>
+        /// <param name="alias">表别名</param>
+        /// <param name="entity">表对应的实体映射</param>
+        /// <param name="name">表名</param>
         public TableExpression(TableAlias alias, MappingEntity entity, string name)
             : base(DbExpressionType.Table, typeof(void), alias)
         {
             this.entity = entity;
             this.name = name;
         }
-
+        /// <summary>
+        /// 表对应的实体映射
+        /// </summary>
         public MappingEntity Entity
         {
             get { return this.entity; }
         }
-
+        /// <summary>
+        /// 表名
+        /// </summary>
         public string Name
         {
             get { return this.name; }
         }
-
+        /// <summary>
+        /// 返回表名
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return "T(" + this.Name + ")";
         }
     }
-
+    /// <summary>
+    /// 表示SQL查询中实体映射对应的表达式
+    /// </summary>
     public class EntityExpression : DbExpression
     {
         MappingEntity entity;
@@ -118,12 +143,16 @@ namespace NTF.Data.Common
             this.entity = entity;
             this.expression = expression;
         }
-
+        /// <summary>
+        /// 实体映射
+        /// </summary>
         public MappingEntity Entity
         {
             get { return this.entity; }
         }
-
+        /// <summary>
+        /// 表达式
+        /// </summary>
         public Expression Expression
         {
             get { return this.expression; }
@@ -131,7 +160,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// A custom expression node that represents a reference to a column in a SQL query
+    /// 表示SQL查询中的列引用的自定义表达式节点
     /// </summary>
     public class ColumnExpression : DbExpression, IEquatable<ColumnExpression>
     {
@@ -150,22 +179,31 @@ namespace NTF.Data.Common
             this.name = name;
             this.queryType = queryType;
         }
-
+        /// <summary>
+        /// 表别名
+        /// </summary>
         public TableAlias Alias
         {
             get { return this.alias; }
         }
-
+        /// <summary>
+        /// 列名
+        /// </summary>
         public string Name
         {
             get { return this.name; }
         }
-
+        /// <summary>
+        /// 数据类型
+        /// </summary>
         public QueryType QueryType
         {
             get { return this.queryType; }
         }
-
+        /// <summary>
+        /// 列名
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return this.Alias.ToString() + ".C(" + this.name + ")";
@@ -188,13 +226,18 @@ namespace NTF.Data.Common
                  || (alias == other.alias && name == other.Name);
         }
     }
-
+    /// <summary>
+    /// 表别名
+    /// </summary>
     public class TableAlias
     {
         public TableAlias()
         {
         }
-
+        /// <summary>
+        /// 生成表别名
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return "A:" + this.GetHashCode();
@@ -202,7 +245,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// A declaration of a column in a SQL SELECT expression
+    ///SELECT表达式中列的声明
     /// </summary>
     public class ColumnDeclaration
     {
@@ -222,17 +265,23 @@ namespace NTF.Data.Common
             this.expression = expression;
             this.queryType = queryType;
         }
-
+        /// <summary>
+        /// 列名
+        /// </summary>
         public string Name
         {
             get { return this.name; }
         }
-
+        /// <summary>
+        /// 列对应的表达式
+        /// </summary>
         public Expression Expression
         {
             get { return this.expression; }
         }
-
+        /// <summary>
+        /// 数据类型
+        /// </summary>
         public QueryType QueryType
         {
             get { return this.queryType; }
@@ -240,7 +289,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// An SQL OrderBy order type 
+    /// SQL排序类型 
     /// </summary>
     public enum OrderType
     {
@@ -249,7 +298,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// A pairing of an expression and an order type for use in a SQL Order By clause
+    /// SQL中Order By 排序与<see cref="OrderType"/>映射
     /// </summary>
     public class OrderExpression
     {
@@ -260,10 +309,16 @@ namespace NTF.Data.Common
             this.orderType = orderType;
             this.expression = expression;
         }
+        /// <summary>
+        /// 排序类型
+        /// </summary>
         public OrderType OrderType
         {
             get { return this.orderType; }
         }
+        /// <summary>
+        /// 排序表达式
+        /// </summary>
         public Expression Expression
         {
             get { return this.expression; }
@@ -271,7 +326,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// A custom expression node used to represent a SQL SELECT expression
+    /// 用于表示SQL SELECT表达式的自定义表达式节点。
     /// </summary>
     public class SelectExpression : AliasedExpression
     {
@@ -370,7 +425,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// A kind of SQL join
+    /// SQL 连接查询类型
     /// </summary>
     public enum JoinType
     {
@@ -383,7 +438,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// A custom expression node representing a SQL join clause
+    /// 表示SQL连接子句的自定义表达式节点
     /// </summary>
     public class JoinExpression : DbExpression
     {
@@ -475,7 +530,7 @@ namespace NTF.Data.Common
     public class InExpression : SubqueryExpression
     {
         Expression expression;
-        ReadOnlyCollection<Expression> values;  // either select or expressions are assigned
+        ReadOnlyCollection<Expression> values;  
         public InExpression(Expression expression, SelectExpression select)
             : base(DbExpressionType.In, typeof(bool), select)
         {
@@ -541,7 +596,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// Allows is-null tests against value-types like int and float
+    /// 允许对int和浮点这样的值类型进行null赋值
     /// </summary>
     public class IsNullExpression : DbExpression
     {
@@ -608,8 +663,6 @@ namespace NTF.Data.Common
         {
             if (name == null)
                 throw new ArgumentNullException("name");
-            //if (queryType == null)
-                //throw new ArgumentNullException("queryType");
             if (value == null)
                 throw new ArgumentNullException("value");
             this.name = name;
@@ -634,8 +687,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// A custom expression representing the construction of one or more result objects from a 
-    /// SQL select expression
+    /// 表示从SQL SELECT表达式构造一个或多个结果对象的自定义表达式
     /// </summary>
     public class ProjectionExpression : DbExpression
     {

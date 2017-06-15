@@ -8,15 +8,17 @@ using System.Reflection;
 
 namespace NTF.Data.Common
 {
+    /// <summary>
+    /// 获取表达式中的聚合函数
+    /// </summary>
     public static class Aggregator
     {
         /// <summary>
-        /// Get a function that coerces a sequence of one type into another type.
-        /// This is primarily used for aggregators stored in ProjectionExpression's, which are used to represent the 
-        /// final transformation of the entire result set of a query.
+        /// 集合类型转换，
+        /// 主要用于存储<see cref="ProjectionExpression"/>中的聚合函数
         /// </summary>
-        /// <param name="expectedType"></param>
-        /// <param name="projector"></param>
+        /// <param name="expectedType">目标类型</param>
+        /// <param name="actualType">实际类型</param>
         /// <returns></returns>
         public static LambdaExpression GetAggregator(Type expectedType, Type actualType)
         {
@@ -54,12 +56,10 @@ namespace NTF.Data.Common
                 }
                 else if (expectedType.IsAssignableFrom(typeof(List<>).MakeGenericType(actualElementType)))
                 {
-                    // List<T> can be assigned to expectedType
                     body = Expression.Call(typeof(Enumerable), "ToList", new Type[] { expectedElementType }, CoerceElement(expectedElementType, p));
                 }
                 else
                 {
-                    // some other collection type that has a constructor that takes IEnumerable<T>
                     ConstructorInfo ci = expectedType.GetConstructor(new Type[] { actualType });
                     if (ci != null)
                     {

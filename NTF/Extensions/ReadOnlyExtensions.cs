@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace NTF.Provider
+namespace NTF
 {
-    public static class ReadOnlyExtensions
+    public static class ReadOnlyEx
     {
         public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> collection)
         {

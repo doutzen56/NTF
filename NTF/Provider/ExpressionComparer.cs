@@ -6,7 +6,7 @@ using System.Reflection;
 namespace NTF.Provider
 {
     /// <summary>
-    /// Compare two expressions to determine if they are equivalent
+    /// 比较两个<see cref="Expression"/>是否相等
     /// </summary>
     public class ExpressionComparer
     {
@@ -197,7 +197,7 @@ namespace NTF.Provider
             int n = a.Parameters.Count;
             if (b.Parameters.Count != n)
                 return false;
-            // all must have same type
+            // 所有Parameter必须具有相同Type
             for (int i = 0; i < n; i++)
             {
                 if (a.Parameters[i].Type != b.Parameters[i].Type)
@@ -310,7 +310,7 @@ namespace NTF.Provider
                 case MemberBindingType.MemberBinding:
                     return this.CompareMemberMemberBinding((MemberMemberBinding)a, (MemberMemberBinding)b);
                 default:
-                    throw new Exception(string.Format("Unhandled binding type: '{0}'", a.BindingType));
+                    throw new Exception("未绑定类型: '{0}'".Fmt(a.BindingType));
             }
         }
 

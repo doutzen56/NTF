@@ -1,10 +1,12 @@
-﻿using NTF.Provider;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace NTF.Data.Common
 {
+    /// <summary>
+    /// SQL查询命令，包括参数
+    /// </summary>
     public class QueryCommand
     {
         string commandText;

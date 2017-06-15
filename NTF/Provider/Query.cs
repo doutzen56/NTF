@@ -7,15 +7,24 @@ using System.Linq.Expressions;
 namespace NTF.Provider
 {
     /// <summary>
-    /// Optional interface for IQueryProvider to implement Query<T>'s QueryText property.
+    /// 提供一个生成SQL查询命令的接口，
+    /// 扩展自<see cref="IQueryProvider"/>接口的类将实现它，
+    /// <see cref="Query{T}"/>中的<see cref="Query{T}.QueryText"/>内部将通过次接口来获取SQL命令
     /// </summary>
     public interface IQueryText
     {
+        /// <summary>
+        /// 将LINQ表达式转换成SQL命令
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
         string GetQueryText(Expression expression);
     }
 
     /// <summary>
-    /// A default implementation of IQueryable for use with QueryProvider
+    /// 定义一个数据源，扩展自<see cref="IQueryable{T}"/>。
+    /// 所有扩展自<see cref="IQueryProvider"/>的Provider，
+    /// 都使用扩展自<see cref="Query{T}"/>的对象来执行查询
     /// </summary>
     public class Query<T> : IQueryable<T>, IQueryable, IEnumerable<T>, IEnumerable, IOrderedQueryable<T>, IOrderedQueryable
     {
@@ -54,17 +63,23 @@ namespace NTF.Provider
             this.provider = provider;
             this.expression = expression;
         }
-
+        /// <summary>
+        /// 数据源对应的LINQ表达式
+        /// </summary>
         public Expression Expression
         {
             get { return this.expression; }
         }
-
+        /// <summary>
+        /// 数据源对应的CLR类型
+        /// </summary>
         public Type ElementType
         {
             get { return typeof(T); }
         }
-
+        /// <summary>
+        /// 与之关联的查询提供程序（Provider）
+        /// </summary>
         public IQueryProvider Provider
         {
             get { return this.provider; }
@@ -92,7 +107,9 @@ namespace NTF.Provider
                 return this.expression.ToString();
             }
         }
-
+        /// <summary>
+        /// 数据源对应的SQL命令
+        /// </summary>
         public string QueryText
         {
             get 

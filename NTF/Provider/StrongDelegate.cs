@@ -4,8 +4,7 @@ using System.Reflection;
 namespace NTF.Provider
 {
     /// <summary>
-    /// Make a strongly-typed delegate to a weakly typed method (one that takes single object[] argument)
-    /// (up to 8 arguments)
+    /// 将强类型委托转换为弱类型方法
     /// </summary>
     public class StrongDelegate
     {
@@ -35,11 +34,11 @@ namespace NTF.Provider
         }
 
         /// <summary>
-        /// Create a strongly typed delegate over a method with a weak signature
+        /// 基于弱类型委托创建强类型委托
         /// </summary>
-        /// <param name="delegateType">The strongly typed delegate's type</param>
-        /// <param name="target"></param>
-        /// <param name="method">Any method that takes a single array of objects and returns an object.</param>
+        /// <param name="delegateType">强类型委托的类型</param>
+        /// <param name="target">弱类型参数</param>
+        /// <param name="method">获取单个对象数组并返回对象的任何方法</param>
         /// <returns></returns>
         public static Delegate CreateDelegate(Type delegateType, object target, MethodInfo method)
         {
@@ -47,10 +46,10 @@ namespace NTF.Provider
         }
 
         /// <summary>
-        /// Create a strongly typed delegate over a Func delegate with weak signature
+        /// 基于弱类型委托创建强类型委托
         /// </summary>
-        /// <param name="delegateType"></param>
-        /// <param name="fn"></param>
+        /// <param name="delegateType">强类型委托的类型</param>
+        /// <param name="fn">弱类型委托</param>
         /// <returns></returns>
         public static Delegate CreateDelegate(Type delegateType, Func<object[], object> fn)
         {
@@ -68,52 +67,52 @@ namespace NTF.Provider
                 var m = gm.MakeGenericMethod(typeArgs);
                 return Delegate.CreateDelegate(delegateType, new StrongDelegate(fn), m);
             }
-            throw new NotSupportedException("Delegate has too many arguments");
+            throw new NotSupportedException("委托参数太多");
         }
 
-        public R M<R>()
+        public TResult M<TResult>()
         {
-            return (R)fn(null);
+            return (TResult)fn(null);
         }
 
-        public R M<A1, R>(A1 a1)
+        public TResult M<T1, TResult>(T1 t1)
         {
-            return (R)fn(new object[] { a1 });
+            return (TResult)fn(new object[] { t1 });
         }
 
-        public R M<A1, A2, R>(A1 a1, A2 a2)
+        public TResult M<T1, T2, TResult>(T1 a1, T2 a2)
         {
-            return (R)fn(new object[] { a1, a2 });
+            return (TResult)fn(new object[] { a1, a2 });
         }
 
-        public R M<A1, A2, A3, R>(A1 a1, A2 a2, A3 a3)
+        public TResult M<T1, T2, T3, TResult>(T1 t1, T2 t2, T3 a3)
         {
-            return (R)fn(new object[] { a1, a2, a3 });
+            return (TResult)fn(new object[] { t1, t2, a3 });
         }
 
-        public R M<A1, A2, A3, A4, R>(A1 a1, A2 a2, A3 a3, A4 a4)
+        public TRsult M<T1, T2, T3, T4, TRsult>(T1 a1, T2 a2, T3 a3, T4 a4)
         {
-            return (R)fn(new object[] { a1, a2, a3, a4 });
+            return (TRsult)fn(new object[] { a1, a2, a3, a4 });
         }
 
-        public R M<A1, A2, A3, A4, A5, R>(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
+        public TRsult M<T1, T2, T3, T4, T5, TRsult>(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)
         {
-            return (R)fn(new object[] { a1, a2, a3, a4, a5 });
+            return (TRsult)fn(new object[] { a1, a2, a3, a4, a5 });
         }
 
-        public R M<A1, A2, A3, A4, A5, A6, R>(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
+        public TRsult M<T1, T2, T3, T4, T5, T6, TRsult>(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)
         {
-            return (R)fn(new object[] { a1, a2, a3, a4, a5, a6 });
+            return (TRsult)fn(new object[] { a1, a2, a3, a4, a5, a6 });
         }
 
-        public R M<A1, A2, A3, A4, A5, A6, A7, R>(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
+        public TRsult M<T1, T2, T3, T4, T5, T6, T7, TRsult>(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7)
         {
-            return (R)fn(new object[] { a1, a2, a3, a4, a5, a6, a7 });
+            return (TRsult)fn(new object[] { a1, a2, a3, a4, a5, a6, a7 });
         }
 
-        public R M<A1, A2, A3, A4, A5, A6, A7, A8, R>(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
+        public TRsult M<T1, T2, T3, T4, T5, T6, T7, T8, TRsult>(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8)
         {
-            return (R)fn(new object[] { a1, a2, a3, a4, a5, a6, a7, a8 });
+            return (TRsult)fn(new object[] { a1, a2, a3, a4, a5, a6, a7, a8 });
         }
     }
 }

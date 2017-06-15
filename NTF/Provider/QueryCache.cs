@@ -6,6 +6,9 @@ using System.Linq.Expressions;
 
 namespace NTF.Provider
 {
+    /// <summary>
+    /// 底层缓存
+    /// </summary>
     public class QueryCache
     {
         static ConcurrentDictionary<RuntimeTypeHandle, QueryCompiler.CompiledQuery> cache;
@@ -92,7 +95,7 @@ namespace NTF.Provider
             IQueryProvider provider = this.FindProvider(query);
             if (provider == null)
             {
-                throw new ArgumentException("Cannot deduce query provider from query");
+                throw new ArgumentException("无法从表达式中推测出数据源对应的Provider");
             }
 
             var ep = provider as IDbContextProvider;
@@ -108,7 +111,6 @@ namespace NTF.Provider
                 var p = Expression.Parameter(c.Type, "p" + parameters.Count);
                 parameters.Add(p);
                 values.Add(c.Value);
-                // if query root then parameterize but don't replace in the tree 
                 if (isQueryRoot)
                     return c;
                 return p;

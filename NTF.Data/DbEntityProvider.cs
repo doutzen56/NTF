@@ -38,7 +38,7 @@ namespace NTF.Data
             set
             {
                 if (value != null && value.Connection != this.connection)
-                    throw new InvalidOperationException("Transaction does not match connection.");
+                    throw new InvalidOperationException("事务与连接不匹配");
                 this.transaction = value;
             }
         }
@@ -113,7 +113,6 @@ namespace NTF.Data
             if (provider == null)
             {
                 var clower = connectionString.ToLower();
-                // try sniffing connection to figure out provider
                 if (clower.Contains(".mdb") || clower.Contains(".accdb"))
                 {
                     provider = "NTF.Data.Access";
@@ -133,13 +132,12 @@ namespace NTF.Data
                 else
                 {
                     provider = "NTF.Data.SqlServerClient";
-                    //throw new InvalidOperationException(string.Format("Query provider not specified and cannot be inferred."));
                 }
             }
 
             Type providerType = GetProviderType(provider);
             if (providerType == null)
-                throw new InvalidOperationException(string.Format("Unable to find query provider '{0}'", provider));
+                throw new InvalidOperationException("找不到查询提供程序'{0}'".Fmt(provider));
 
             return From(providerType, connectionString, mapping, policy);
         }
@@ -148,10 +146,8 @@ namespace NTF.Data
         {
             Type adoConnectionType = GetAdoConnectionType(providerType);
             if (adoConnectionType == null)
-                throw new InvalidOperationException(string.Format("Unable to deduce ADO provider for '{0}'", providerType.Name));
+                throw new InvalidOperationException("无法推断出ADO提供程序'{0}'".Fmt(providerType.Name));
             DbConnection connection = (DbConnection)Activator.CreateInstance(adoConnectionType);
-
-            // is the connection string just a filename?
             if (!connectionString.Contains('='))
             {
                 MethodInfo gcs = providerType.GetMethod("GetConnectionString", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string) }, null);
@@ -168,7 +164,6 @@ namespace NTF.Data
 
         private static Type GetAdoConnectionType(Type providerType)
         {
-            // sniff constructors 
             foreach (var con in providerType.GetConstructors())
             {
                 foreach (var arg in con.GetParameters())
@@ -375,7 +370,6 @@ namespace NTF.Data
                 var reader = command.ExecuteReader();
                 if (this.BufferResultRows)
                 {
-                    // use data table to buffer results
                     var ds = new DataSet();
                     ds.EnforceConstraints = false;
                     var table = new DataTable();
@@ -537,7 +531,7 @@ namespace NTF.Data
             }
 
             /// <summary>
-            /// Get an ADO command object initialized with the command-text and parameters
+            /// 获取命令文本和参数初始化的ADO命令对象
             /// </summary>
             /// <param name="commandText"></param>
             /// <param name="paramNames"></param>
@@ -545,7 +539,6 @@ namespace NTF.Data
             /// <returns></returns>
             protected virtual DbCommand GetCommand(QueryCommand query, object[] paramValues)
             {
-                // create command object (and fill in parameters)
                 DbCommand cmd = this.provider.Connection.CreateCommand();
                 cmd.CommandText = query.CommandText;
                 if (this.provider.Transaction != null)
@@ -611,7 +604,7 @@ namespace NTF.Data
             }
 
             /// <summary>
-            /// Write a command & parameters to the log
+            /// 将命令和参数写入日志
             /// </summary>
             /// <param name="command"></param>
             /// <param name="paramValues"></param>

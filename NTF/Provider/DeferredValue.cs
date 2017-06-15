@@ -3,6 +3,10 @@ using System.Linq;
 
 namespace NTF.Provider
 {
+    /// <summary>
+    /// 延时加载实现
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public struct DeferredValue<T> : IDeferLoadable
     {
         IEnumerable<T> source;

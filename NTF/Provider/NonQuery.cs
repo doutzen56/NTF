@@ -149,7 +149,7 @@ namespace NTF.Provider
         }
 
         /// <summary>
-        /// 批量操作
+        /// 批量增、删、改操作
         /// </summary>
         /// <typeparam name="TDbContext">数据集上下文类型</typeparam>
         /// <typeparam name="TModel">实体类型</typeparam>
@@ -175,7 +175,7 @@ namespace NTF.Provider
         }
 
         /// <summary>
-        /// 
+        /// 批量增、删、改操作
         /// </summary>
         /// <typeparam name="TDbContext">数据集上下文类型</typeparam>
         /// <typeparam name="TModel">实体类型</typeparam>

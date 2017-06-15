@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace NTF.Provider
 {
     /// <summary>
-    /// Common interface for controlling defer-loadable types
+    /// 控制延时加载类型类型的接口
     /// </summary>
     public interface IDeferLoadable
     {
@@ -22,7 +22,7 @@ namespace NTF.Provider
     }
 
     /// <summary>
-    /// A list implementation that is loaded the first time the contents are examined
+    /// 延时加载实现
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class DeferredList<T> : IDeferredList<T>, ICollection<T>, IEnumerable<T>, IList, ICollection, IEnumerable, IDeferLoadable

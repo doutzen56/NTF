@@ -11,7 +11,7 @@ using System.Text;
 namespace NTF.Provider
 {
     /// <summary>
-    /// Writes out an expression tree in a C#-ish syntax
+    /// 以C#语法输出<see cref="Expression"/>
     /// </summary>
     public class ExpressionWriter : ExpressionVisitor
     {
@@ -35,7 +35,9 @@ namespace NTF.Provider
             Write(sw, expression);
             return sw.ToString();
         }
-
+        /// <summary>
+        /// 缩进方式
+        /// </summary>
         protected enum Indentation
         {
             Same,

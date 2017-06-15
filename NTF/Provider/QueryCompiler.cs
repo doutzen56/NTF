@@ -73,14 +73,13 @@ namespace NTF.Provider
             {
                 if (this.fnQuery == null)
                 {
-                    // first identify the query provider being used
+                    //推测表达式数据源对应的Provider
+                    //通过Provider执行查询
                     Expression body = this.query.Body;
-
-                    // ask the query provider to compile the query by 'executing' the lambda expression
                     IQueryProvider provider = this.FindProvider(body, args);
                     if (provider == null)
                     {
-                        throw new InvalidOperationException("Could not find query provider");
+                        throw new InvalidOperationException("未找到数据源对应的Provider");
                     }
 
                     Delegate result = (Delegate)provider.Execute(this.query);

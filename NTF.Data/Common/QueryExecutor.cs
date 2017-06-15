@@ -10,7 +10,6 @@ namespace NTF.Data.Common
 
     public abstract class QueryExecutor
     {
-        // called from compiled execution plan
         public abstract int RowsAffected { get; }
         public abstract object Convert(object value, Type type);
         public abstract IEnumerable<T> Execute<T>(QueryCommand command, Func<FieldReader, T> fnProjector, MappingEntity entity, object[] paramValues);

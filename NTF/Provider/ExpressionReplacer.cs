@@ -3,7 +3,7 @@
 namespace NTF.Provider
 {
     /// <summary>
-    /// Replaces references to one specific instance of an expression node with another node
+    /// 将<see cref="Expression"/>节点的一个特定实例替换为另一个节点
     /// </summary>
     public class ExpressionReplacer : ExpressionVisitor
     {

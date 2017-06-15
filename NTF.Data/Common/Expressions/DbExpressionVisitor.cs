@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// An extended expression visitor including custom DbExpression nodes
+    /// <see cref="Expression"/>扩展解析器，支持<see cref="DbExpression"/>自定义节点
     /// </summary>
     public abstract class DbExpressionVisitor : Provider.ExpressionVisitor
     {
@@ -107,8 +107,8 @@ namespace NTF.Data.Common
         }
 
         protected SelectExpression UpdateSelect(
-            SelectExpression select,             
-            Expression from, Expression where, 
+            SelectExpression select,
+            Expression from, Expression where,
             IEnumerable<OrderExpression> orderBy, IEnumerable<Expression> groupBy,
             Expression skip, Expression take,
             bool isDistinct, bool isReverse,
@@ -301,7 +301,7 @@ namespace NTF.Data.Common
 
         protected virtual Expression VisitAggregateSubquery(AggregateSubqueryExpression aggregate)
         {
-            var subquery = (ScalarExpression) this.Visit(aggregate.AggregateAsSubquery);
+            var subquery = (ScalarExpression)this.Visit(aggregate.AggregateAsSubquery);
             return this.UpdateAggregateSubquery(aggregate, subquery);
         }
 
@@ -341,7 +341,7 @@ namespace NTF.Data.Common
             var outerKey = this.VisitExpressionList(join.OuterKey);
             var innerKey = this.VisitExpressionList(join.InnerKey);
             return this.UpdateClientJoin(join, projection, outerKey, innerKey);
-         }
+        }
 
         protected ClientJoinExpression UpdateClientJoin(ClientJoinExpression join, ProjectionExpression projection, IEnumerable<Expression> outerKey, IEnumerable<Expression> innerKey)
         {

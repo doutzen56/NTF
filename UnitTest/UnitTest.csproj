@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="ProviderTest.cs" />
+    <Compile Include="Model\ScoreInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="__entity.xml" />

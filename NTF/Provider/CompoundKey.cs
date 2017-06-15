@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace NTF.Provider
 {
+    /// <summary>
+    /// 定义一个用于存储复合主键的集合
+    /// </summary>
     public class CompoundKey : IEquatable<CompoundKey>, IEnumerable<object>, IEnumerable
     {
         object[] values;

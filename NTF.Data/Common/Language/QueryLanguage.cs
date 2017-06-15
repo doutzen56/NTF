@@ -9,7 +9,7 @@ using System.Reflection;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Defines the language rules for the query provider
+    /// 定义查询提供程序（Provider）的语言规则
     /// </summary>
     public abstract class QueryLanguage
     {
@@ -49,16 +49,10 @@ namespace NTF.Data.Common
 
         public virtual Expression GetOuterJoinTest(SelectExpression select)
         {
-            // if the column is used in the join condition (equality test)
-            // if it is null in the database then the join test won't match (null != null) so the row won't appear
-            // we can safely use this existing column as our test to determine if the outer join produced a row
-
-            // find a column that is used in equality test
             var aliases = DeclaredAliasGatherer.Gather(select.From);
             var joinColumns = JoinColumnGatherer.Gather(aliases, select).ToList();
             if (joinColumns.Count > 0)
             {
-                // prefer one that is already in the projection list.
                 foreach (var jc in joinColumns)
                 {
                     foreach (var col in select.Columns)
@@ -71,8 +65,6 @@ namespace NTF.Data.Common
                 }
                 return joinColumns[0];
             }
-
-            // fall back to introducing a constant
             return Expression.Constant(1, typeof(int?));
         }
 
@@ -81,7 +73,6 @@ namespace NTF.Data.Common
             var test = this.GetOuterJoinTest(proj.Select);
             var select = proj.Select;
             ColumnExpression testCol = null;
-            // look to see if test expression exists in columns already
             foreach (var col in select.Columns)
             {
                 if (test.Equals(col.Expression))
@@ -93,7 +84,6 @@ namespace NTF.Data.Common
             }
             if (testCol == null)
             {
-                // add expression to projection
                 testCol = test as ColumnExpression;
                 string colName = (testCol != null) ? testCol.Name : "Test";
                 colName = proj.Select.Columns.GetAvailableColumnName(colName);
@@ -169,7 +159,7 @@ namespace NTF.Data.Common
         }
 
         /// <summary>
-        /// Determines whether the CLR type corresponds to a scalar data type in the query language
+        /// 确定CLR类型是否与查询语言中的数据类型相对应
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -228,13 +218,12 @@ namespace NTF.Data.Common
         }
 
         /// <summary>
-        /// Determines whether the given expression can be represented as a column in a select expressionss
+        /// 确定给定的表达式可以表示为<see cref="SelectExpression"/>的一个列
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
         public virtual bool CanBeColumn(Expression expression)
         {
-            // by default, push all work in projection to client
             return this.MustBeColumn(expression);
         }
 
@@ -258,7 +247,10 @@ namespace NTF.Data.Common
             return new QueryLinguist(this, translator);
         }
     }
-
+    /// <summary>
+    /// 定义一个拥有特定SQL语言定义，以及将LINQ表达式翻译成特定SQL语言功能的基类，
+    /// 用于做SQL翻译工作
+    /// </summary>
     public class QueryLinguist
     {
         QueryLanguage language;
@@ -281,28 +273,20 @@ namespace NTF.Data.Common
         }
 
         /// <summary>
-        /// Provides language specific query translation.  Use this to apply language specific rewrites or
-        /// to make assertions/validations about the query.
+        /// 将LINQ表达式翻译成特定的SQL语言
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
         public virtual Expression Translate(Expression expression)
         {
-            // remove redundant layers again before cross apply rewrite
             expression = UnusedColumnRemover.Remove(expression);
             expression = RedundantColumnRemover.Remove(expression);
             expression = RedundantSubqueryRemover.Remove(expression);
-
-            // convert cross-apply and outer-apply joins into inner & left-outer-joins if possible
             var rewritten = CrossApplyRewriter.Rewrite(this.language, expression);
-
-            // convert cross joins into inner joins
             rewritten = CrossJoinRewriter.Rewrite(rewritten);
-
             if (rewritten != expression)
             {
                 expression = rewritten;
-                // do final reduction
                 expression = UnusedColumnRemover.Remove(expression);
                 expression = RedundantSubqueryRemover.Remove(expression);
                 expression = RedundantJoinRemover.Remove(expression);
@@ -313,18 +297,17 @@ namespace NTF.Data.Common
         }
 
         /// <summary>
-        /// Converts the query expression into text of this query language
+        /// 将查询表达式转换为该查询语言的SQL命令
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
         public virtual string Format(Expression expression)
         {
-            // use common SQL formatter by default
             return CmdFormatter.Format(expression);
         }
 
         /// <summary>
-        /// Determine which sub-expressions must be parameters
+        /// 确定哪些子表达式必须是Parameter类型
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
