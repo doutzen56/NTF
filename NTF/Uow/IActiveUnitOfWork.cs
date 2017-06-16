@@ -11,7 +11,7 @@ namespace NTF.Uow
         /// <summary>
         /// 事务提交成功事件
         /// </summary>
-        event EventHandler Commited;
+        event EventHandler Completed;
         /// <summary>
         /// 事务提交失败事件
         /// </summary>
@@ -32,10 +32,6 @@ namespace NTF.Uow
         /// 保存所有更改
         /// </summary>
         void SaveChanges();
-        /// <summary>
-        /// 保存所有更改
-        /// </summary>
-        /// <returns></returns>
-        Task SaveChangesAsync();
+        
     }
 }

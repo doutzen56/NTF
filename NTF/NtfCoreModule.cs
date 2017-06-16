@@ -39,7 +39,7 @@ namespace NTF
 
         private void RegisterMissingComponents()
         {
-            IocManager.RegisterIfNot<IUnitOfWork, NullUnitOfWork>(LifeStyle.Transient);
+            IocManager.RegisterIfNot<IUnitOfWork, DefaultUnitOfWork>(LifeStyle.Transient);
         }
     }
 }

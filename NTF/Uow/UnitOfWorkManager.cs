@@ -46,7 +46,7 @@ namespace NTF.Uow
                 return new DefaultUnitOfWorkCompleteHandle();
             }
             var uow = _iocResolver.Resolve<IUnitOfWork>();
-            uow.Commited += (sender, args) =>
+            uow.Completed += (sender, args) =>
             {
                 _currentUowProvider.Current = null;
             };

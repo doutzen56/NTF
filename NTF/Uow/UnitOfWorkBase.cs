@@ -30,7 +30,7 @@ namespace NTF.Uow
         /// <summary>
         /// 事务提交成功事件
         /// </summary>
-        public event EventHandler Commited;
+        public event EventHandler Completed;
         /// <summary>
         /// 事务释放时事件
         /// </summary>
@@ -48,9 +48,9 @@ namespace NTF.Uow
         /// </summary>
         private bool _isBeginCalled;
         /// <summary>
-        /// <see cref="Commit"/>方法是否被调用过
+        /// <see cref="Complete"/>方法是否被调用过
         /// </summary>
-        private bool _isCommitCalled;
+        private bool _isCompleteCalled;
         /// <summary>
         /// 当前工作单元是否成功完成
         /// </summary>
@@ -82,17 +82,15 @@ namespace NTF.Uow
             this.Options = options;
             BeginUow();
         }
-        /// <summary>
-        /// 工作单元提交
-        /// </summary>
-        public void Commit()
+
+        public void Complete()
         {
-            IsCommitCalled();
+            IsCompleteCalled();
             try
             {
-                CommitUow();
+                CompleteUow();
                 _succeed = true;
-                OnCommited();
+                OnCompleted();
             }
             catch (Exception ex)
             {
@@ -100,24 +98,7 @@ namespace NTF.Uow
                 throw;
             }
         }
-        /// <summary>
-        /// 工作单元提交
-        /// </summary>
-        public async Task CommitAsync()
-        {
-            IsBeginCalled();
-            try
-            {
-                await CommitUowAsync();
-                _succeed = true;
-                OnCommited();
-            }
-            catch (Exception ex)
-            {
-                this._exception = ex;
-                throw;
-            }
-        }
+        
         /// <summary>
         /// 资源释放
         /// </summary>
@@ -139,32 +120,26 @@ namespace NTF.Uow
         /// 提交更改
         /// </summary>
         public abstract void SaveChanges();
-        /// <summary>
-        /// 提交更改
-        /// </summary>
-        public abstract Task SaveChangesAsync();
+       
         /// <summary>
         /// 开始工作单元
         /// </summary>
         protected abstract void BeginUow();
         /// <summary>
-        /// 提交工作单元
+        /// 工作单元提交
         /// </summary>
-        protected abstract void CommitUow();
-        /// <summary>
-        /// 提交工作单元
-        /// </summary>
-        protected abstract Task CommitUowAsync();
+        protected abstract void CompleteUow();
+        
         /// <summary>
         /// 释放资源
         /// </summary>
         protected abstract void DisposeUow();
         /// <summary>
-        /// 提交事件
+        /// 工作单元完成事件
         /// </summary>
-        protected virtual void OnCommited()
+        protected virtual void OnCompleted()
         {
-            Commited?.Invoke(this, EventArgs.Empty);
+            Completed?.Invoke(this, EventArgs.Empty);
         }
         /// <summary>
         /// 提交失败事件
@@ -195,13 +170,13 @@ namespace NTF.Uow
         /// <summary>
         /// 工作单元是否已提交
         /// </summary>
-        private void IsCommitCalled()
+        private void IsCompleteCalled()
         {
-            if (_isCommitCalled)
+            if (_isCompleteCalled)
             {
                 throw new Exception("请勿重复提交");
             }
-            this._isCommitCalled = true;
+            this._isCompleteCalled = true;
         }
     }
 }

@@ -10,7 +10,7 @@ using NTF.Provider;
 
 namespace NTF.Data
 {
-    public class DbEntityProvider : EntityProvider
+    public class DbQueryProvider : QueryProvider
     {
         DbConnection connection;
         DbTransaction transaction;
@@ -19,7 +19,7 @@ namespace NTF.Data
         int nConnectedActions = 0;
         bool actionOpenedConnection = false;
 
-        public DbEntityProvider(DbConnection connection, QueryLanguage language, QueryMapping mapping, QueryPolicy policy)
+        public DbQueryProvider(DbConnection connection, QueryLanguage language, QueryMapping mapping, QueryPolicy policy)
             : base(language, mapping, policy)
         {
             if (connection == null)
@@ -49,33 +49,33 @@ namespace NTF.Data
             set { this.isolation = value; }
         }
 
-        public virtual DbEntityProvider New(DbConnection connection, QueryMapping mapping, QueryPolicy policy)
+        public virtual DbQueryProvider New(DbConnection connection, QueryMapping mapping, QueryPolicy policy)
         {
-            return (DbEntityProvider)Activator.CreateInstance(this.GetType(), new object[] { connection, mapping, policy });
+            return (DbQueryProvider)Activator.CreateInstance(this.GetType(), new object[] { connection, mapping, policy });
         }
 
-        public virtual DbEntityProvider New(DbConnection connection)
+        public virtual DbQueryProvider New(DbConnection connection)
         {
             var n = New(connection, this.Mapping, this.Policy);
             n.Log = this.Log;
             return n;
         }
 
-        public virtual DbEntityProvider New(QueryMapping mapping)
+        public virtual DbQueryProvider New(QueryMapping mapping)
         {
             var n = New(this.Connection, mapping, this.Policy);
             n.Log = this.Log;
             return n;
         }
 
-        public virtual DbEntityProvider New(QueryPolicy policy)
+        public virtual DbQueryProvider New(QueryPolicy policy)
         {
             var n = New(this.Connection, this.Mapping, policy);
             n.Log = this.Log;
             return n;
         }
 
-        public static DbEntityProvider FromApplicationSettings()
+        public static DbQueryProvider FromApplicationSettings()
         {
             var provider = System.Configuration.ConfigurationSettings.AppSettings["Provider"];
             var connection = System.Configuration.ConfigurationSettings.AppSettings["Connection"];
@@ -83,32 +83,32 @@ namespace NTF.Data
             return From(provider, connection, mapping);
         }
 
-        public static DbEntityProvider From(string connectionString, string mappingId = null)
+        public static DbQueryProvider From(string connectionString, string mappingId = null)
         {
             return From(connectionString, mappingId, QueryPolicy.Default);
         }
 
-        public static DbEntityProvider From(string connectionString, string mappingId, QueryPolicy policy)
+        public static DbQueryProvider From(string connectionString, string mappingId, QueryPolicy policy)
         {
             return From(null, connectionString, mappingId, policy);
         }
 
-        public static DbEntityProvider From(string connectionString, QueryMapping mapping, QueryPolicy policy)
+        public static DbQueryProvider From(string connectionString, QueryMapping mapping, QueryPolicy policy)
         {
             return From((string)null, connectionString, mapping, policy);
         }
 
-        public static DbEntityProvider From(string provider, string connectionString, string mappingId)
+        public static DbQueryProvider From(string provider, string connectionString, string mappingId)
         {
             return From(provider, connectionString, mappingId, QueryPolicy.Default);
         }
 
-        public static DbEntityProvider From(string provider, string connectionString, string mappingId, QueryPolicy policy)
+        public static DbQueryProvider From(string provider, string connectionString, string mappingId, QueryPolicy policy)
         {
             return From(provider, connectionString, GetMapping(mappingId), policy);
         }
 
-        public static DbEntityProvider From(string provider, string connectionString, QueryMapping mapping, QueryPolicy policy)
+        public static DbQueryProvider From(string provider, string connectionString, QueryMapping mapping, QueryPolicy policy)
         {
             if (provider == null)
             {
@@ -142,7 +142,7 @@ namespace NTF.Data
             return From(providerType, connectionString, mapping, policy);
         }
 
-        public static DbEntityProvider From(Type providerType, string connectionString, QueryMapping mapping, QueryPolicy policy)
+        public static DbQueryProvider From(Type providerType, string connectionString, QueryMapping mapping, QueryPolicy policy)
         {
             Type adoConnectionType = GetAdoConnectionType(providerType);
             if (adoConnectionType == null)
@@ -159,7 +159,7 @@ namespace NTF.Data
 
             connection.ConnectionString = connectionString;
 
-            return (DbEntityProvider)Activator.CreateInstance(providerType, new object[] { connection, mapping, policy });
+            return (DbQueryProvider)Activator.CreateInstance(providerType, new object[] { connection, mapping, policy });
         }
 
         private static Type GetAdoConnectionType(Type providerType)
@@ -192,7 +192,6 @@ namespace NTF.Data
 
         protected void StopUsingConnection()
         {
-            System.Diagnostics.Debug.Assert(this.nConnectedActions > 0);
             this.nConnectedActions--;
             if (this.nConnectedActions == 0 && this.actionOpenedConnection)
             {
@@ -200,52 +199,8 @@ namespace NTF.Data
                 this.actionOpenedConnection = false;
             }
         }
-
-        public override void DoConnected(Action action)
-        {
-            this.StartUsingConnection();
-            try
-            {
-                action();
-            }
-            finally
-            {
-                this.StopUsingConnection();
-            }
-        }
-
-        public override void DoTransacted(Action action)
-        {
-            this.StartUsingConnection();
-            try
-            {
-                if (this.Transaction == null)
-                {
-                    var trans = this.Connection.BeginTransaction(this.Isolation);
-                    try
-                    {
-                        this.Transaction = trans;
-                        action();
-                        trans.Commit();
-                    }
-                    finally
-                    {
-                        this.Transaction = null;
-                        trans.Dispose();
-                    }
-                }
-                else
-                {
-                    action();
-                }
-            }
-            finally
-            {
-                this.StopUsingConnection();
-            }
-        }
-
-        public override int ExecuteCommand(string commandText)
+        
+        public override int ExecuteNonQuery(string commandText)
         {
             if (this.Log != null)
             {
@@ -271,15 +226,15 @@ namespace NTF.Data
 
         public class Executor : QueryExecutor
         {
-            DbEntityProvider provider;
+            DbQueryProvider provider;
             int rowsAffected;
 
-            public Executor(DbEntityProvider provider)
+            public Executor(DbQueryProvider provider)
             {
                 this.provider = provider;
             }
 
-            public DbEntityProvider Provider
+            public DbQueryProvider Provider
             {
                 get { return this.provider; }
             }

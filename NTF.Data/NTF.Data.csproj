@@ -88,10 +88,10 @@
     <Compile Include="Common\Translation\SkipToRowNumberRewriter.cs" />
     <Compile Include="Common\Translation\SubqueryRemover.cs" />
     <Compile Include="Common\Translation\UnusedColumnRemover.cs" />
-    <Compile Include="DbEntityProvider.cs" />
+    <Compile Include="DbQueryProvider.cs" />
     <Compile Include="DbTypeSystem.cs" />
-    <Compile Include="EntityPolicy.cs" />
-    <Compile Include="EntityProvider.cs" />
+    <Compile Include="DbQueryPolicy.cs" />
+    <Compile Include="QueryProvider.cs" />
     <Compile Include="Mapping\AttributeMapping.cs" />
     <Compile Include="Mapping\ImplicitMapping.cs" />
     <Compile Include="Mapping\XmlMapping.cs" />

@@ -40,7 +40,9 @@ namespace NTF.Data.Common
         {
             return new QueryPolice(this, translator);
         }
-
+        /// <summary>
+        /// 构建一个默认的单例<see cref="QueryPolicy"/>
+        /// </summary>
         public static readonly QueryPolicy Default = new QueryPolicy();
     }
     /// <summary>

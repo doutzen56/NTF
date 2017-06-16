@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace NTF.Data.SqlServerClient
 {
-    public class SqlQueryProvider : DbEntityProvider
+    public class SqlQueryProvider : DbQueryProvider
     {
         bool? allowMulitpleActiveResultSets;
 
@@ -19,7 +19,7 @@ namespace NTF.Data.SqlServerClient
         {
         }
 
-        public override DbEntityProvider New(DbConnection connection, QueryMapping mapping, QueryPolicy policy)
+        public override DbQueryProvider New(DbConnection connection, QueryMapping mapping, QueryPolicy policy)
         {
             return new SqlQueryProvider((SqlConnection)connection, mapping, policy);
         }
@@ -48,7 +48,7 @@ namespace NTF.Data.SqlServerClient
             return new Executor(this);
         }
 
-        new class Executor : DbEntityProvider.Executor
+        new class Executor : DbQueryProvider.Executor
         {
             SqlQueryProvider provider;
 
@@ -117,7 +117,7 @@ namespace NTF.Data.SqlServerClient
                 dataAdapter.InsertCommand.UpdatedRowSource = UpdateRowSource.None;
                 dataAdapter.UpdateBatchSize = batchSize;
 
-                this.LogMessage("-- Start SQL Batching --");
+                this.LogMessage("-- 批量操作开始 --");
                 this.LogMessage("");
                 this.LogCommand(query, null);
 
@@ -147,7 +147,7 @@ namespace NTF.Data.SqlServerClient
                     }
                 }
 
-                this.LogMessage(string.Format("-- End SQL Batching --"));
+                this.LogMessage(string.Format("-- 批量操作结束 --"));
                 this.LogMessage("");
             }
         }

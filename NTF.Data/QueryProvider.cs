@@ -15,7 +15,7 @@ namespace NTF.Data
     /// <summary>
     /// A LINQ IQueryable query provider that executes database queries over a DbConnection
     /// </summary>
-    public abstract class EntityProvider : QueryProvider, IDbContextProvider, ICreateExecutor
+    public abstract class QueryProvider : DbProvider, IDbContextProvider, ICreateExecutor
     {
         QueryLanguage language;
         QueryMapping mapping;
@@ -24,7 +24,7 @@ namespace NTF.Data
         Dictionary<MappingEntity, IDbContext> tables;
         QueryCache cache;
 
-        public EntityProvider(QueryLanguage language, QueryMapping mapping, QueryPolicy policy)
+        public QueryProvider(QueryLanguage language, QueryMapping mapping, QueryPolicy policy)
         {
             if (language == null)
                 throw new InvalidOperationException("Language not specified");
@@ -91,7 +91,7 @@ namespace NTF.Data
         protected virtual IDbContext CreateTable(MappingEntity entity)
         {
             return (IDbContext) Activator.CreateInstance(
-                typeof(EntityDbContenxt<>).MakeGenericType(entity.ElementType), 
+                typeof(DbQueryContenxt<>).MakeGenericType(entity.ElementType), 
                 new object[] { this, entity }
                 );
         }
@@ -143,12 +143,17 @@ namespace NTF.Data
             return this.CreateExecutor();
         }
 
-        public class EntityDbContenxt<T> : Query<T>, IDbContext<T>, IHaveMappingEntity
+        /// <summary>
+        /// 查询数据库的数据源,
+        /// 实现了<see cref="IDbContext{T}"/>和<see cref="Query{T}"/>接口
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public class DbQueryContenxt<T> : Query<T>, IDbContext<T>, IHaveMappingEntity
         {
             MappingEntity entity;
-            EntityProvider provider;
+            QueryProvider provider;
 
-            public EntityDbContenxt(EntityProvider provider, MappingEntity entity)
+            public DbQueryContenxt(QueryProvider provider, MappingEntity entity)
                 : base(provider, typeof(IDbContext<T>))
             {
                 this.provider = provider;
@@ -183,7 +188,7 @@ namespace NTF.Data
                     IEnumerable<object> keys = id as IEnumerable<object>;
                     if (keys == null)
                         keys = new object[] { id };
-                    Expression query = ((EntityProvider)dbProvider).Mapping.GetPrimaryKeyQuery(this.entity, this.Expression, keys.Select(v => Expression.Constant(v)).ToArray());
+                    Expression query = ((QueryProvider)dbProvider).Mapping.GetPrimaryKeyQuery(this.entity, this.Expression, keys.Select(v => Expression.Constant(v)).ToArray());
                     return this.Provider.Execute<T>(query);
                 }
                 return default(T);
@@ -264,10 +269,8 @@ namespace NTF.Data
         {
             return new QueryTranslator(this.language, this.mapping, this.policy);
         }
-
-        public abstract void DoTransacted(Action action);
-        public abstract void DoConnected(Action action);
-        public abstract int ExecuteCommand(string commandText);
+        
+        public abstract int ExecuteNonQuery(string commandText);
 
         /// <summary>
         /// Execute the query expression (does translation, etc.)
@@ -287,24 +290,15 @@ namespace NTF.Data
 
             if (lambda != null)
             {
-                // compile & return the execution plan so it can be used multiple times
                 LambdaExpression fn = Expression.Lambda(lambda.Type, plan, lambda.Parameters);
-#if NOREFEMIT
-                    return ExpressionEvaluator.CreateDelegate(fn);
-#else
                 return fn.Compile();
-#endif
             }
             else
             {
-                // compile the execution plan and invoke it
                 Expression<Func<object>> efn = Expression.Lambda<Func<object>>(Expression.Convert(plan, typeof(object)));
-#if NOREFEMIT
-                    return ExpressionEvaluator.Eval(efn, new object[] { });
-#else
                 Func<object> fn = efn.Compile();
                 return fn();
-#endif
+
             }
         }
 
@@ -326,7 +320,7 @@ namespace NTF.Data
             Expression translation = translator.Translate(expression);
 
             var parameters = lambda != null ? lambda.Parameters : null;
-            Expression provider = this.Find(expression, parameters, typeof(EntityProvider));
+            Expression provider = this.Find(expression, parameters, typeof(QueryProvider));
             if (provider == null)
             {
                 Expression rootQueryable = this.Find(expression, parameters, typeof(IQueryable));
@@ -368,7 +362,7 @@ namespace NTF.Data
         {
             if (!string.IsNullOrEmpty(providerName))
             {
-                var type = FindInstancesIn(typeof(EntityProvider), providerName).FirstOrDefault();
+                var type = FindInstancesIn(typeof(QueryProvider), providerName).FirstOrDefault();
                 if (type != null)
                     return type;
             }

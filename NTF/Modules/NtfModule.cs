@@ -20,15 +20,15 @@ namespace NTF.Modules
         protected internal IIocManager IocManager { get; internal set; }
 
         /// <summary>
-        /// 应用程序启动前事件
+        /// 模块初始化前
         /// </summary>
         public virtual void BeforeInit() { }
         /// <summary>
-        /// 初始化时，注册模块的依赖关系
+        /// 模块初始化时
         /// </summary>
         public virtual void Initialize() { }
         /// <summary>
-        /// 应用程序启动后执行
+        /// 模块初始化后
         /// </summary>
         public virtual void AfterInit() { }
         /// <summary>

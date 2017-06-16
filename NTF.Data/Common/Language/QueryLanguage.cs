@@ -248,7 +248,7 @@ namespace NTF.Data.Common
         }
     }
     /// <summary>
-    /// 定义一个拥有特定SQL语言定义，以及将LINQ表达式翻译成特定SQL语言功能的基类，
+    /// 一个拥有特定SQL语言定义，以及将LINQ表达式翻译成特定SQL语言功能的基类，
     /// 用于做SQL翻译工作
     /// </summary>
     public class QueryLinguist

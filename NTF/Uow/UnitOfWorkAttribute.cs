@@ -17,7 +17,7 @@ namespace NTF.Uow
         /// </summary>
         public TransactionScopeOption? Scope { get; set; }
         /// <summary>
-        /// 是否事务性
+        /// 是否事务性,默认非事务提交
         /// </summary>
         public bool? IsTransactional { get; set; }
         /// <summary>
@@ -71,7 +71,7 @@ namespace NTF.Uow
         /// <param name="isolationLevel">事务隔离级别</param>
         public UnitOfWorkAttribute(IsolationLevel isolationLevel)
         {
-            IsTransactional = true;
+            IsTransactional = false;
             IsolationLevel = isolationLevel;
         }
         /// <summary>
@@ -81,7 +81,7 @@ namespace NTF.Uow
         /// <param name="timeout">超时时间，单位（秒）</param>
         public UnitOfWorkAttribute(IsolationLevel isolationLevel, int timeout)
         {
-            IsTransactional = true;
+            IsTransactional = false;
             IsolationLevel = isolationLevel;
             Timeout = TimeSpan.FromSeconds(timeout);
         }
@@ -101,7 +101,7 @@ namespace NTF.Uow
         /// <param name="timeout">超时时间，单位（秒）</param>
         public UnitOfWorkAttribute(TransactionScopeOption scope, int timeout)
         {
-            IsTransactional = true;
+            IsTransactional = false;
             Scope = scope;
             Timeout = TimeSpan.FromSeconds(timeout);
         }

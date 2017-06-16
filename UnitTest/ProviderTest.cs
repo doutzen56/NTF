@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-
+using System.Data.Common;
 namespace UnitTest
 {
     [TestClass()]
     public class ProviderTest
     {
         #region 属性字段
-        private static EntityProvider provider;
+        private static DbQueryProvider provider;
         private static string conStr = "Data Source=.;Initial Catalog=Tzen;Integrated Security=True";
 
         private static IDbContext<UserInfo> UserList;
@@ -26,7 +26,7 @@ namespace UnitTest
         [ClassInitialize()]
         public static void Init(TestContext context)
         {
-            provider = DbEntityProvider.From(conStr);
+            provider = DbQueryProvider.From(conStr);
             fs = new FileStream("G:\\Git\\NTF\\UnitTest\\SQL.txt", FileMode.OpenOrCreate);
             tr = new StreamWriter(fs, Encoding.UTF8);
             provider.Log = tr;
@@ -53,7 +53,7 @@ namespace UnitTest
         {
             var user = new UserInfo() { Age = 27, Name = "测试", Address = "中国广州" };
             var rs = UserList.Insert(user);
-            Assert.AreEqual(rs, 1);
+            Assert.AreEqual(1, rs);
         }
         [TestMethod]
         public void TestInsertAndResult()
@@ -117,13 +117,26 @@ namespace UnitTest
         [TestMethod]
         public void TestPageList()
         {
-            var list = UserList.Where(a => a.Name == "jdc")
-                             .Select(a => a)
-                             .Skip(0)
-                             .Take(10)
-                             .OrderBy(a => a.ID);
-            Assert.AreEqual(list.Count(), 10);
+            //var list = UserList.Where(a => a.Name == "jdc")
+            //                 .Select(a => a)
+            //                 .Skip(0)
+            //                 .Take(10)
+            //                 .OrderBy(a => a.ID);
+            //Assert.AreEqual(10, list.Count());
+
+            //var user = new UserInfo() { Age = 27, Name = "测试事务", Address = "中国广州" };
+            //provider.Connection.Open();
+            //using (var tran = provider.Connection.BeginTransaction())
+            //{
+            //    provider.Transaction = tran;
+            //    UserList.Insert(user);
+            //    var u = UserList.Where(a => a.Name == "测试事务");
+            //    UserList.Update(a => a.Name == "测试事务", a => new UserInfo() { Address = "甘肃" });
+            //    tran.Commit();
+            //}
+            IDbContext<UserInfo> us = new QueryProvider.DbQueryContenxt<UserInfo>(provider, provider.Mapping.GetEntity(typeof(UserInfo)));
+            var rs = us.GetById(421);
         }
-        
+
     }
 }

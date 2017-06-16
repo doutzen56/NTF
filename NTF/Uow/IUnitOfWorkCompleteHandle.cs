@@ -10,14 +10,10 @@ namespace NTF.Uow
     public interface IUnitOfWorkCompleteHandle : IDisposable
     {
         /// <summary>
-        /// 提交事务
+        /// 完成工作单元，
+        /// 保存所有更改并提交事务
         /// </summary>
-        void Commit();
-        /// <summary>
-        /// 提交事务
-        /// </summary>
-        /// <returns></returns>
-        Task CommitAsync();
+        void Complete();
     }
     /// <summary>
     /// 此内部类用于处理工作单元内的事务，
@@ -25,18 +21,12 @@ namespace NTF.Uow
     /// </summary>
     internal class DefaultUnitOfWorkCompleteHandle : IUnitOfWorkCompleteHandle
     {
-        private volatile bool _isCommitCalled;
+        private volatile bool _isCompleteCalled;
         private volatile bool _isDisposed;
-        public void Commit()
+        public void Complete()
         {
-            _isCommitCalled = true;
+            _isCompleteCalled = true;
         }
-
-        public async Task CommitAsync()
-        {
-            _isCommitCalled = true;
-        }
-
         public void Dispose()
         {
             if (_isDisposed)
@@ -44,7 +34,7 @@ namespace NTF.Uow
                 return;
             }
             _isDisposed = true;
-            if (!_isCommitCalled)
+            if (!_isCompleteCalled)
             {
                 if (HasException())
                 {

@@ -42,7 +42,7 @@ namespace NTF.Provider
 
         public object Execute(IQueryable query)
         {
-            return this.Equals(query.Expression);
+            return this.Execute(query.Expression);
         }
 
         public IEnumerable<T> Execute<T>(IQueryable<T> query)

@@ -46,7 +46,7 @@ namespace NTF.Provider
             this.expression = staticType != null ? Expression.Constant(this, staticType) : Expression.Constant(this);
         }
 
-        public Query(QueryProvider provider, Expression expression)
+        public Query(DbProvider provider, Expression expression)
         {
             if (provider == null)
             {

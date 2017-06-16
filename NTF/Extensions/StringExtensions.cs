@@ -29,5 +29,14 @@ namespace NTF
             return string.Format(format, args);
         }
 
+        public static string ValueOfConnectionString(this string str)
+        {
+            return ConfigurationManager.ConnectionStrings[str].IsNull() ? null : ConfigurationManager.ConnectionStrings[str].ConnectionString;
+        }
+
+        public static string ValueOfAppSetting(this string key)
+        {
+            return ConfigurationManager.AppSettings[key];
+        }
     }
 }

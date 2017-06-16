@@ -9,9 +9,9 @@ namespace NTF.Provider
     /// <summary>
     /// 定义一个扩展自<see cref="IQueryProvider"/>用于执行LINQ查询的Provider
     /// </summary>
-    public abstract class QueryProvider : IQueryProvider, IQueryText
+    public abstract class DbProvider : IQueryProvider, IQueryText
     {
-        protected QueryProvider()
+        protected DbProvider()
         {
         }
         /// <summary>

@@ -25,7 +25,8 @@ namespace NTF.Uow
             using(var uow = _uowManager.Begin(uowAttr.CreateOptions()))
             {
                 invocation.Proceed();
-                uow.Commit();
+
+                uow.Complete();
             }
         }
     }

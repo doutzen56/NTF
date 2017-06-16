@@ -8,14 +8,14 @@ using System.Data.Common;
 
 namespace NTF.Provider.Data.MySqlClient
 {
-    public class MySqlQueryProvider : DbEntityProvider
+    public class MySqlQueryProvider : DbQueryProvider
     {
         public MySqlQueryProvider(MySqlConnection connection, QueryMapping mapping, QueryPolicy policy)
             : base(connection, MySqlLanguage.Default, mapping, policy)
         {
         }
 
-        public override DbEntityProvider New(DbConnection connection, QueryMapping mapping, QueryPolicy policy)
+        public override DbQueryProvider New(DbConnection connection, QueryMapping mapping, QueryPolicy policy)
         {
             return new MySqlQueryProvider((MySqlConnection)connection, mapping, policy);
         }
@@ -30,7 +30,7 @@ namespace NTF.Provider.Data.MySqlClient
             return new Executor(this);
         }
 
-        new class Executor : DbEntityProvider.Executor
+        new class Executor : DbQueryProvider.Executor
         {
             MySqlQueryProvider provider;
 

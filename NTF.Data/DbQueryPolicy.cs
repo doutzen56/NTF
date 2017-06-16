@@ -12,7 +12,7 @@ namespace NTF.Data
     /// <summary>
     /// 查询计划和实体化策略
     /// </summary>
-    public class EntityPolicy : QueryPolicy
+    public class DbQueryPolicy : QueryPolicy
     {
         HashSet<MemberInfo> included = new HashSet<MemberInfo>();
         HashSet<MemberInfo> deferred = new HashSet<MemberInfo>();
@@ -177,9 +177,9 @@ namespace NTF.Data
 
         class Police : QueryPolice
         {
-            EntityPolicy policy;
+            DbQueryPolicy policy;
 
-            public Police(EntityPolicy policy, QueryTranslator translator)
+            public Police(DbQueryPolicy policy, QueryTranslator translator)
                 : base(policy, translator)
             {
                 this.policy = policy;

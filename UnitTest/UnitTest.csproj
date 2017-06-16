@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -58,9 +59,13 @@
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="ProviderTest.cs" />
     <Compile Include="Model\ScoreInfo.cs" />
+    <Compile Include="TestModule.cs" />
+    <Compile Include="V_GetUserList.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="__entity.xml" />
+    <Content Include="__entity.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NTF.Data.MySqlClient\NTF.Data.MySqlClient.csproj">
@@ -83,6 +88,9 @@
       <Project>{c6866fde-933b-4152-827e-481728548bbb}</Project>
       <Name>NTF</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
