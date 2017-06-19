@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Result from calling ColumnProjector.ProjectColumns
+    /// 调用<see cref="ColumnProjector.ProjectColumns"/>结果
     /// </summary>
     public sealed class ProjectedColumns
     {
@@ -31,9 +31,8 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// Splits an expression into two parts
-    ///   1) a list of column declarations for sub-expressions that must be evaluated on the server
-    ///   2) a expression that describes how to combine/project the columns back together into the correct result
+    /// 将表达式拆分为两部分，
+    /// 1.必须在
     /// </summary>
     public class ColumnProjector : DbExpressionVisitor
     {
@@ -89,13 +88,12 @@ namespace NTF.Data.Common
                     {
                         return mapped;
                     }
-                    // check for column that already refers to this column
+                    // 检查已经指向了此列的列
                     foreach (ColumnDeclaration existingColumn in this.columns)
                     {
                         ColumnExpression cex = existingColumn.Expression as ColumnExpression;
                         if (cex != null && cex.Alias == column.Alias && cex.Name == column.Name)
                         {
-                            // refer to the column already in the column list
                             return new ColumnExpression(column.Type, column.QueryType, this.newAlias, existingColumn.Name);
                         }
                     }
@@ -109,7 +107,6 @@ namespace NTF.Data.Common
                         this.columnNames.Add(columnName);
                         return mapped;
                     }
-                    // must be referring to outer scope
                     return column;
                 }
                 else
@@ -148,8 +145,7 @@ namespace NTF.Data.Common
         }
 
         /// <summary>
-        /// Nominator is a class that walks an expression tree bottom up, determining the set of 
-        /// candidate expressions that are possible columns of a select expression
+        ///在表达式的最后，确定表达式中SelectExpression的列表
         /// </summary>
         class Nominator : DbExpressionVisitor
         {
@@ -180,7 +176,6 @@ namespace NTF.Data.Common
                     if (this.language.MustBeColumn(expression))
                     {
                         this.candidates.Add(expression);
-                        // don't merge saveIsBlocked
                     }
                     else
                     {

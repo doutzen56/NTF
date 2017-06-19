@@ -60,7 +60,6 @@
     <Compile Include="ProviderTest.cs" />
     <Compile Include="Model\ScoreInfo.cs" />
     <Compile Include="TestModule.cs" />
-    <Compile Include="V_GetUserList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="__entity.xml">

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace NTF.Extensions
+namespace NTF
 {
     public static class TaskEx
     {

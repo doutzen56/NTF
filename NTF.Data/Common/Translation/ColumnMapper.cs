@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Rewrite all column references to one or more aliases to a new single alias
+    /// 重写所有列引用的别名（用一个新生成的列别名来重写他们）
     /// </summary>
     public class ColumnMapper : DbExpressionVisitor
     {

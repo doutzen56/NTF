@@ -59,7 +59,7 @@ namespace NTF.Data.Common
         {
             get { return this.language; }
         }
-
+        
         protected bool HideColumnAliases
         {
             get { return this.hideColumnAliases; }

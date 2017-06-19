@@ -1,7 +1,7 @@
 ﻿using System;
 using NTF.Ioc;
 
-namespace NTF.Extensions
+namespace NTF
 {
     public static class IocExtensions
     {

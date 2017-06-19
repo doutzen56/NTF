@@ -190,7 +190,7 @@ namespace NTF.Data
             this.nConnectedActions++;
         }
 
-        protected void StopUsingConnection()
+        protected void StopUsingConnection() 
         {
             this.nConnectedActions--;
             if (this.nConnectedActions == 0 && this.actionOpenedConnection)

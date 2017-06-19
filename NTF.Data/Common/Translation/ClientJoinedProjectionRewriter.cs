@@ -7,7 +7,7 @@ using System.Reflection;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// rewrites nested projections into client-side joins
+    /// 重写嵌套Projection到客户端的连接
     /// </summary>
     public class ClientJoinedProjectionRewriter : DbExpressionVisitor
     {
@@ -57,12 +57,10 @@ namespace NTF.Data.Common
                 {
                     if (this.CanJoinOnClient(this.currentSelect))
                     {
-                        // make a query that combines all the constraints from the outer queries into a single select
+                        // 进行一个查询，将外部查询的所有约束组合成一个select表达式
                         SelectExpression newOuterSelect = (SelectExpression)QueryDuplicator.Duplicate(save);
-
-                        // remap any references to the outer select to the new alias;
                         SelectExpression newInnerSelect = (SelectExpression)ColumnMapper.Map(proj.Select, newOuterSelect.Alias, save.Alias);
-                        // add outer-join test
+                        //添加外部连接测试
                         ProjectionExpression newInnerProjection = this.language.AddOuterJoinTest(new ProjectionExpression(newInnerSelect, proj.Projector));
                         newInnerSelect = newInnerProjection.Select;
                         Expression newProjector = newInnerProjection.Projector;
@@ -72,19 +70,13 @@ namespace NTF.Data.Common
 
                         JoinExpression join = new JoinExpression(JoinType.OuterApply, newOuterSelect, newInnerSelect, null);
                         SelectExpression joinedSelect = new SelectExpression(newAlias, pc.Columns, join, null, null, null, proj.IsSingleton, null, null, false);
-
-                        // apply client-join treatment recursively
                         this.currentSelect = joinedSelect;
                         newProjector = this.Visit(pc.Projector);
-
-                        // compute keys (this only works if join condition was a single column comparison)
                         List<Expression> outerKeys = new List<Expression>();
                         List<Expression> innerKeys = new List<Expression>();
                         if (this.GetEquiJoinKeyExpressions(newInnerSelect.Where, newOuterSelect.Alias, outerKeys, innerKeys))
                         {
-                            // outerKey needs to refer to the outer-scope's alias
                             var outerKey = outerKeys.Select(k => ColumnMapper.Map(k, save.Alias, newOuterSelect.Alias));
-                            // innerKey needs to refer to the new alias for the select with the new join
                             var innerKey = innerKeys.Select(k => ColumnMapper.Map(k, joinedSelect.Alias, ((ColumnExpression)k).Alias));
                             ProjectionExpression newProjection = new ProjectionExpression(joinedSelect, newProjector, proj.Aggregator);
                             return new ClientJoinExpression(newProjection, outerKey, innerKey);

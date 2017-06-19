@@ -48,7 +48,7 @@ namespace NTF.Data.Common
     }
 
     /// <summary>
-    /// 定义<see cref="IQueryProvider"/>的映射信息和规则
+    /// 定义实体映射信息和规则
     /// </summary>
     public abstract class QueryMapping
     {

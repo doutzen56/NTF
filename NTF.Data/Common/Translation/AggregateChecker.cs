@@ -3,7 +3,7 @@
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Determines if a SelectExpression contains any aggregate expressions
+    /// 确定<see cref="SelectExpression"/>中是否包含聚合函数
     /// </summary>
     class AggregateChecker : DbExpressionVisitor
     {
@@ -27,7 +27,7 @@ namespace NTF.Data.Common
 
         protected override Expression VisitSelect(SelectExpression select)
         {
-            // only consider aggregates in these locations
+            // 只考虑这些位置的聚合函数
             this.Visit(select.Where);
             this.VisitOrderBy(select.OrderBy);
             this.VisitColumnDeclarations(select.Columns);
@@ -36,7 +36,7 @@ namespace NTF.Data.Common
 
         protected override Expression VisitSubquery(SubqueryExpression subquery)
         {
-            // don't count aggregates in subqueries
+            // 子查询里面不予考虑
             return subquery;
         }
     }

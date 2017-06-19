@@ -20,7 +20,7 @@ namespace NTF.Provider
     {
     }
     /// <summary>
-    /// <see cref="INonQuery{T}"/>扩展，扩展增删改方法
+    /// <see cref="INonQuery{T}"/>接口增、删、改方法
     /// </summary>
     public static class NonQuery
     {

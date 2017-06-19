@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Attempts to rewrite cross-apply and outer-apply joins as inner and left-outer joins
+    /// 
     /// </summary>
     public class CrossApplyRewriter : DbExpressionVisitor
     {
@@ -33,11 +33,11 @@ namespace NTF.Data.Common
                 else
                 {
                     SelectExpression select = join.Right as SelectExpression;
-                    // Only consider rewriting cross apply if 
-                    //   1) right side is a select
-                    //   2) other than in the where clause in the right-side select, no left-side declared aliases are referenced
-                    //   3) and has no behavior that would change semantics if the where clause is removed (like groups, aggregates, take, skip, etc).
-                    // Note: it is best to attempt this after redundant subqueries have been removed.
+                    // 只考虑重写交叉应用程序
+                    //（1）右边是一个选择
+                    //（2）除了右侧的WHERE子句选择外，没有左侧声明的别名被引用。
+                    //（3）如果没有删除WHERE子句（如组、聚集、取、跳过等），则没有更改语义的行为。
+                    // 注：最好是尝试这种冗余查询后已被删除。
                     if (select != null
                         && select.Take == null
                         && select.Skip == null

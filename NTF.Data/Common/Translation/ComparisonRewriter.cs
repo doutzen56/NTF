@@ -1,8 +1,4 @@
-﻿
-
-
-using NTF.Provider;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -68,13 +64,11 @@ namespace NTF.Data.Common
 
             if (dm1 == null && dm2 == null)
             {
-                // neither are constructed types
                 return bop;
             }
 
             if (dm1 != null && dm2 != null)
             {
-                // both are constructed types, so they'd better have the same members declared
                 HashSet<string> names1 = new HashSet<string>(dm1.Select(m => m.Name));
                 HashSet<string> names2 = new HashSet<string>(dm2.Select(m => m.Name));
                 if (names1.IsSubsetOf(names2) && names2.IsSubsetOf(names1)) 
@@ -91,7 +85,7 @@ namespace NTF.Data.Common
                 return MakePredicate(e1, e2, dm2, negate);
             }
 
-            throw new InvalidOperationException("Cannot compare two constructed types with different sets of members assigned.");
+            throw new InvalidOperationException("无法将两个构造类型不同的成员进行比较");
         }
 
         protected Expression MakePredicate(Expression e1, Expression e2, IEnumerable<MemberInfo> members, bool negate)

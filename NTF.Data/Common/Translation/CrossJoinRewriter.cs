@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Attempt to rewrite cross joins as inner joins
+    /// 将交叉连接重写为内部连接
     /// </summary>
     public class CrossJoinRewriter : DbExpressionVisitor
     {

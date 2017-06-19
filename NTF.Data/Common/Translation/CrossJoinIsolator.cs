@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Isolates cross joins from other types of joins using nested sub queries
+    /// 使用嵌套子查询分离来自其他类型联接的交叉连接
     /// </summary>
     public class CrossJoinIsolator : DbExpressionVisitor
     {

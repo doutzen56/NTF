@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace NTF.Data.Common
 {
     /// <summary>
-    /// Rewrite aggregate expressions, moving them into same select expression that has the group-by clause
+    /// 重写<see cref="AggregateExpression"/>表达式，将他们移动到具有相同<see cref="SelectExpression"/>表达式的Group By子句中
     /// </summary>
     public class AggregateRewriter : DbExpressionVisitor
     {
