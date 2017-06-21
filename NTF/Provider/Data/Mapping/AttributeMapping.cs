@@ -1,5 +1,4 @@
-﻿using NTF.Extensions;
-using NTF.Data.Common;
+﻿using NTF.Data.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using NTF.Provider;
 
 namespace NTF.Data.Mapping
 {

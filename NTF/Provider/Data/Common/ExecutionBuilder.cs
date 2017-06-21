@@ -1,5 +1,4 @@
-﻿using NTF.Extensions;
-using NTF.Provider;
+﻿using NTF.Provider;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

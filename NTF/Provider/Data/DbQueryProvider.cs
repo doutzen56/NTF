@@ -1,5 +1,4 @@
-﻿using NTF.Extensions;
-using NTF.Data.Common;
+﻿using NTF.Data.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,7 +22,7 @@ namespace NTF.Data
             : base(language, mapping, policy)
         {
             if (connection == null)
-                throw new InvalidOperationException("Connection not specified");
+                throw new InvalidOperationException("没有指定连接");
             this.connection = connection;
         }
 
@@ -77,9 +76,9 @@ namespace NTF.Data
 
         public static DbQueryProvider FromApplicationSettings()
         {
-            var provider = System.Configuration.ConfigurationSettings.AppSettings["Provider"];
-            var connection = System.Configuration.ConfigurationSettings.AppSettings["Connection"];
-            var mapping = System.Configuration.ConfigurationSettings.AppSettings["Mapping"];
+            var provider = "Provider".ValueOfAppSetting();
+            var connection = "Connection".ValueOfAppSetting();
+            var mapping = "Mapping".ValueOfAppSetting();
             return From(provider, connection, mapping);
         }
 

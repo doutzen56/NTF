@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using NTF.Extensions;
 using NTF.Ioc;
 using NTF.Modules;
 using NTF.Uow;

@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Data.Common;
+using Castle.MicroKernel.Registration;
+
 namespace UnitTest
 {
     [TestClass()]
@@ -117,12 +119,12 @@ namespace UnitTest
         [TestMethod]
         public void TestPageList()
         {
-            //var list = UserList.Where(a => a.Name == "jdc")
-            //                 .Select(a => a)
-            //                 .Skip(0)
-            //                 .Take(10)
-            //                 .OrderBy(a => a.ID);
-            //Assert.AreEqual(10, list.Count());
+            var list = UserList.Where(a => a.Name == "jdc")
+                             .Select(a => a)
+                             .Skip(0)
+                             .Take(10)
+                             .OrderBy(a => a.ID);
+            Assert.AreEqual(10, list.Count());
 
             //var user = new UserInfo() { Age = 27, Name = "测试事务", Address = "中国广州" };
             //provider.Connection.Open();
@@ -134,8 +136,8 @@ namespace UnitTest
             //    UserList.Update(a => a.Name == "测试事务", a => new UserInfo() { Address = "甘肃" });
             //    tran.Commit();
             //}
-            IDbContext<UserInfo> us = new QueryProvider.DbQueryContenxt<UserInfo>(provider, provider.Mapping.GetEntity(typeof(UserInfo)));
-            var rs = us.GetById(421);
+            //IDbContext<UserInfo> us = new QueryProvider.DbQueryContenxt<UserInfo>(provider, provider.Mapping.GetEntity(typeof(UserInfo)));
+            //var rs = us.GetById(421);
         }
 
     }

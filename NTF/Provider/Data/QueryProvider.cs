@@ -1,6 +1,6 @@
-﻿using NTF.Extensions;
-using NTF.Data.Common;
+﻿using NTF.Data.Common;
 using NTF.Data.Mapping;
+using NTF.Provider;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using NTF.Provider;
 
 namespace NTF.Data
 {
@@ -27,11 +26,11 @@ namespace NTF.Data
         public QueryProvider(QueryLanguage language, QueryMapping mapping, QueryPolicy policy)
         {
             if (language == null)
-                throw new InvalidOperationException("Language not specified");
+                throw new InvalidOperationException("Language未定义");
             if (mapping == null)
-                throw new InvalidOperationException("Mapping not specified");
+                throw new InvalidOperationException("Mapping未定义");
             if (policy == null)
-                throw new InvalidOperationException("Policy not specified");
+                throw new InvalidOperationException("Policy未定义");
             this.language = language;
             this.mapping = mapping;
             this.policy = policy;

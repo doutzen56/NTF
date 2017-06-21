@@ -1,5 +1,4 @@
-﻿using NTF.Extensions;
-using NTF.Data.Common;
+﻿using NTF.Data.Common;
 using System;
 using System.Data;
 using System.Text;

@@ -50,10 +50,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NTF.Data\NTF.Data.csproj">
-      <Project>{43a1d9c0-d66f-408b-a9a0-4708b6222a42}</Project>
-      <Name>NTF.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NTF\NTF.csproj">
       <Project>{C6866FDE-933B-4152-827E-481728548BBB}</Project>
       <Name>NTF</Name>
