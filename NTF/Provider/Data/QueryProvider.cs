@@ -89,8 +89,8 @@ namespace NTF.Data
 
         protected virtual IDbContext CreateTable(MappingEntity entity)
         {
-            return (IDbContext) Activator.CreateInstance(
-                typeof(DbQueryContenxt<>).MakeGenericType(entity.ElementType), 
+            return (IDbContext)Activator.CreateInstance(
+                typeof(DbQueryContenxt<>).MakeGenericType(entity.ElementType),
                 new object[] { this, entity }
                 );
         }
@@ -152,13 +152,18 @@ namespace NTF.Data
             MappingEntity entity;
             QueryProvider provider;
 
-            public DbQueryContenxt(QueryProvider provider, MappingEntity entity)
+            public DbQueryContenxt(Func<string, QueryProvider> provider)
+                : base(provider(typeof(T).Namespace), typeof(IDbContext<T>))
+            {
+                this.provider = provider(Named);
+                this.entity = this.provider.Mapping.GetEntity(typeof(T));
+            }
+            public DbQueryContenxt(QueryProvider provider,MappingEntity entity) 
                 : base(provider, typeof(IDbContext<T>))
             {
                 this.provider = provider;
                 this.entity = entity;
             }
-
             public MappingEntity Entity
             {
                 get { return this.entity; }
@@ -177,6 +182,14 @@ namespace NTF.Data
             public Type EntityType
             {
                 get { return this.entity.EntityType; }
+            }
+
+            public string Named
+            {
+                get
+                {
+                    return typeof(T).Namespace;
+                }
             }
 
             public T GetById(object id)
@@ -268,7 +281,7 @@ namespace NTF.Data
         {
             return new QueryTranslator(this.language, this.mapping, this.policy);
         }
-        
+
         public abstract int ExecuteNonQuery(string commandText);
 
         /// <summary>
@@ -339,7 +352,7 @@ namespace NTF.Data
             }
             return TypedSubtreeFinder.Find(expression, type);
         }
-           
+
         public static QueryMapping GetMapping(string mappingId)
         {
             if (mappingId != null)

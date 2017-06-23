@@ -69,7 +69,7 @@ namespace NTF
         public object Items { get; }
     }
     /// <summary>
-    /// 分页数据封装(泛型版)
+    /// 分页数据封装
     /// </summary>
     /// <typeparam name="T">泛型类型</typeparam>
     public class PageList<T> : PageList

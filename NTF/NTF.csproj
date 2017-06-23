@@ -187,6 +187,7 @@
     <Compile Include="Uow\UnitOfWorkManager.cs" />
     <Compile Include="Uow\UnitOfWorkRegister.cs" />
     <Compile Include="Uow\UnitOfWorkOptions.cs" />
+    <Compile Include="Utility\ConfigUtil.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

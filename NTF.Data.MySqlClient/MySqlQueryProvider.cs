@@ -109,7 +109,7 @@ namespace NTF.Provider.Data.MySqlClient
                 case SqlDbType.Xml:
                     return MySqlDbType.Text;
                 default:
-                    throw new NotSupportedException(string.Format("The SQL type '{0}' is not supported", dbType));
+                    throw new NotSupportedException("SQL类型'{0}'不被支持".Fmt(dbType));
             }
         }
     }

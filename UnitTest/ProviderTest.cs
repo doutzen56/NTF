@@ -7,6 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Data.Common;
 using Castle.MicroKernel.Registration;
+using Tzen;
+using NTF.Utility;
+using System;
+using static NTF.Data.QueryProvider;
+using NTF.Ioc;
+using NTF;
 
 namespace UnitTest
 {
@@ -23,18 +29,23 @@ namespace UnitTest
         private static FileStream fs;
         private static TextWriter tr;
         #endregion
-
+       
         #region 初始化
         [ClassInitialize()]
         public static void Init(TestContext context)
         {
+            var ioc = IocManager.Instance;
+            NtfBootstrapper ntf = new NtfBootstrapper();
+            ntf.Init();
+
+            UserList = ioc.Resolve<IDbContext<UserInfo>>();
+            OrderList = ioc.Resolve<IDbContext<Orders>>();
+            ScoreInfo = ioc.Resolve<IDbContext<ScoreInfo>>();
             provider = DbQueryProvider.From(conStr);
             fs = new FileStream("G:\\Git\\NTF\\UnitTest\\SQL.txt", FileMode.OpenOrCreate);
             tr = new StreamWriter(fs, Encoding.UTF8);
             provider.Log = tr;
-            UserList = provider.GetTable<UserInfo>();
-            OrderList = provider.GetTable<Orders>();
-            ScoreInfo = provider.GetTable<ScoreInfo>();
+            
             List<UserInfo> list = new List<UserInfo>();
             for (int i = 0; i < 5; i++)
             {

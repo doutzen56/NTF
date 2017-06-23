@@ -2,6 +2,8 @@
 using NTF.Ioc;
 using NTF.Modules;
 using NTF.Uow;
+using NTF.Data.Common;
+using NTF.Data.Mapping;
 
 namespace NTF
 {
@@ -39,6 +41,8 @@ namespace NTF
         private void RegisterMissingComponents()
         {
             IocManager.RegisterIfNot<IUnitOfWork, DefaultUnitOfWork>(LifeStyle.Transient);
+            IocManager.RegisterIfNot<QueryMapping, ImplicitMapping>(LifeStyle.Singleton);
+            IocManager.RegisterIfNot<QueryPolicy>(LifeStyle.Singleton);
         }
     }
 }

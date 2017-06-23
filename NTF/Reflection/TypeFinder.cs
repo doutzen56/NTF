@@ -49,7 +49,6 @@ namespace NTF.Reflection
 
                 }
             }
-            var type = allTypes.Where(a => a.Name == "DataModule" || a.Name.IndexOf("Module") > 0).ToList();
             return allTypes;
         }
     }

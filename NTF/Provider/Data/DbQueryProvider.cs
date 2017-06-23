@@ -126,7 +126,7 @@ namespace NTF.Data
                 }
                 else if (clower.Contains(".mdf"))
                 {
-                    provider = "NTF.Data.SqlClient";
+                    provider = "NTF.Data.SqlServerClient";
                 }
                 else
                 {
@@ -149,11 +149,12 @@ namespace NTF.Data
             DbConnection connection = (DbConnection)Activator.CreateInstance(adoConnectionType);
             if (!connectionString.Contains('='))
             {
-                MethodInfo gcs = providerType.GetMethod("GetConnectionString", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string) }, null);
-                if (gcs != null)
-                {
-                    connectionString = (string)gcs.Invoke(null, new object[] { connectionString });
-                }
+                //MethodInfo gcs = providerType.GetMethod("GetConnectionString", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string) }, null);
+                //if (gcs != null)
+                //{
+                //    connectionString = (string)gcs.Invoke(null, new object[] { connectionString });
+                //}
+                connectionString = connectionString.ValueOfConnectionString();
             }
 
             connection.ConnectionString = connectionString;
@@ -189,7 +190,7 @@ namespace NTF.Data
             this.nConnectedActions++;
         }
 
-        protected void StopUsingConnection() 
+        protected void StopUsingConnection()
         {
             this.nConnectedActions--;
             if (this.nConnectedActions == 0 && this.actionOpenedConnection)
@@ -198,7 +199,7 @@ namespace NTF.Data
                 this.actionOpenedConnection = false;
             }
         }
-        
+
         public override int ExecuteNonQuery(string commandText)
         {
             if (this.Log != null)

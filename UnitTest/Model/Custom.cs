@@ -6,9 +6,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-namespace Tzen
+namespace Test
 {
-    public class UserInfo
+    public class Custom
     {
         
         /// <summary>
@@ -23,21 +23,13 @@ namespace Tzen
         /// <summary>
         /// Name
         /// </summary>    
-        [Required] 
         [Display(Name="Name")]
         public string Name{ get; set; }
         
         /// <summary>
         /// Age
         /// </summary>    
-        [Required] 
         [Display(Name="Age")]
-        public int Age{ get; set; }
-        
-        /// <summary>
-        /// Address
-        /// </summary>    
-        [Display(Name="Address")]
-        public string Address{ get; set; }
+        public int? Age{ get; set; }
     }
 }
