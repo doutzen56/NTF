@@ -1,19 +1,12 @@
 ﻿using Castle.MicroKernel.Registration;
-using NTF;
 using NTF.Data;
 using NTF.Data.Common;
 using NTF.Data.SqlServerClient;
 using NTF.Modules;
 using NTF.Provider;
+using NTF.Provider.Data;
 using NTF.Utility;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.Common;
-using System.Data.SqlClient;
-using Tzen;
-using UnitTest;
-using static NTF.Data.QueryProvider;
 
 namespace NTF.控制台
 {
@@ -46,7 +39,7 @@ namespace NTF.控制台
                                .Named(item.Key));
             }
 
-            IocManager.Register(typeof(IDbContext<>), typeof(DbQueryContenxt<>), Ioc.LifeStyle.Singleton);
+            IocManager.Register(typeof(IDbContext<>), typeof(DbContenxt<>), Ioc.LifeStyle.Singleton);
         }
     }
 }

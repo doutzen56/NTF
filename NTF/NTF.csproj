@@ -108,6 +108,7 @@
     <Compile Include="Provider\Data\Common\Translation\SkipToRowNumberRewriter.cs" />
     <Compile Include="Provider\Data\Common\Translation\SubqueryRemover.cs" />
     <Compile Include="Provider\Data\Common\Translation\UnusedColumnRemover.cs" />
+    <Compile Include="Provider\Data\DbContext.cs" />
     <Compile Include="Provider\Data\DbQueryPolicy.cs" />
     <Compile Include="Provider\Data\DbQueryProvider.cs" />
     <Compile Include="Provider\Data\DbTypeSystem.cs" />

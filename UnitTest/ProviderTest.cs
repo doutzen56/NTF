@@ -44,7 +44,7 @@ namespace UnitTest
             provider = DbQueryProvider.From(conStr);
             fs = new FileStream("G:\\Git\\NTF\\UnitTest\\SQL.txt", FileMode.OpenOrCreate);
             tr = new StreamWriter(fs, Encoding.UTF8);
-            provider.Log = tr;
+            ((QueryProvider)UserList.Provider).Log = tr;
             
             List<UserInfo> list = new List<UserInfo>();
             for (int i = 0; i < 5; i++)
