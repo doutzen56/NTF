@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using NTF.Provider;
+using NTF.Ioc;
 
 namespace NTF.Data
 {
@@ -86,7 +87,6 @@ namespace NTF.Data
         {
             return From(connectionString, mappingId, QueryPolicy.Default);
         }
-
         public static DbQueryProvider From(string connectionString, string mappingId, QueryPolicy policy)
         {
             return From(null, connectionString, mappingId, policy);

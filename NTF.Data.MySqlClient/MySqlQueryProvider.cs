@@ -6,7 +6,7 @@ using System;
 using System.Data;
 using System.Data.Common;
 
-namespace NTF.Provider.Data.MySqlClient
+namespace NTF.Data.MySqlClient
 {
     public class MySqlQueryProvider : DbQueryProvider
     {
