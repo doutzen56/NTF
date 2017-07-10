@@ -5,6 +5,7 @@ using NTF.Provider.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -13,7 +14,7 @@ using System.Reflection;
 namespace NTF.Data
 {
     /// <summary>
-    /// A LINQ IQueryable query provider that executes database queries over a DbConnection
+    /// 基于<see cref="DbConnection"/>执行LINQ查询的提供程序（Provider）
     /// </summary>
     public abstract class QueryProvider : DbProvider, IDbContextProvider, ICreateExecutor
     {
@@ -23,7 +24,6 @@ namespace NTF.Data
         TextWriter log;
         Dictionary<MappingEntity, IDbContext> tables;
         QueryCache cache;
-
         public QueryProvider(QueryLanguage language, QueryMapping mapping, QueryPolicy policy)
         {
             if (language == null)

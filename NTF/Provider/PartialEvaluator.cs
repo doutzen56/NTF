@@ -88,47 +88,6 @@ namespace NTF.Provider
             private Expression Evaluate(Expression e)
             {
                 return e;
-                Type type = e.Type;
-                if (e.NodeType == ExpressionType.Convert)
-                {
-                    // 检查不必要的替换
-                    var u = (UnaryExpression)e;
-                    if (TypeEx.GetNonNullableType(u.Operand.Type) == TypeEx.GetNonNullableType(type))
-                    {
-                        e = ((UnaryExpression)e).Operand;
-                    }
-                }
-                if (e.NodeType == ExpressionType.Constant)
-                {
-                    if (e.Type == type)
-                    {
-                        return e;
-                    }
-                    else if (TypeEx.GetNonNullableType(e.Type) == TypeEx.GetNonNullableType(type))
-                    {
-                        return Expression.Constant(((ConstantExpression)e).Value, type);
-                    }
-                }
-                var me = e as MemberExpression;
-                if (me != null)
-                {
-                    var ce = me.Expression as ConstantExpression;
-                    if (ce != null)
-                    {
-                        return this.PostEval(Expression.Constant(me.Member.GetValue(ce.Value), type));
-                    }
-                }
-                if (type.IsValueType)
-                {
-                    e = Expression.Convert(e, typeof(object));
-                }
-                Expression<Func<object>> lambda = Expression.Lambda<Func<object>>(e);
-#if NOREFEMIT
-                Func<object> fn = ExpressionEvaluator.CreateDelegate(lambda);
-#else
-                Func<object> fn = lambda.Compile();
-#endif
-                return this.PostEval(Expression.Constant(fn(), type));
             }
         }
 

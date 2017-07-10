@@ -10,34 +10,35 @@ namespace Tzen
 {
     public class UserInfo
     {
-        
+
         /// <summary>
         /// ID
         /// </summary>    
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Required] 
-        [Display(Name="ID")]
-        public int ID{ get; set; }
-        
+        [Required]
+        [Display(Name = "ID")]
+        public int ID { get; set; }
+
         /// <summary>
         /// Name
         /// </summary>    
-        [Required] 
-        [Display(Name="Name")]
-        public string Name{ get; set; }
-        
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
         /// <summary>
         /// Age
         /// </summary>    
-        [Required] 
-        [Display(Name="Age")]
-        public int Age{ get; set; }
-        
+        [Required]
+        [Display(Name = "Age")]
+        public int Age { get; set; } 
+
         /// <summary>
         /// Address
         /// </summary>    
-        [Display(Name="Address")]
-        public string Address{ get; set; }
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+
     }
 }

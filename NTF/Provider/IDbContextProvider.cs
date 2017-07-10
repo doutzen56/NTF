@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -78,7 +79,7 @@ namespace NTF.Provider
     /// 数据源操作定义
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IDbContext<T> : IQueryable<T>, IDbContext, INonQuery<T>
+    public interface IDbContext<T> : IQueryable<T>,IEnumerable<T>, IDbContext, INonQuery<T>
     {
         /// <summary>
         /// 根据实体Id获取实体对象

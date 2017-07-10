@@ -29,7 +29,7 @@ namespace UnitTest
         private static FileStream fs;
         private static TextWriter tr;
         #endregion
-       
+
         #region 初始化
         [ClassInitialize()]
         public static void Init(TestContext context)
@@ -38,14 +38,17 @@ namespace UnitTest
             NtfBootstrapper ntf = new NtfBootstrapper();
             ntf.Init();
 
-            UserList = ioc.Resolve<IDbContext<UserInfo>>();
-            OrderList = ioc.Resolve<IDbContext<Orders>>();
-            ScoreInfo = ioc.Resolve<IDbContext<ScoreInfo>>();
+            //UserList = ioc.Resolve<IDbContext<UserInfo>>();
+            //OrderList = ioc.Resolve<IDbContext<Orders>>();
+            //ScoreInfo = ioc.Resolve<IDbContext<ScoreInfo>>();
+
             provider = DbQueryProvider.From(conStr);
+            UserList = provider.GetTable<UserInfo>();
+            ScoreInfo = provider.GetTable<ScoreInfo>();
             fs = new FileStream("G:\\Git\\NTF\\UnitTest\\SQL.txt", FileMode.OpenOrCreate);
             tr = new StreamWriter(fs, Encoding.UTF8);
             ((QueryProvider)UserList.Provider).Log = tr;
-            
+
             List<UserInfo> list = new List<UserInfo>();
             for (int i = 0; i < 5; i++)
             {
@@ -103,7 +106,7 @@ namespace UnitTest
         [TestMethod]
         public void TestBatchUpdate()
         {
-            var list = UserList.Where(a => a.Name == "jdc").ToList();
+            var list = UserList.Where(a => a.ID < 100).ToList();
             list.ForEach(
                 item =>
                     {
@@ -115,7 +118,7 @@ namespace UnitTest
         [TestMethod]
         public void TestManyUpdate()
         {
-            var rs = UserList.Update(a => a.Name == "jdc", a => new UserInfo { Address = "中国北京" });
+            var rs = UserList.Update(a => a.ID < 100, a => new UserInfo { Address = "中国北京" });
             Assert.IsTrue(rs > 0);
         }
         [TestMethod]
@@ -132,10 +135,10 @@ namespace UnitTest
         {
             var list = UserList.Where(a => a.Name == "jdc")
                              .Select(a => a)
-                             .Skip(0)
-                             .Take(10)
+                             .Skip(100000)
+                             .Take(100)
                              .OrderBy(a => a.ID);
-            Assert.AreEqual(10, list.Count());
+            Assert.AreEqual(100, list.Count());
 
             //var user = new UserInfo() { Age = 27, Name = "测试事务", Address = "中国广州" };
             //provider.Connection.Open();
@@ -151,5 +154,32 @@ namespace UnitTest
             //var rs = us.GetById(421);
         }
 
+        [TestMethod]
+        public void TestInnerJoin()
+        {
+            var rs = from u in UserList
+                     join s in ScoreInfo
+                     on new { a = u.ID } equals new { a = s.UserId }
+                     where u.ID <= 100
+                     select new { u.ID, u.Name, u.Age, s.Score };
+            var list = rs.ToList();
+
+
+            Assert.IsTrue(list.Count >= 0);
+        }
+        [TestMethod]
+        public void TestLeftJoin()
+        {
+            var rs = from u in UserList
+                     join s in ScoreInfo
+                     on new { a = u.ID } equals new { a = s.UserId } into temp
+                     from t in temp.DefaultIfEmpty()
+                     where u.ID <= 100
+                     select new { u.ID, u.Name, u.Age, t.Score };
+            var list = rs.ToList();
+
+
+            Assert.IsTrue(list.Count >= 0);
+        }
     }
 }
