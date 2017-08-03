@@ -171,6 +171,7 @@ namespace NTF.Provider
                 Expression.Constant(batchSize),
                 Expression.Constant(isLazy)
                 );
+            
             return (IEnumerable<TResult>)collection.Provider.Execute(callMyself);
         }
 
