@@ -26,12 +26,12 @@ namespace NTF.Data.Mapping
 
         public override bool IsPrimaryKey(MappingEntity entity, MemberInfo member)
         {
-            return member.IsDefined(typeof(DatabaseGeneratedAttribute));
+            return member.IsDefined(typeof(KeyAttribute));
         }
 
         public override bool IsGenerated(MappingEntity entity, MemberInfo member)
         {
-            return member.IsDefined(typeof(KeyAttribute));
+            return member.IsDefined(typeof(DatabaseGeneratedAttribute));
         }
 
         private string NameWithoutTrailingDigits(string name)

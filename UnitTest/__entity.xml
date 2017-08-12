@@ -2,7 +2,7 @@
 <AutoEntity>
   <ConnString>
     <![CDATA[
-    Data Source=.;Initial Catalog=Test;Integrated Security=True
+    Data Source=192.168.3.180,1500;Initial Catalog=IntegrationAdmin;Persist Security Info=True;User ID=sa;Password=!QAZxsw2
     ]]>
   </ConnString>
   <Template>
@@ -36,11 +36,6 @@ namespace $entity.ProjectName
 #if(!$c.IsNullable)
         [Required] 
 #end  
-#if($c.CSharpType == "string" && $c.Length != -1)     
-#if($c.Type == "nvarchar")
-        [StringLength($c.Length)]
-#end
-#end
 #if($c.Remark != "")
         [Display(Name="$c.Remark")]
 #else

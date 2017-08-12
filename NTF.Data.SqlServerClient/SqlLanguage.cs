@@ -9,7 +9,7 @@ namespace NTF.Data.SqlServerClient
 {
 
     /// <summary>
-    /// TSQL specific QueryLanguage
+    /// TSQL特定查询语言
     /// </summary>
     public class SqlLanguage : QueryLanguage
     {

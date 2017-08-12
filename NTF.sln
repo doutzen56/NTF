@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Data.SqlServerClient", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{F2FB329C-2E50-49BA-93D9-5116A18B3A2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.控制台", "NTF.控制台\NTF.控制台.csproj", "{117ECF9D-839D-4EE4-A529-84AB5DD65E1B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{F2FB329C-2E50-49BA-93D9-5116A18B3A2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2FB329C-2E50-49BA-93D9-5116A18B3A2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2FB329C-2E50-49BA-93D9-5116A18B3A2D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{117ECF9D-839D-4EE4-A529-84AB5DD65E1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{117ECF9D-839D-4EE4-A529-84AB5DD65E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{117ECF9D-839D-4EE4-A529-84AB5DD65E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{117ECF9D-839D-4EE4-A529-84AB5DD65E1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

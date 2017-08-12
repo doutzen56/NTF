@@ -24,12 +24,12 @@ namespace NTF.Provider.Data
             this.provider = provider(Named);
             this.entity = this.provider.Mapping.GetEntity(typeof(T));
         }
-        public DbContenxt(QueryProvider provider, MappingEntity entity)
-            : base(provider, typeof(IDbContext<T>))
-        {
-            this.provider = provider;
-            this.entity = entity;
-        }
+        //public DbContenxt(QueryProvider provider, MappingEntity entity)
+        //    : base(provider, typeof(IDbContext<T>))
+        //{
+        //    this.provider = provider;
+        //    this.entity = entity;
+        //}
         public MappingEntity Entity
         {
             get { return this.entity; }

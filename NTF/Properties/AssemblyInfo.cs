@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("NTF")]
 [assembly: AssemblyDescription("NTF")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Tzen")]
+[assembly: AssemblyCompany("56")]
 [assembly: AssemblyProduct("NTF")]
 [assembly: AssemblyCopyright("Copyright © Tzen2017")]
 [assembly: AssemblyTrademark("")]
