@@ -16,11 +16,12 @@ namespace NTF.Uow
         }
         IIocResolver IocResolver;
         DbTransaction tran;
+
         public override void SaveChanges()
         {
 
         }
-        
+
 
         protected override void BeginUow()
         {
@@ -31,7 +32,7 @@ namespace NTF.Uow
         {
 
         }
-        
+
         protected override void DisposeUow()
         {
 

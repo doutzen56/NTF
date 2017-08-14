@@ -3,7 +3,7 @@
     /// <summary>
     /// 定义一个工作单元，
     /// 这个接口是框架内部使用。
-    /// 应用程序使用<see cref="IUnitOfWork.Begin()"/>来开启一个新的事务
+    /// 应用程序使用<see cref="Begin(UnitOfWorkOptions)"/>来开启一个新的事务
     /// </summary>
     public interface IUnitOfWork : IActiveUnitOfWork, IUnitOfWorkCompleteHandle
     {

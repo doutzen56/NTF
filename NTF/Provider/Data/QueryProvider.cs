@@ -24,7 +24,9 @@ namespace NTF.Data
         TextWriter log;
         Dictionary<MappingEntity, IDbContext> tables;
         QueryCache cache;
-        public QueryProvider(QueryLanguage language, QueryMapping mapping, QueryPolicy policy)
+        DbConnection connection;
+        DbTransaction transaction;
+        public QueryProvider(DbConnection connection,QueryLanguage language, QueryMapping mapping, QueryPolicy policy)
         {
             if (language == null)
                 throw new InvalidOperationException("Language未定义");
@@ -35,9 +37,28 @@ namespace NTF.Data
             this.language = language;
             this.mapping = mapping;
             this.policy = policy;
+            if (connection == null)
+                throw new InvalidOperationException("没有指定连接");
+            this.connection = connection;
             this.tables = new Dictionary<MappingEntity, IDbContext>();
         }
 
+
+        public virtual DbConnection Connection
+        {
+            get { return this.connection; }
+        }
+
+        public virtual DbTransaction Transaction
+        {
+            get { return this.transaction; }
+            set
+            {
+                if (value != null && value.Connection != this.connection)
+                    throw new InvalidOperationException("事务与连接不匹配");
+                this.transaction = value;
+            }
+        }
         public QueryMapping Mapping
         {
             get { return this.mapping; }

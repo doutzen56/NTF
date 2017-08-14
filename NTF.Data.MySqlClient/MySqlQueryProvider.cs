@@ -1,7 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
-using NTF.Data;
 using NTF.Data.Common;
-using NTF.Data.MySqlClient;
 using System;
 using System.Data;
 using System.Data.Common;

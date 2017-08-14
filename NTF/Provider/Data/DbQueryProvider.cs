@@ -12,37 +12,18 @@ namespace NTF.Data
 {
     public class DbQueryProvider : QueryProvider
     {
-        DbConnection connection;
-        DbTransaction transaction;
+
         IsolationLevel isolation = IsolationLevel.ReadCommitted;
 
         int nConnectedActions = 0;
         bool actionOpenedConnection = false;
 
         public DbQueryProvider(DbConnection connection, QueryLanguage language, QueryMapping mapping, QueryPolicy policy)
-            : base(language, mapping, policy)
+            : base(connection, language, mapping, policy)
         {
-            if (connection == null)
-                throw new InvalidOperationException("没有指定连接");
-            this.connection = connection;
+            
         }
-
-        public virtual DbConnection Connection
-        {
-            get { return this.connection; }
-        }
-
-        public virtual DbTransaction Transaction
-        {
-            get { return this.transaction; }
-            set
-            {
-                if (value != null && value.Connection != this.connection)
-                    throw new InvalidOperationException("事务与连接不匹配");
-                this.transaction = value;
-            }
-        }
-
+        
         public IsolationLevel Isolation
         {
             get { return this.isolation; }
@@ -182,9 +163,9 @@ namespace NTF.Data
 
         protected void StartUsingConnection()
         {
-            if (this.connection.State == ConnectionState.Closed)
+            if (this.Connection.State == ConnectionState.Closed)
             {
-                this.connection.Open();
+                this.Connection.Open();
                 this.actionOpenedConnection = true;
             }
             this.nConnectedActions++;
@@ -195,7 +176,7 @@ namespace NTF.Data
             this.nConnectedActions--;
             if (this.nConnectedActions == 0 && this.actionOpenedConnection)
             {
-                this.connection.Close();
+                this.Connection.Close();
                 this.actionOpenedConnection = false;
             }
         }

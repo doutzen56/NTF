@@ -69,6 +69,7 @@
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="ProviderTest.cs" />
     <Compile Include="Model\ScoreInfo.cs" />
+    <Compile Include="Test.cs" />
     <Compile Include="TestModule.cs" />
     <Compile Include="u8_GameLocal.cs" />
     <Compile Include="u8_GameLocal_Test.cs" />

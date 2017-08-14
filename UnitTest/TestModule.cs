@@ -7,6 +7,7 @@ using NTF.Provider;
 using NTF.Provider.Data;
 using NTF.Utility;
 using System;
+using System.Reflection;
 
 namespace NTF.控制台
 {
@@ -17,6 +18,7 @@ namespace NTF.控制台
         {
             base.Initialize();
             IocManager.Register<QueryLanguage, SqlLanguage>();
+            IocManager.RegisterAssembiyByDefault(Assembly.GetExecutingAssembly(), false);
         }
         public override void AfterInit()
         {
