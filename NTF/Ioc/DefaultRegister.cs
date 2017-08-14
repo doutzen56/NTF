@@ -8,6 +8,10 @@ namespace NTF.Ioc
     /// </summary>
     public class DefaultRegister : IDefaultRegister
     {
+        /// <summary>
+        /// 注册基本约定对象，如<see cref="ITransient"/>、<see cref="ISingleton"/>和<see cref="IInterceptor"/>
+        /// </summary>
+        /// <param name="context"></param>
         public void RegisiterAssembly(DefaultRegsterContext context)
         {
             //注入ITransient接口对象

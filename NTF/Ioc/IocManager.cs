@@ -88,9 +88,10 @@ namespace NTF.Ioc
             this._conventionRegster.Add(reg);
         }
         /// <summary>
-        /// 为该程序集注册所有已添加
+        /// 注册当前程序集下所有的约定对象
         /// </summary>
-        /// <param name="assembly"></param>
+        /// <param name="assembly">当前程序集</param>
+        /// <param name="excuteInstaller">是否执行Installer</param>
         public void RegisterAssembiyByDefault(Assembly assembly, bool excuteInstaller = true)
         {
             var context = new DefaultRegsterContext(assembly, this);
