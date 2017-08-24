@@ -42,12 +42,12 @@ namespace UnitTest
             //OrderList = ioc.Resolve<IDbContext<Orders>>();
             //ScoreInfo = ioc.Resolve<IDbContext<ScoreInfo>>();
 
-            provider = DbQueryProvider.From(conStr);
-            UserList = provider.GetTable<UserInfo>();
-            ScoreInfo = provider.GetTable<ScoreInfo>();
-            fs = new FileStream("G:\\Git\\NTF\\UnitTest\\SQL.txt", FileMode.OpenOrCreate);
-            tr = new StreamWriter(fs, Encoding.UTF8);
-            ((QueryProvider)UserList.Provider).Log = tr;
+            //provider = DbQueryProvider.From(conStr);
+            UserList = ioc.Resolve<IDbContext<UserInfo>>();
+            //ScoreInfo = provider.GetTable<ScoreInfo>();
+            //fs = new FileStream("G:\\Git\\NTF\\UnitTest\\SQL.txt", FileMode.OpenOrCreate);
+            //tr = new StreamWriter(fs, Encoding.UTF8);
+            //((QueryProvider)UserList.Provider).Log = tr;
 
             List<UserInfo> list = new List<UserInfo>();
             for (int i = 0; i < 5; i++)
