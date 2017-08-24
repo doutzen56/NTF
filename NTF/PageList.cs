@@ -24,11 +24,11 @@ namespace NTF
                 total = 0;
             this.Total = total;
             this.PageIndex = pageIndex;
-            this.PageSize = PageSize;
+            this.PageSize = pageSize;
             this.Items = items;
-            this.TotalPage = Total % PageSize == 0 ?
-                             Total / PageSize :
-                             Total / PageSize + 1;
+            this.TotalPage = total % pageSize == 0 ?
+                             total / pageSize :
+                             total / pageSize + 1;
         }
         /// <summary>
         /// 总记录数
