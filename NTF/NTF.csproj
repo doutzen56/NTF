@@ -56,6 +56,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logger\INtfLog.cs" />
+    <Compile Include="Logger\NullLoger.cs" />
+    <Compile Include="Modules\NtfModuleInfo.cs" />
+    <Compile Include="Modules\NtfModuleList.cs" />
+    <Compile Include="Modules\NtfModuleManager.cs" />
     <Compile Include="Provider\Data\Common\ExecutionBuilder.cs" />
     <Compile Include="Provider\Data\Common\Expressions\Aggregator.cs" />
     <Compile Include="Provider\Data\Common\Expressions\DbExpressionComparer.cs" />

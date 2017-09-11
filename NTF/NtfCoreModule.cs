@@ -4,6 +4,7 @@ using NTF.Modules;
 using NTF.Uow;
 using NTF.Data.Common;
 using NTF.Data.Mapping;
+using NTF.Logger;
 
 namespace NTF
 {
@@ -35,7 +36,7 @@ namespace NTF
         }
         public override void Shutdown()
         {
-            base.Shutdown();
+            IocManager.IocContainer.Dispose();
         }
 
         private void RegisterMissingComponents()
@@ -43,6 +44,7 @@ namespace NTF
             IocManager.RegisterIfNot<IUnitOfWork, DefaultUnitOfWork>(LifeStyle.Transient);
             IocManager.RegisterIfNot<QueryMapping, ImplicitMapping>(LifeStyle.Singleton);
             IocManager.RegisterIfNot<QueryPolicy>(LifeStyle.Singleton);
+            IocManager.RegisterIfNot<INtfLog, NullLoger>(LifeStyle.Singleton);
         }
     }
 }

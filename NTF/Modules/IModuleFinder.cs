@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using NTF.Reflection;
 
 namespace NTF.Modules
 {
@@ -15,18 +13,5 @@ namespace NTF.Modules
         /// </summary>
         /// <returns></returns>
         ICollection<Type> FindAll();
-    }
-
-    internal class DefaultModuleFinder : IModuleFinder
-    {
-        private ITypeFinder _typeFinder;
-        public DefaultModuleFinder(ITypeFinder typeFinder)
-        {
-            this._typeFinder = typeFinder;
-        }
-        public ICollection<Type> FindAll()
-        {
-            return _typeFinder.Find(NtfModule.IsNtfModule).ToList();
-        }
     }
 }
