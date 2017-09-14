@@ -89,10 +89,6 @@
       <Project>{5c4f38fb-59f7-4aea-ae6a-1a1af2600e0a}</Project>
       <Name>NTF.Data.SqlServerClient</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NTF.SQL\NTF.SQL.csproj">
-      <Project>{f5c36c42-54a0-4e9d-b051-e0b3630d463a}</Project>
-      <Name>NTF.SQL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NTF\NTF.csproj">
       <Project>{c6866fde-933b-4152-827e-481728548bbb}</Project>
       <Name>NTF</Name>

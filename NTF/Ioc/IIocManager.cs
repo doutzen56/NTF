@@ -4,7 +4,7 @@ using System;
 namespace NTF.Ioc
 {
     /// <summary>
-    /// Ioc注入统一管理类
+    /// Ioc统一管理类
     /// </summary>
     public interface IIocManager : IIocRegister, IIocResolver, IDisposable
     {

@@ -44,7 +44,7 @@ namespace NTF
             IocManager.RegisterIfNot<IUnitOfWork, DefaultUnitOfWork>(LifeStyle.Transient);
             IocManager.RegisterIfNot<QueryMapping, ImplicitMapping>(LifeStyle.Singleton);
             IocManager.RegisterIfNot<QueryPolicy>(LifeStyle.Singleton);
-            IocManager.RegisterIfNot<INtfLog, NullLoger>(LifeStyle.Singleton);
+            IocManager.RegisterIfNot<INtfLog, NullLogger>(LifeStyle.Singleton);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace NTF.Ioc
 {
     /// <summary>
-    /// 定义注入对象类型：临时/单例
+    /// 定义注入对象生命周期：临时/单例
     /// </summary>
     public enum LifeStyle
     {

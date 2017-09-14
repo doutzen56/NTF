@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Logger\INtfLog.cs" />
     <Compile Include="Logger\NullLoger.cs" />
+    <Compile Include="Modules\DefaultModuleFinder.cs" />
     <Compile Include="Modules\NtfModuleInfo.cs" />
     <Compile Include="Modules\NtfModuleList.cs" />
     <Compile Include="Modules\NtfModuleManager.cs" />

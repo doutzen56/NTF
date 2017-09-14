@@ -52,7 +52,7 @@ namespace UnitTest
         [TestMethod]
         public void MyTestMethod()
         {
-            //var up = ioc.Resolve<IDbContext<u8_Update_Jackpot>>();
+            var up = ioc.Resolve<IDbContext<u8_Update_Jackpot>>();
             //up.Insert(new u8_Update_Jackpot()
             //{
             //    Amount = 100,
@@ -64,8 +64,11 @@ namespace UnitTest
             //    JackpotsParams = "",
             //    UpdateTime = DateTime.Now
             //});
-            var t=ioc.Resolve<Test>();
-            t.Test1();
+            var ex = up.Where(a => a.Amount > 0).Skip(10).Take(100).OrderByDescending(a=>a.Amount).Expression;
+            
+            var str = ((QueryProvider)up.Provider).GetQueryText(ex);
+            //var t=ioc.Resolve<Test>();
+            //t.Test1();
         }
         
     }

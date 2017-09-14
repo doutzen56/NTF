@@ -41,7 +41,7 @@ namespace NTF.控制台
                                .Named(item.Key));
             }
 
-            IocManager.Register(typeof(IDbContext<>), typeof(DbContenxt<>), Ioc.LifeStyle.Singleton);
+            IocManager.Register(typeof(IDbContext<>), typeof(DbContenxt<>), Ioc.LifeStyle.Transient);
         }
     }
 }

@@ -7,6 +7,9 @@ using Castle.Windsor.Installer;
 
 namespace NTF.Ioc
 {
+    /// <summary>
+    /// Ioc统一管理类
+    /// </summary>
     public class IocManager : IIocManager
     {
         #region IocManager 属性
@@ -44,7 +47,7 @@ namespace NTF.Ioc
         /// </summary>
         /// <param name="type">待注册类型</param>
         /// <param name="lifeStyle">生命周期</param>
-        public void Register(Type type, LifeStyle lifeStyle = LifeStyle.Singleton)
+        public void Register(Type type, LifeStyle lifeStyle = LifeStyle.Transient)
         {
             IocContainer.Register(SetLifeStyle(Component.For(type), lifeStyle));
         }
@@ -54,7 +57,7 @@ namespace NTF.Ioc
         /// <param name="type">类型type</param>
         /// <param name="impl">type实现类型impl</param>
         /// <param name="lifeStyle">生命周期</param>
-        public void Register(Type type, Type impl, LifeStyle lifeStyle = LifeStyle.Singleton)
+        public void Register(Type type, Type impl, LifeStyle lifeStyle = LifeStyle.Transient)
         {
             IocContainer.Register(SetLifeStyle(Component.For(type, impl).ImplementedBy(impl), lifeStyle));
         }
@@ -63,7 +66,7 @@ namespace NTF.Ioc
         /// </summary>
         /// <typeparam name="TType">类型TType</typeparam>
         /// <param name="lifeStyle">生命周期</param>
-        public void Register<TType>(LifeStyle lifeStyle = LifeStyle.Singleton) where TType : class
+        public void Register<TType>(LifeStyle lifeStyle = LifeStyle.Transient) where TType : class
         {
             IocContainer.Register(SetLifeStyle(Component.For<TType>(), lifeStyle));
         }
@@ -73,7 +76,7 @@ namespace NTF.Ioc
         /// <typeparam name="TType">类型TType</typeparam>
         /// <typeparam name="TImpl">类型TImpl</typeparam>
         /// <param name="lifeStyle">生命周期</param>
-        public void Register<TType, TImpl>(LifeStyle lifeStyle)
+        public void Register<TType, TImpl>(LifeStyle lifeStyle = LifeStyle.Transient)
             where TType : class
             where TImpl : class, TType
         {
