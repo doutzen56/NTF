@@ -8,7 +8,7 @@ namespace NTF.Logger
     /// <remarks>
     /// 底层默认提供一个空的日志实现，调用层通过注入对应日志实现类来写日志
     /// </remarks>
-    internal class NullLogger : INtfLog
+    internal class NullLogger : ILogger
     {
         public void Debug(string msg)
         {

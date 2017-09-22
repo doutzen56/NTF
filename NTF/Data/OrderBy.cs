@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace NTF
+namespace NTF.Data
 {
     public class OrderBy<T> : OrderBy where T : class
     {

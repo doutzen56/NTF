@@ -6,7 +6,7 @@ namespace NTF.Logger
     /// <summary>
     /// 日志基类
     /// </summary>
-    public interface INtfLog
+    public interface ILogger
     {
         /// <summary>
         /// 基础信息日志

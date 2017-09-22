@@ -1,4 +1,4 @@
-.svn/
+﻿.svn/
 /.vs
 /packages
 /NTF.Test
@@ -29,3 +29,5 @@
 /UnitTest/bin
 /NTF.控制台
 /UnitTest/SQL.txt
+/NTF.RabbitMQ/obj
+/NTF.RabbitMQ/bin

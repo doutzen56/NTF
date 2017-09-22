@@ -58,9 +58,9 @@ namespace NTF.Data
 
         public static DbQueryProvider FromApplicationSettings()
         {
-            var provider = "Provider".ValueOfAppSetting();
-            var connection = "Connection".ValueOfAppSetting();
-            var mapping = "Mapping".ValueOfAppSetting();
+            var provider = "Provider".GetAppSettings();
+            var connection = "Connection".GetAppSettings();
+            var mapping = "Mapping".GetAppSettings();
             return From(provider, connection, mapping);
         }
 
@@ -135,7 +135,7 @@ namespace NTF.Data
                 //{
                 //    connectionString = (string)gcs.Invoke(null, new object[] { connectionString });
                 //}
-                connectionString = connectionString.ValueOfConnectionString();
+                connectionString = connectionString.GetConnectionString();
             }
 
             connection.ConnectionString = connectionString;
