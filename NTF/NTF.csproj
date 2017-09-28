@@ -56,13 +56,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logger\INtfLog.cs" />
-    <Compile Include="Logger\NullLoger.cs" />
+    <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\NullLogger.cs" />
     <Compile Include="Modules\DefaultModuleFinder.cs" />
     <Compile Include="Modules\NtfModuleInfo.cs" />
     <Compile Include="Modules\NtfModuleList.cs" />
     <Compile Include="Modules\NtfModuleManager.cs" />
     <Compile Include="Cache\ICache.cs" />
+    <Compile Include="MQ\IRabbitProxy.cs" />
+    <Compile Include="MQ\QueueMessage.cs" />
     <Compile Include="NoSql\IMongoProxy.cs" />
     <Compile Include="NoSql\IRedisProxy.cs" />
     <Compile Include="NoSql\MongoEntity.cs" />

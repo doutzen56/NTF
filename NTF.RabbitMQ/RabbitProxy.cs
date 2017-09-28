@@ -1,6 +1,6 @@
 ﻿using NTF.Logger;
+using NTF.MQ;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 
 namespace NTF.RabbitMQ
 {
-    public class RabbitProxy
+    public class RabbitProxy : IRabbitProxy
     {
         public ILogger Logger { get; set; }
 
@@ -20,11 +20,11 @@ namespace NTF.RabbitMQ
         /// <param name="queueName">队列名称</param>
         /// <param name="model">消息内容</param>
         /// <returns>是否发布成功</returns>
-        public bool Publish<T>(string queueName, T model)
+        public bool Publish<T>(string queueName, T model) where T : QueueMessage
         {
             if (string.IsNullOrEmpty(url))
             {
-                Logger.Error("请在AppSettings中配置MQ节点RabbitMQ");
+                Logger.Error("请在AppSettings中配置MQ节点RabbitMQ或者通过构造函数传入MQ连接字符串");
                 return false;
             }
             if (model == null)
@@ -52,8 +52,6 @@ namespace NTF.RabbitMQ
 
                         //发送消息到队列
                         channel.BasicPublish("", queueName, properties, bytes);
-
-                        //logger.Info("发送至队列:" + queueName + ":" + msg);
                         return true;
                     }
                 }
@@ -71,7 +69,7 @@ namespace NTF.RabbitMQ
         /// <param name="queueName"></param>
         /// <param name="list"></param>
         /// <returns></returns>
-        public bool BatchPublish<T>(string queueName, IList<T> list)
+        public bool BatchPublish<T>(string queueName, IList<T> list) where T : QueueMessage
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -125,7 +123,7 @@ namespace NTF.RabbitMQ
         /// <typeparam name="T"></typeparam>
         /// <param name="queueName">队列名称</param>
         /// <param name="func">接收到消息后执行的操作</param>
-        public void Subscribe<T>(string queueName, Func<T, bool> func)
+        public void Subscribe<T>(string queueName, Func<T, bool> func) where T : QueueMessage
         {
             var isClose = false;//队列服务端是否关闭
             do
