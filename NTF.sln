@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.RabbitMQ", "NTF.RabbitMQ\NTF.RabbitMQ.csproj", "{D5B983D8-C96E-4AD8-9EBA-A73E0C8FC694}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTF.Data", "NTF.Data\NTF.Data.csproj", "{A003D70A-5EB1-46CF-98B0-2CA555F8089C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D5B983D8-C96E-4AD8-9EBA-A73E0C8FC694}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5B983D8-C96E-4AD8-9EBA-A73E0C8FC694}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5B983D8-C96E-4AD8-9EBA-A73E0C8FC694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A003D70A-5EB1-46CF-98B0-2CA555F8089C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A003D70A-5EB1-46CF-98B0-2CA555F8089C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A003D70A-5EB1-46CF-98B0-2CA555F8089C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A003D70A-5EB1-46CF-98B0-2CA555F8089C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -169,7 +169,7 @@
     <Compile Include="Provider\ScopedDictionary.cs" />
     <Compile Include="Provider\StrongDelegate.cs" />
     <Compile Include="Provider\TypedSubtreeFinder.cs" />
-    <Compile Include="Data\OrderBy.cs" />
+    <Compile Include="OrderBy.cs" />
     <Compile Include="PageList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\NtfAssemblyFinder.cs" />
@@ -197,6 +197,7 @@
     <Compile Include="Utility\ConfigUtil.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Data\Provider\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
   <ItemGroup>
