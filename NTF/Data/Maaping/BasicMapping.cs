@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -21,11 +22,21 @@ namespace NTF.Data.Maaping
         /// </summary>
         public virtual string TableAlias { get; }
         /// <summary>
-        /// 实体属性
+        /// 所有字段
         /// </summary>
-        public static PropertyInfo[] Properties;
-        public static PropertyInfo[] KeyProperties;
-        public static PropertyInfo AutoIncrement;
+        protected ConcurrentDictionary<RuntimeTypeHandle, IEnumerable<PropertyInfo>> Fields = new ConcurrentDictionary<RuntimeTypeHandle, IEnumerable<PropertyInfo>>();
+        /// <summary>
+        /// 主键
+        /// </summary>
+        protected ConcurrentDictionary<RuntimeTypeHandle, IEnumerable<PropertyInfo>> KeyFields = new ConcurrentDictionary<RuntimeTypeHandle, IEnumerable<PropertyInfo>>();
+        /// <summary>
+        /// 自增列
+        /// </summary>
+        protected PropertyInfo AutoIncFiekd = null;
+        /// <summary>
+        /// 非自增列
+        /// </summary>
+        protected ConcurrentDictionary<RuntimeTypeHandle, IEnumerable<PropertyInfo>> NoIncFields = new ConcurrentDictionary<RuntimeTypeHandle, IEnumerable<PropertyInfo>>();
 
         /// <summary>
         /// 获取实体对应的表名

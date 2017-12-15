@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace NTF.Data.Language
 {
-    /// <summary>
-    /// 构建T-SQL语句
-    /// </summary>
-    public abstract class SQLFormatter
+    public interface ISqlBuilder
     {
-        
+
     }
 }
