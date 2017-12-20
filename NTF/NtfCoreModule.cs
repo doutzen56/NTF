@@ -2,9 +2,7 @@
 using NTF.Ioc;
 using NTF.Modules;
 using NTF.Uow;
-using NTF.Data.Common;
 using NTF.Data.Mapping;
-using NTF.Logger;
 
 namespace NTF
 {
@@ -42,9 +40,7 @@ namespace NTF
         private void RegisterMissingComponents()
         {
             IocManager.RegisterIfNot<IUnitOfWork, DefaultUnitOfWork>(LifeStyle.Transient);
-            IocManager.RegisterIfNot<QueryMapping, ImplicitMapping>(LifeStyle.Singleton);
-            IocManager.RegisterIfNot<QueryPolicy>(LifeStyle.Singleton);
-            IocManager.RegisterIfNot<ILogger, NullLogger>(LifeStyle.Singleton);
+            IocManager.RegisterIfNot<BasicMapping, DefaultMapping>(LifeStyle.Singleton);
         }
     }
 }
