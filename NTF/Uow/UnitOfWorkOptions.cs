@@ -25,10 +25,6 @@ namespace NTF.Uow
         /// </summary>
         public IsolationLevel? IsolationLevel { get; set; }
         /// <summary>
-        /// 此项可设置为 <see cref="TransactionScopeAsyncFlowOption.Enabled"/>
-        /// </summary>
-        public TransactionScopeAsyncFlowOption? AsyncFlowOption { get; set; }
-        /// <summary>
         /// 设置工作单元默认值
         /// </summary>
         internal void SetDefaultOptions(IUnitOfWorkDefaultOptions defaultOptions)

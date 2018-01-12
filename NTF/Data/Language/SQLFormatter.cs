@@ -19,7 +19,7 @@ namespace NTF.Data.Language
         protected static Dictionary<RuntimeTypeHandle, string> insertSQL;
         protected static Dictionary<RuntimeTypeHandle, string> updateSQL;
         protected static Dictionary<RuntimeTypeHandle, string> deleteSQL;
-        static SQLFormatter()
+        static SQLFormatter() 
         {
             insertSQL = new Dictionary<RuntimeTypeHandle, string>();
             updateSQL = new Dictionary<RuntimeTypeHandle, string>();
@@ -60,7 +60,7 @@ namespace NTF.Data.Language
 
         #region T-SQL 语句初始化
         /// <summary>
-        /// 
+        /// 初始化Insert操作SQL语句
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -103,6 +103,17 @@ namespace NTF.Data.Language
                 insertSQL[type.TypeHandle] = builder.ToString();
             }
             return insertSQL[type.TypeHandle];
+        }
+
+        protected virtual string InitUpdateSQL(Type type)
+        {
+
+            return updateSQL[type.TypeHandle];
+        }
+
+        protected virtual string InitDeleteSQL(Type type)
+        {
+            return updateSQL[type.TypeHandle];
         }
         #endregion
 
